@@ -1,0 +1,18 @@
+:root {
+  --primary: #7653d6;
+  --primary-dark: #5435ad;
+  --primary-light: #a991f2;
+  --accent: #d6b4ff;
+  --background: #f7f7fb;
+  --surface: #ffffff;
+  --text: #201b2c;
+  --muted: #777184;
+  --border: #e7e3ef;
+  --success: #1ca779;
+  --danger: #d84b67;
+  --warning: #f0a500;
+  --radius: 12px;
+  --shadow: 0 2px 8px rgba(32, 27, 44, 0.06);
+  --shadow-lg: 0 8px 24px rgba(32, 27, 44, 0.12);
+  --font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif;
+}
