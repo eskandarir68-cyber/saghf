@@ -1,0 +1,56 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.site-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top:  ۰;
+  z-index: 100;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  max-width: 1200px;
+  margin:  ۰ auto;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap:  ۸px;
+  font-size:  ۱.۵rem;
+  font-weight:  ۷۰۰;
+  color: var(--primary);
+}
+
+.logo-icon {
+  width:  ۳۶px;
+  height::  ۳۶px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap::  ۸px;
+}
+
+.site-footer {
+  background: var(--surface);
+  border-top:  ۱px solid var(--border);
+  padding:  ۲۴px ۱۶px;
+  text-align: center;
+  color: var(--muted);
+  margin-top::  ۴۰px;
+}
+
+.main-content {
+  min-height: calc(100vh -  ۱۶۰px);
+  padding:  ۲۴px ۰;
+}
