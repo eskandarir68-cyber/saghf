@@ -5,67 +5,963 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>سقف | همه چیز زیر یک سقف</title>
-  <meta
-    name="description"
-    content="سقف؛ پلتفرم جستجو، خرید، فروش و اجاره ملک"
-  >
 
-  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --grape: #713f9e;
+      --grape-dark: #4b2677;
+      --lavender: #d9c6f1;
+      --lavender-light: #f3edfb;
+      --royal: #41319b;
+      --pastel: #faf7ff;
+      --white: #ffffff;
+      --text: #21182d;
+      --muted: #766c82;
+      --border: #e8dfef;
+      --green: #20936d;
+      --red: #c94962;
+      --shadow: 0 18px 45px rgba(76, 38, 123, 0.13);
+      --radius: 22px;
+      --font: Tahoma, Arial, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-width: 320px;
+      background: var(--pastel);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.8;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    /* Header */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.94);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(14px);
+    }
+
+    .header-inner {
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--grape-dark);
+    }
+
+    .brand-symbol {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--grape), var(--royal));
+      color: white;
+      font-size: 25px;
+      font-weight: bold;
+      box-shadow: 0 9px 20px rgba(113, 63, 158, 0.3);
+    }
+
+    .brand-name {
+      display: block;
+      font-size: 23px;
+      font-weight: bold;
+      line-height: 1.1;
+    }
+
+    .brand-slogan {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav a {
+      transition: 0.2s;
+    }
+
+    .nav a:hover {
+      color: var(--grape);
+    }
+
+    .header-buttons {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 19px;
+      border: 0;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: bold;
+      transition: 0.2s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button-primary {
+      background: linear-gradient(135deg, var(--grape), var(--royal));
+      color: white;
+      box-shadow: 0 8px 20px rgba(113, 63, 158, 0.25);
+    }
+
+    .button-light {
+      background: var(--lavender-light);
+      color: var(--grape-dark);
+    }
+
+    .button-white {
+      background: white;
+      color: var(--grape-dark);
+    }
+
+    .mobile-button {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--lavender-light);
+      color: var(--grape-dark);
+      font-size: 22px;
+    }
+
+    .mobile-menu {
+      display: none;
+      padding: 14px 0 18px;
+      border-top: 1px solid var(--border);
+    }
+
+    .mobile-menu.open {
+      display: grid;
+      gap: 5px;
+    }
+
+    .mobile-menu a {
+      padding: 9px 12px;
+      border-radius: 10px;
+      color: var(--muted);
+    }
+
+    .mobile-menu a:hover {
+      background: var(--lavender-light);
+      color: var(--grape);
+    }
+
+    /* Hero */
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 88px 0 105px;
+      background:
+        radial-gradient(circle at 8% 15%, rgba(217, 198, 241, 0.9), transparent 29%),
+        radial-gradient(circle at 90% 85%, rgba(65, 49, 155, 0.18), transparent 34%),
+        linear-gradient(135deg, #fdfaff, #eee5fa);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      left: -110px;
+      bottom: -160px;
+      border-radius: 50%;
+      background: rgba(113, 63, 158, 0.08);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 850px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .hero-label {
+      display: inline-block;
+      margin-bottom: 20px;
+      padding: 7px 16px;
+      border: 1px solid var(--lavender);
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.75);
+      color: var(--grape);
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .hero h1 {
+      margin-bottom: 18px;
+      color: var(--grape-dark);
+      font-size: clamp(34px, 5vw, 63px);
+      line-height: 1.35;
+    }
+
+    .hero h1 span {
+      color: var(--royal);
+    }
+
+    .hero-description {
+      max-width: 650px;
+      margin: 0 auto 34px;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .search-panel {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr auto;
+      gap: 10px;
+      padding: 13px;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.86);
+      box-shadow: var(--shadow);
+      text-align: right;
+    }
+
+    .search-panel input,
+    .search-panel select {
+      width: 100%;
+      min-width: 0;
+      height: 48px;
+      padding: 0 13px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      outline: 0;
+      background: white;
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    .search-panel input:focus,
+    .search-panel select:focus {
+      border-color: var(--grape);
+    }
+
+    .search-submit {
+      min-height: 48px;
+      padding: 0 25px;
+      border: 0;
+      border-radius: 11px;
+      background: var(--grape);
+      color: white;
+      font-weight: bold;
+    }
+
+    /* Stats */
+
+    .stats {
+      position: relative;
+      z-index: 5;
+      margin-top: -38px;
+    }
+
+    .stats-box {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      padding: 22px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: white;
+      box-shadow: var(--shadow);
+    }
+
+    .stat {
+      text-align: center;
+      border-left: 1px solid var(--border);
+    }
+
+    .stat:last-child {
+      border-left: 0;
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--grape);
+      font-size: 25px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* Sections */
+
+    .section {
+      padding: 82px 0;
+    }
+
+    .section-heading {
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .section-heading h2 {
+      margin-bottom: 8px;
+      color: var(--grape-dark);
+      font-size: 29px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .property-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .property-card {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: white;
+      box-shadow: 0 7px 20px rgba(76, 38, 123, 0.07);
+      transition: 0.25s ease;
+    }
+
+    .property-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow);
+    }
+
+    .property-image {
+      position: relative;
+      height: 205px;
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(135deg, rgba(113, 63, 158, 0.35), rgba(65, 49, 155, 0.25)),
+        linear-gradient(135deg, #d7c2ed, #8f77c4);
+      color: white;
+      font-size: 42px;
+    }
+
+    .property-image::after {
+      content: "تصویر ملک";
+      position: absolute;
+      bottom: 12px;
+      right: 14px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(0, 0, 0, 0.25);
+      font-size: 11px;
+    }
+
+    .property-badge {
+      position: absolute;
+      top: 13px;
+      right: 13px;
+      padding: 5px 10px;
+      border-radius: 20px;
+      background: white;
+      color: var(--grape);
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .property-body {
+      padding: 18px;
+    }
+
+    .property-title {
+      margin-bottom: 6px;
+      color: var(--grape-dark);
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .property-location {
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .property-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 16px;
+    }
+
+    .property-meta span {
+      padding: 4px 8px;
+      border-radius: 7px;
+      background: var(--lavender-light);
+      color: var(--grape-dark);
+      font-size: 11px;
+    }
+
+    .property-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 13px;
+      border-top: 1px solid var(--border);
+    }
+
+    .property-price {
+      color: var(--grape);
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .property-link {
+      color: var(--royal);
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    /* Features */
+
+    .features {
+      background: white;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .feature-card {
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--pastel);
+      text-align: center;
+      transition: 0.25s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow);
+    }
+
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 15px;
+      border-radius: 18px;
+      background: var(--lavender);
+      color: var(--grape-dark);
+      font-size: 27px;
+    }
+
+    .feature-card h3 {
+      margin-bottom: 8px;
+      color: var(--grape-dark);
+      font-size: 17px;
+    }
+
+    .feature-card p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* CTA */
+
+    .cta {
+      padding: 80px 0;
+    }
+
+    .cta-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+      padding: 42px;
+      border-radius: 27px;
+      background: linear-gradient(135deg, var(--grape-dark), var(--royal));
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .cta-box h2 {
+      margin-bottom: 7px;
+      font-size: 25px;
+    }
+
+    .cta-box p {
+      color: #e9def7;
+      font-size: 13px;
+    }
+
+    /* Footer */
+
+    .footer {
+      padding: 32px 0;
+      background: #251535;
+      color: #e9dff2;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .footer-title {
+      color: white;
+      font-size: 23px;
+      font-weight: bold;
+    }
+
+    .footer p,
+    .footer small {
+      color: #cdbedc;
+      font-size: 12px;
+    }
+
+    /* Responsive */
+
+    @media (max-width: 900px) {
+      .nav,
+      .header-buttons {
+        display: none;
+      }
+
+      .mobile-button {
+        display: block;
+      }
+
+      .search-panel {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .search-submit {
+        min-height: 48px;
+      }
+
+      .property-grid,
+      .feature-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        width: min(100% - 24px, 1180px);
+      }
+
+      .hero {
+        padding: 62px 0 82px;
+      }
+
+      .hero-description {
+        font-size: 14px;
+      }
+
+      .search-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-box {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      .stat {
+        padding-bottom: 15px;
+        border-left: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .stat:last-child {
+        padding-bottom: 0;
+        border-bottom: 0;
+      }
+
+      .property-grid,
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-box {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 28px;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-  <header class="site-header">
+  <header class="header">
     <div class="container header-inner">
 
-      <a href="#/" class="brand">
-        <span class="brand-icon">س</span>
+      <a href="#home" class="brand">
+        <span class="brand-symbol">س</span>
+
         <span>
-          <strong>سقف</strong>
-          <small>همه چیز زیر یک سقف</small>
+          <span class="brand-name">سقف</span>
+          <span class="brand-slogan">همه چیز زیر یک سقف</span>
         </span>
       </a>
 
-      <nav class="main-nav" aria-label="منوی اصلی">
-        <a href="#/">خانه</a>
-        <a href="#/properties">املاک</a>
-        <a href="#/about">درباره سقف</a>
+      <nav class="nav">
+        <a href="#home">خانه</a>
+        <a href="#properties">املاک</a>
+        <a href="#features">امکانات</a>
+        <a href="#about">درباره ما</a>
       </nav>
 
-      <div class="header-actions">
-        <a href="#/login" class="btn btn-light">ورود</a>
-        <a href="#/register" class="btn btn-primary">ثبت‌نام</a>
+      <div class="header-buttons">
+        <a href="#login" class="button button-light">ورود</a>
+        <a href="#register" class="button button-primary">ثبت‌نام</a>
       </div>
 
-      <button class="menu-button" id="menuButton" aria-label="باز کردن منو">
-        ☰
-      </button>
+      <button class="mobile-button" id="mobileButton">☰</button>
     </div>
 
-    <div class="mobile-menu" id="mobileMenu">
-      <a href="#/">خانه</a>
-      <a href="#/properties">املاک</a>
-      <a href="#/about">درباره سقف</a>
-      <a href="#/login">ورود</a>
-      <a href="#/register">ثبت‌نام</a>
+    <div class="container mobile-menu" id="mobileMenu">
+      <a href="#home">خانه</a>
+      <a href="#properties">املاک</a>
+      <a href="#features">امکانات</a>
+      <a href="#about">درباره ما</a>
+      <a href="#login">ورود</a>
+      <a href="#register">ثبت‌نام</a>
     </div>
   </header>
 
-  <main id="app"></main>
+  <main>
 
-  <footer class="site-footer">
+    <section class="hero" id="home">
+      <div class="container hero-content">
+
+        <div class="hero-label">
+          پلتفرم حرفه‌ای خرید، فروش و اجاره املاک
+        </div>
+
+        <h1>
+          خانه‌ای که دنبالش هستید را
+          <span>پیدا کنید</span>
+        </h1>
+
+        <p class="hero-description">
+          در سقف، فایل‌های ملکی واقعی را جستجو کنید، جزئیات ملک را ببینید
+          و مستقیماً با مشاور تماس بگیرید.
+          همه چیز زیر یک سقف.
+        </p>
+
+        <form class="search-panel" id="searchForm">
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="شهر یا منطقه را وارد کنید"
+          >
+
+          <select id="dealType">
+            <option value="">نوع معامله</option>
+            <option>فروش</option>
+            <option>اجاره</option>
+            <option>رهن</option>
+          </select>
+
+          <select id="propertyType">
+            <option value="">نوع ملک</option>
+            <option>آپارتمان</option>
+            <option>خانه</option>
+            <option>زمین</option>
+            <option>دفتر کار</option>
+          </select>
+
+          <button type="submit" class="search-submit">
+            جستجوی ملک
+          </button>
+        </form>
+
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="container">
+        <div class="stats-box">
+          <div class="stat">
+            <strong>۱۲۰۰+</strong>
+            <span>فایل ملکی</span>
+          </div>
+
+          <div class="stat">
+            <strong>۳۵۰+</strong>
+            <span>مشاور فعال</span>
+          </div>
+
+          <div class="stat">
+            <strong>۲۴/۷</strong>
+            <span>همراه شما</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="properties">
+      <div class="container">
+
+        <div class="section-heading">
+          <h2>فایل‌های منتخب سقف</h2>
+          <p>چند نمونه از فایل‌های ملکی موجود در پلتفرم</p>
+        </div>
+
+        <div class="property-grid">
+
+          <article class="property-card">
+            <div class="property-image">
+              🏠
+              <span class="property-badge">فروش</span>
+            </div>
+
+            <div class="property-body">
+              <h3 class="property-title">آپارتمان مدرن و نورگیر</h3>
+              <p class="property-location">تهران، منطقه ۵</p>
+
+              <div class="property-meta">
+                <span>۱۲۰ متر</span>
+                <span>۲ خواب</span>
+                <span>پارکینگ</span>
+              </div>
+
+              <div class="property-footer">
+                <span class="property-price">تماس بگیرید</span>
+                <a href="#login" class="property-link">مشاهده جزئیات ←</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="property-card">
+            <div class="property-image">
+              🏡
+              <span class="property-badge">اجاره</span>
+            </div>
+
+            <div class="property-body">
+              <h3 class="property-title">خانه ویلایی دلباز</h3>
+              <p class="property-location">کرج، عظیمیه</p>
+
+              <div class="property-meta">
+                <span>۱۸۰ متر</span>
+                <span>۳ خواب</span>
+                <span>انباری</span>
+              </div>
+
+              <div class="property-footer">
+                <span class="property-price">رهن و اجاره</span>
+                <a href="#login" class="property-link">مشاهده جزئیات ←</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="property-card">
+            <div class="property-image">
+              🏢
+              <span class="property-badge">رهن</span>
+            </div>
+
+            <div class="property-body">
+              <h3 class="property-title">واحد اداری مجهز</h3>
+              <p class="property-location">تهران، ونک</p>
+
+              <div class="property-meta">
+                <span>۹۰ متر</span>
+                <span>۲ اتاق</span>
+                <span>آسانسور</span>
+              </div>
+
+              <div class="property-footer">
+                <span class="property-price">قیمت توافقی</span>
+                <a href="#login" class="property-link">مشاهده جزئیات ←</a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section features" id="features">
+      <div class="container">
+
+        <div class="section-heading">
+          <h2>چرا سقف؟</h2>
+          <p>تمام امکانات لازم برای یک تجربه بهتر در بازار املاک</p>
+        </div>
+
+        <div class="feature-grid">
+
+          <article class="feature-card">
+            <div class="feature-icon">⌕</div>
+            <h3>جستجوی آسان</h3>
+            <p>
+              ملک موردنظر خود را بر اساس شهر، منطقه، قیمت و نوع معامله پیدا کنید.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon">✓</div>
+            <h3>فایل‌های کامل</h3>
+            <p>
+              مشخصات ملک، تصاویر، امکانات و اطلاعات مشاور را یکجا مشاهده کنید.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon">☎</div>
+            <h3>ارتباط مستقیم</h3>
+            <p>
+              بدون واسطه اضافی با مشاور ملک تماس بگیرید و سؤال‌های خود را بپرسید.
+            </p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="cta" id="about">
+      <div class="container">
+        <div class="cta-box">
+          <div>
+            <h2>مشاور املاک هستید؟</h2>
+            <p>
+              فایل‌های خود را در سقف ثبت کنید و مشتریان بیشتری پیدا کنید.
+            </p>
+          </div>
+
+          <a href="#register" class="button button-white">
+            ثبت‌نام به‌عنوان مشاور
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
     <div class="container footer-inner">
       <div>
-        <div class="footer-brand">سقف</div>
+        <div class="footer-title">سقف</div>
         <p>همه چیز زیر یک سقف</p>
       </div>
 
-      <div class="footer-info">
-        <span>پلتفرم جستجوی املاک</span>
-        <span>سازنده: کوروش غلامی</span>
+      <div>
+        <small>سازنده: کوروش غلامی</small>
       </div>
     </div>
   </footer>
 
-  <script src="app.js"></script>
+  <script>
+    const mobileButton = document.getElementById("mobileButton");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const searchForm = document.getElementById("searchForm");
+
+    mobileButton.addEventListener("click", function () {
+      mobileMenu.classList.toggle("open");
+    });
+
+    mobileMenu.addEventListener("click", function (event) {
+      if (event.target.tagName === "A") {
+        mobileMenu.classList.remove("open");
+      }
+    });
+
+    searchForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const searchText = document.getElementById("searchInput").value.trim();
+      const dealType = document.getElementById("dealType").value;
+      const propertyType = document.getElementById("propertyType").value;
+
+      let message = "لطفاً یکی از گزینه‌های جستجو را انتخاب کنید.";
+
+      if (searchText || dealType || propertyType) {
+        message = "جستجو ثبت شد. بخش اتصال به Supabase در مرحله بعد فعال می‌شود.";
+      }
+
+      alert(message);
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+      link.addEventListener("click", function () {
+        const target = document.querySelector(this.getAttribute("href"));
+
+        if (target) {
+          target.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+        }
+      });
+    });
+  </script>
+
 </body>
 </html>
