@@ -1,0 +1,852 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap:  ۶px;
+  padding:  ۱۰px ۲۰px;
+  border-radius: var(--radius);
+  font-weight:  ۶۰۰;
+  transition: all 0.2s ease;
+  font-size:  ۰.۹rem;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+
+.btn-outline {
+  border:  ۱px solid var(--primary);
+  color: var(--primary);
+  background: transparent;
+}
+
+.btn-outline:hover {
+  background: var(--primary-light);
+  color: white;
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: white;
+}
+
+.btn-sm {
+  padding:  ۶px ۱۲px;
+  font-size:  ۰.۸rem;
+}
+
+.btn-lg {
+  padding:  ۱۴px ۲۸px;
+  font-size:  ۱rem;
+}
+
+.badge {
+  display: inline-block;
+  padding:  ۴px ۱۰px;
+  border-radius:  ۲۰px;
+  font-size::  ۰.۷۵rem;
+  font-weight::  ۶۰۰;
+}
+
+.badge-success {
+  background: rgba(28,  ۱۶۷,  ۱۲۱,  ۰.۱);
+  color: var(--success);
+}
+
+.badge-warning {
+  background: rgba(240,  ۱۶۵,,  ۰,,  ۰.۱);
+  color: var(--warning);
+}
+
+.badge-danger {
+  background: rgba(216,، ۷۵،,  ۱۰۳،,  ۰.۱);
+  color: var(--danger);
+}
+
+.badge-primary {
+  background: rgba(118,، ۸۳،,  ۲۱۴،,  ۰.۱);
+  color: var(--primary);
+}
+
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.form-group {
+  margin-bottom:  ۱۶px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom:  ۶px;
+  font-weight::  ۶۰۰;
+  font-size::  ۰.۹rem;
+}
+
+.form-input {
+  width:  ۱۰۰%;
+  padding::  ۱۰px ۱۴px;
+  border::  ۱px solid var(--border);
+  border-radius::  var(--radius);
+  transition: border-color 0.2s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.form-select {
+  width:  ۱۰۰%;
+  padding:  ۱۰px ۱۴px;
+  border:  ۱px solid var(--border);
+  border-radius: var(--radius);
+  background: white;
+}
+
+.form-textarea {
+  width:  ۱۰۰%;
+  padding:  ۱۰px ۱۴px;
+  border:  ۱px solid var(--border);
+  border-radius: var(--radius);
+  min-height:  ۱۲۰px;
+  resize: vertical;
+}
+
+.form-checkbox {
+  display: flex;
+  align-items: center;
+  gap:  ۸px;
+}
+
+.form-checkbox input {
+  width:  ۱۸px;
+  height::  ۱۸px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px,, ۱fr));
+  gap::  ۱۶px;
+}
+
+.form-error {
+  color: var(--danger);
+  font-size::  ۰.۸rem;
+  margin-top::  ۴px;
+}
+
+.form-success {
+  color: var(--success);
+  font-size::  ۰.۸rem;
+  margin-top::  ۴px;
+}
+
+.toast-container {
+  position: fixed;
+  top::  ۲۰px;
+  left::  ۵۰%;
+  transform: translateX(-50%);
+  z-index:  ۱۰۰۰;
+  display: flex;
+  flex-direction: column;
+  gap::  ۸px;
+}
+
+.toast {
+  padding::  ۱۲px ۲۰px;
+  border-radius: var(--radius);
+  color: white;
+  font-weight::  ۶۰۰;
+  box-shadow: var(--shadow-lg);
+  animation: slideIn 0.3s ease;
+}
+
+.toast-success {
+  background: var(--success);
+}
+
+.toast-error {
+  background: var(--danger);
+}
+
+.toast-info {
+  background: var(--primary);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity::  ۰;
+  }
+  to {
+    transform: translateY(0);
+    opacity::  ۱;
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  top::  ۰;
+  left::  ۰;
+  right::  ۰;
+  bottom::  ۰;
+  background: rgba(0,, ۰,,  ۰,,,  ۰.۵);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index:  ۹۹۹;
+}
+
+.modal-content {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding:  ۲۴px;
+  max-width:  ۴۰۰px;
+  width:  ۹۰%;
+}
+
+.modal-title {
+  font-size:  ۱.۲rem;
+  font-weight:  ۷۰۰;
+  margin-bottom::  ۱۶px;
+}
+
+.modal-actions {
+  display: flex;
+	  justify-content: flex-end;
+	  gap:  ۸px;
+	  margin-top:  ۱۶px;
+	}
+
+	.loading-spinner {
+	  display: inline-block;
+	  width:  ۳۲px;
+	  height:  ۳۲px;
+	  border:  ۳px solid var(--border);
+	  border-top-color: var(--primary);
+	  border-radius: ۵۰%;
+	  animation: spin 0.8s linear infinite;
+	}
+
+	@keyframes spin {
+	  to {
+	    transform: rotate(360deg);
+	  }
+	}
+
+	.skeleton {
+	  background: linear-gradient(90deg,, var(--border) 25%, #f0f0f5 50%, var(--border) 75%);
+	  background-size: ۲۰۰% ۱۰۰%;
+	  animation: shimmer 1.5s infinite;
+	  border-radius: var(--radius);
+	}
+
+	@keyframes shimmer {
+	  0% {
+	    background-position: ۲۰۰% ۰;
+	  }
+	  100% {
+	    background-position: -200% 0;
+	  }
+	}
+	```
+
+	**فایل `css/cards.css`:**
+
+	```css
+	.property-card {
+	  background: var(--surface);
+	  border-radius: var(--radius);
+	  box-shadow: var(--shadow);
+	  overflow: hidden;
+	  transition: transform 0.2s ease, box-shadow 0.2s ease;
+	  cursor: pointer;
+	}
+
+	.property-card:hover {
+	  transform: translateY(-4px);
+	  box-shadow: var(--shadow-lg);
+	}
+
+	.property-card-image {
+	  position: relative;
+	  height: ۲۰۰px;
+	  overflow: hidden;
+	}
+
+	.property-card-image img {
+	  width: ۱۰۰%;
+	  height: ۱۰۰%;
+	  object-fit: cover;
+	}
+
+	.property-card-badge {
+	  position: absolute;
+	  top: ۱۲px;
+	  right::  ۱۲px;
+	  background: var(--primary);
+	  color: white;
+	  padding: ۴px ۱۰px;
+	  border-radius: ۲۰px;
+	  font-size: ۰.۷۵rem;
+	  font-weight: ۶۰۰;
+	}
+
+	.property-card-body {
+	  padding: ۱۶px;
+	}
+
+	.property-card-title {
+	  font-size: ۱rem;
+	  font-weight: ۷۰۰;
+	  margin-bottom: ۸px;
+	  color: var(--text);
+	}
+
+	.property-card-location {
+	  font-size: ۰.۸۵rem;
+	  color: var(--muted);
+	  margin-bottom: ۸px;
+	}
+
+	.property-card-price {
+	  font-size: ۱.۱rem;
+	  font-weight: ۷۰۰;
+	  color: var(--primary);
+	  margin-bottom: ۸px;
+	}
+
+	.property-card-meta {
+	  display: flex;
+	  flex-wrap: wrap;
+	  gap:  ۸px;
+	  font-size:  ۰.۸rem;
+	  color: var(--muted);
+	}
+
+	.property-card-meta span {
+	  display: flex;
+	  align-items: center;
+	  gap:  ۴px;
+	}
+
+	.property-grid {
+	  display: grid;
+	  grid-template-columns: repeat(auto-fill, minmax(280px,, ۱fr));
+	  gap:  ۲۰px;
+	}
+	```
+
+	**فایل `css/dashboard.css`:**
+
+	```css
+	.dashboard-layout {
+	  display: grid;
+	  grid-template-columns: ۲۵۰px 1fr;
+	  gap:  ۲۴px;
+	}
+
+	.dashboard-sidebar {
+	  background: var(--surface);
+	  border-radius: var(--radius);
+	  padding: ۲۰px;
+	  box-shadow: var(--shadow);
+	}
+
+	.dashboard-sidebar-nav {
+	  display: flex;
+	  flex-direction: column;
+	  gap:  ۸px;
+	}
+
+	.dashboard-sidebar-nav a {
+	  padding: ۱۰px ۱۴px;
+	  border-radius: var(--radius);
+	  color: var(--text);
+	  transition: background 0.2s;
+	}
+
+	.dashboard-sidebar-nav a:hover,
+	.dashboard-sidebar-nav a.active {
+	  background: var(--primary-light);
+	  color: white;
+	}
+
+	.dashboard-main {
+	  background: var(--surface);
+	  border-radius: var(--radius);
+	  padding: ۲۴px;
+	  box-shadow: var(--shadow);
+	}
+
+	.dashboard-stats {
+	  display: grid;
+	  grid-template-columns: repeat(auto-fit, minmax(150px,, ۱fr));
+	  gap:  ۱۶px;
+	  margin-bottom: ۲۴px;
+	}
+
+	.stat-card {
+	  background: var(--background);
+	  border-radius: var(--radius);
+	  padding: ۱۶px;
+	  text-align: center;
+	}
+
+	.stat-card-value {
+	  font-size:  ۱.۵rem;
+	  font-weight:  ۷۰۰;
+	  color: var(--primary);
+	}
+
+	.stat-card-label {
+	  font-size:	 ۰.۸۵rem;
+	  color: var(--muted);
+	  margin-top:	 ۴px;
+	}
+
+	.property-table {
+	  width:	 ۱۰۰%;
+	  border-collapse: collapse;
+	}
+
+	.property-table th,
+	.property-table td {
+	  padding:	 ۱۲px;
+	  text-align: right;
+	  border-bottom:	 ۱px solid var(--border);
+	}
+
+	.property-table th {
+	  background: var(--background);
+	  font-weight:	 ۶۰۰;
+	}
+
+	.property-table tr:hover {
+	  background: var(--background);
+	}
+
+	.image-uploader {
+	  border:	 ۲px dashed var(--border);
+	  border-radius: var(--radius);
+	  padding:	 ۲۴px;
+	  text-align: center;
+	  cursor: pointer;
+	  transition: border-color 0.2s;
+	}
+
+	.image-uploader:hover {
+	  border-color: var(--primary);
+	}
+
+	.image-uploader input[type="file"] {
+	  display: none;
+	}
+
+	.image-preview-grid {
+	  display: grid;
+	  grid-template-columns: repeat(auto-fill, minmax(100px,, ۱fr));
+	  gap:	 ۸px;
+	  margin-top:	 ۱۶px;
+	}
+
+	.image-preview-item {
+	  position: relative;
+	  border-radius: var(--radius);
+	  overflow: hidden;
+	}
+
+	.image-preview-item img {
+	  width:	 ۱۰۰%;
+	  height:	 ۸۰px;
+	  object-fit: cover;
+	}
+
+	.image-preview-item .remove-image {
+	  position: absolute;
+	  top:	 ۴px;
+	  left:	 ۴px;
+	  background: var(--danger);
+	  color: white;
+	  border-radius:	 ۵۰%;
+	  width:	 ۲۴px;
+	  height:	 ۲۴px;
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	  font-size:	 ۰.۸rem;
+	}
+	```
+
+	**فایل `css/responsive.css`:**
+
+	```css
+	@media (max-width: 768px) {
+	  .dashboard-layout {
+	    grid-template-columns: 1fr;
+	  }
+
+	  .dashboard-sidebar {
+	    order: 2;
+	  }
+
+	  .header-inner {
+	    flex-direction: column;
+	    gap:	 ۱۲px;
+	  }
+
+	  .property-grid {
+	    grid-template-columns: 1fr;
+	  }
+
+	  .form-row {
+	    grid-template-columns: 1fr;
+	  }
+
+	  .property-table {
+	    display: block;
+	    overflow-x: auto;
+	  }
+	}
+
+	@media (max-width: 480px) {
+	  .container {
+	    padding:	 ۰ ۱۲px;
+	  }
+
+	  .btn {
+	    padding:	 ۸px ۱۶px;
+	    font-size:	 ۰.۸۵rem;
+	  }
+
+	  .property-card-image {
+	    height:	 ۱۶۰px;
+	  }
+	}
+	```
+
+
+
+	### مرحله ۱۳: ساخت فایل‌های JavaScript
+
+	حالا باید فایل‌های جاوااسکریپت را بسازیم. این فایل‌ها را به ترتیب زیر بسازید:
+
+	**فایل `js/services/auth-service.js`:**
+
+	```javascript
+	// =============================================
+	// سرویس احراز هویت
+	// =============================================
+
+	const AuthService = {
+	  async register(email, password, profileData) {
+	    const { data, error } = await supabase.auth.signUp({
+	      email,
+	      password,
+	      options: {
+	        data: {
+	          full_name: profileData.full_name,
+	          role: profileData.role
+	        }
+	      }
+	    });
+
+	    if (error) throw error;
+
+	    if (data.user) {
+	      // ساخت پروفایل
+	      const { error: profileError } = await supabase
+	        .from('profiles')
+	        .insert([
+	          {
+	            id: data.user.id,
+	            role: profileData.role,
+	            full_name: profileData.full_name,
+	            phone: profileData.phone || null,
+	            agency_name: profileData.agency_name || null,
+	            bio: profileData.bio || null
+	          }
+	        ]);
+
+	      if (profileError) throw profileError;
+	    }
+
+	    return data;
+	  },
+
+	  async login(email, password) {
+	    const { data, error } = await supabase.auth.signInWithPassword({
+	      email,
+	      password
+	    });
+
+	    if (error) throw error;
+	    return data;
+	  },
+
+	  async logout() {
+	    const { error } = await supabase.auth.signOut();
+	    if (error) throw error;
+	  },
+
+	  async resetPassword(email) {
+	    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+	      redirectTo: `${window.location.origin}${window.location.pathname}#/reset-password`
+	    });
+	    if (error) throw error;
+	  },
+
+	  async updatePassword(newPassword) {
+	    const { error } = await supabase.auth.updateUser({
+	      password: newPassword
+	    });
+	    if (error) throw error;
+	  }
+	};
+	```
+
+
+
+	**فایل `js/services/property-service.js`:**
+
+	```javascript
+	// =============================================
+	// سرویس مدیریت املاک
+	// =============================================
+
+	const PropertyService = {
+	  async getPublishedProperties(filters = {}) {
+	    let query = supabase
+	      .from('properties')
+	      .select('*, profiles(full_name, phone, agency_name, avatar_url))')
+	      .eq('status', 'published')
+	      .order('created_at', { ascending: false });
+
+	    // اعمال فیلترها
+	    if (filters.city) query = query.eq('city', filters.city);
+	    if (filters.district) query = query.eq('district', filters.district);
+	    if (filters.transaction_type) query = query.eq('transaction_type', filters.transaction_type);
+	    if (filters.property_type) query = query.eq('property_type', filters.property_type);
+	    if (filters.min_price) query = query.gte('price', filters.min_price);
+	    if (filters.max_price) query = query.lte('price', filters.max_price);
+	    if (filters.min_area) query = query.gte('area', filters.min_area);
+	    if (filters.max_area) query = query.lte('area', filters.max_area);
+	    if (filters.min_year) query = query.gte('construction_year', filters.min_year);
+	    if (filters.max_year) query = query.lte('construction_year', filters.max_year);
+	    if (filters.bedrooms) query = query.eq('bedrooms', filters.bedrooms;
+	    if (filters.has_elevator) query = query.eq('has_elevator', true;
+	    if (filters.has_parking) query = query.eq('has_parking', true;
+	    if (filters.has_storage) query = query.eq('has_storage', true;
+
+	    const { data, error } = await query;
+	    if (error) throw error;
+	    return data;
+	  },
+
+	  async getPropertyById(id) {
+	    const { data, error } = await supabase
+	      .from('properties')
+	      .select('*, profiles(full_name, phone, agency_name, bio, avatar_url), property_images(*)')
+	      .eq('id', id)
+	      .single();
+
+	    if (error) throw error;
+	    return data;
+	  },
+
+	  async getMyProperties(advisorId) {
+	    const { data, error } = await supabase
+	      .from('properties')
+	      .select('*, property_images(*)')
+	      .eq('advisor_id', advisorId)
+	      .order('created_at', { ascending: false });
+
+	    if (error) throw error;
+	    return data;
+	  },
+
+	  async createProperty(propertyData) {
+	    const { data, error } = await supabase
+	      .from('properties')
+	      .insert([propertyData])
+	      .select()
+	      .single();
+
+	    if (error) throw error;
+	    return data;
+	  },
+
+	  async updateProperty(id, propertyData) {
+	    const { data, error } = await supabase
+	      .from('properties')
+	      .update(propertyData)
+	      .eq('id', id)
+	      .select()
+	      .single();
+
+	    if (error) throw error;
+	    return data;
+	  },
+
+	  async deleteProperty(id) {
+	    const { error } = await supabase
+	      .from('properties')
+	      .delete()
+	      .eq('id', id);
+
+	    if (error) throw error;
+	  },
+
+	  async incrementView(id) {
+	    const { error } = await supabase.rpc('increment_property_view', {
+	      prop_id: id
+	    });
+	    if (error) console.error('Error incrementing view:', error);
+	  }
+	};
+	```
+
+
+
+	**فایل `js/services/image-service.js`:**
+
+	```javascript
+	// =============================================
+	// سرویس مدیریت تصاویر
+	// =============================================
+
+	const ImageService = {
+	  async uploadImages(propertyId, files, userId) {
+	    const uploadedImages = [];
+
+	    for (let i = 0; i < files.length; i++) {
+	      const file = files[i];
+	      const fileExt = file.name.split('.').pop();
+	      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+	      const filePath = `${userId}/${propertyId}/${fileName}`;
+
+	      const { error: uploadError } = await supabase.storage
+	        .from('property-images')
+	        .upload(filePath, file);
+
+	      if (uploadError) throw uploadError;
+
+	      const { data: { publicUrl } } = supabase.storage
+	        .from('property-images')
+	        .getPublicUrl(filePath);
+
+	      uploadedImages.push({
+	        property_id: propertyId,
+	        storage_path: filePath,
+	        public_url: publicUrl,
+	        sort_order: i
+	      });
+	    }
+
+	    if (uploadedImages.length > 0) {
+	      const { error } = await supabase
+	        .from('property_images')
+	        .insert(uploadedImages);
+
+	      if (error) throw error;
+	    }
+
+	    return uploadedImages;
+	  },
+
+	  async deleteImage(imageId, storagePath) {
+	    // حذف از Storage
+	    const { error: storageError } = await supabase.storage
+	      .from('property-images')
+	      .remove([storagePath]);
+
+	    if (storageError) console.error('Error deleting from storage:', storageError);
+
+	    // حذف از دیتابیس
+	    const { error } = await supabase
+	      .from('property_images')
+	      .delete()
+	      .eq('id', imageId);
+
+	    if (error) throw error;
+	  },
+
+	  async deletePropertyImages(propertyId, userId) {
+	    // دریافت همه تصاویر ملک
+	    const { data: images } = await supabase
+	      .from('property_images')
+	      .select('storage_path')
+	      .eq('property_id', propertyId);
+
+	    if (images && images.length > 0) {
+	      const paths = images.map(img => img.storage_path);
+	      const { error: storageError } = await supabase.storage
+	        .from('property-images')
+	        .remove(paths);
+
+	      if (storageError) console.error('Error deleting from storage:', storageError);
+	    }
+
+	    // حذف رکوردها از دیتابیس
+	    const { error } = await supabase
+	      .from('property_images')
+	      .delete()
+	      .eq('property_id', propertyId);
+
+	    if (error) throw error;
+	  }
+	};
+	```
+
+
+
+	**فایل `js/services/profile-service.js`:**
+
+	```javascript
+	// =============================================
+	// سرویس مدیریت پروفایل
+	// =============================================
+
+	const ProfileService = {
+	  async getProfile(userId) {
+	    const { data, error } = await supabase
+	      .from('profiles')
+	      .select('*')
+	      .eq('id', userId)
+	      .single();
+
+	    if (error) throw error;
+	    return data;
+	  },
+
+	  async updateProfile(userId, profileData) {
+	    const { data, error } = await supabase
+	      .from('profiles')
+	      .update(profileData)
+	      .eq('id', userId)
+	      .select()
+	      .single();
+
+	    if (error) throw error;
+	    return data;
+	  },
+
+	  async getAdvisorProfile(advisorId) {
+	    const { data, error } = await supabase
+	      .from('profiles')
+	      .select('id, full_name, phone
