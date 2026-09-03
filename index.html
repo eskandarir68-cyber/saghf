@@ -6,6 +6,9 @@
 
   <title>سقف | همه چیز زیر یک سقف</title>
 
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     :root {
       --grape: #713f9e;
@@ -43,6 +46,10 @@
       line-height: 1.8;
     }
 
+    body.modal-open {
+      overflow: hidden;
+    }
+
     a {
       color: inherit;
       text-decoration: none;
@@ -63,13 +70,13 @@
       margin: 0 auto;
     }
 
-    /* Header */
+    /* ================= HEADER ================= */
 
     .header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(255, 255, 255, 0.94);
+      background: rgba(255,255,255,.95);
       border-bottom: 1px solid var(--border);
       backdrop-filter: blur(14px);
     }
@@ -89,17 +96,31 @@
       color: var(--grape-dark);
     }
 
+    /* =========================================
+       لوگوی واقعی را بعداً اینجا قرار بده
+       فایل پیشنهادی:
+       images/logo.png
+       ========================================= */
+
+    .brand-logo {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      border-radius: 14px;
+      display: block;
+    }
+
     .brand-symbol {
-      width: 48px;
-      height: 48px;
+      width: 50px;
+      height: 50px;
       display: grid;
       place-items: center;
       border-radius: 16px;
-      background: linear-gradient(135deg, var(--grape), var(--royal));
+      background: linear-gradient(135deg,var(--grape),var(--royal));
       color: white;
       font-size: 25px;
       font-weight: bold;
-      box-shadow: 0 9px 20px rgba(113, 63, 158, 0.3);
+      box-shadow: 0 9px 20px rgba(113,63,158,.3);
     }
 
     .brand-name {
@@ -125,7 +146,7 @@
     }
 
     .nav a {
-      transition: 0.2s;
+      transition: .2s;
     }
 
     .nav a:hover {
@@ -148,7 +169,7 @@
       border-radius: 12px;
       font-size: 13px;
       font-weight: bold;
-      transition: 0.2s ease;
+      transition: .2s ease;
     }
 
     .button:hover {
@@ -156,9 +177,9 @@
     }
 
     .button-primary {
-      background: linear-gradient(135deg, var(--grape), var(--royal));
+      background: linear-gradient(135deg,var(--grape),var(--royal));
       color: white;
-      box-shadow: 0 8px 20px rgba(113, 63, 158, 0.25);
+      box-shadow: 0 8px 20px rgba(113,63,158,.25);
     }
 
     .button-light {
@@ -169,6 +190,16 @@
     .button-white {
       background: white;
       color: var(--grape-dark);
+    }
+
+    .user-button {
+      background: #eee5fa;
+      color: var(--grape-dark);
+    }
+
+    .logout-button {
+      background: #fff0f3;
+      color: var(--red);
     }
 
     .mobile-button {
@@ -193,463 +224,757 @@
       gap: 5px;
     }
 
-    .mobile-menu a {
+    .mobile-menu a,
+    .mobile-menu button {
       padding: 9px 12px;
+      border: 0;
       border-radius: 10px;
+      background: transparent;
       color: var(--muted);
+      text-align: right;
     }
 
-    .mobile-menu a:hover {
+    .mobile-menu a:hover,
+    .mobile-menu button:hover {
       background: var(--lavender-light);
       color: var(--grape);
     }
 
-    /* Hero */
+    /* ================= HERO ================= */
 
     .hero {
       position: relative;
       overflow: hidden;
       padding: 88px 0 105px;
       background:
-        radial-gradient(circle at 8% 15%, rgba(217, 198, 241, 0.9), transparent 29%),
-        radial-gradient(circle at 90% 85%, rgba(65, 49, 155, 0.18), transparent 34%),
-        linear-gradient(135deg, #fdfaff, #eee5fa);
+        radial-gradient(circle at 8% 15%,rgba(217,198,241,.9),transparent 29%),
+        radial-gradient(circle at 90% 85%,rgba(65,49,155,.18),transparent 34%),
+        linear-gradient(135deg,#fdfaff,#eee5fa);
     }
 
     .hero::after {
-      content: "";
-      position: absolute;
-      width: 300px;
-      height: 300px;
-      left: -110px;
-      bottom: -160px;
-      border-radius: 50%;
-      background: rgba(113, 63, 158, 0.08);
+      content:"";
+      position:absolute;
+      width:300px;
+      height:300px;
+      left:-110px;
+      bottom:-160px;
+      border-radius:50%;
+      background:rgba(113,63,158,.08);
     }
 
     .hero-content {
       position: relative;
       z-index: 2;
-      max-width: 850px;
+      max-width: 1000px;
       margin: 0 auto;
       text-align: center;
     }
 
     .hero-label {
-      display: inline-block;
-      margin-bottom: 20px;
-      padding: 7px 16px;
-      border: 1px solid var(--lavender);
-      border-radius: 50px;
-      background: rgba(255, 255, 255, 0.75);
-      color: var(--grape);
-      font-size: 13px;
-      font-weight: bold;
+      display:inline-block;
+      margin-bottom:22px;
+      padding:8px 18px;
+      border:1px solid var(--lavender);
+      border-radius:50px;
+      background:rgba(255,255,255,.78);
+      color:var(--grape);
+      font-size:13px;
+      font-weight:bold;
+    }
+
+    /* شعار اصلی بزرگ‌تر */
+
+    .main-slogan {
+      margin: 0 auto 18px;
+      color: var(--grape-dark);
+      font-size: clamp(46px,8vw,88px);
+      line-height: 1.15;
+      font-weight: 900;
+      letter-spacing: -2px;
+      text-shadow: 0 8px 30px rgba(76,38,123,.12);
+    }
+
+    .main-slogan span {
+      color: var(--royal);
+      background: linear-gradient(135deg,var(--grape),var(--royal));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
     }
 
     .hero h1 {
-      margin-bottom: 18px;
-      color: var(--grape-dark);
-      font-size: clamp(34px, 5vw, 63px);
-      line-height: 1.35;
+      margin-bottom:18px;
+      color:var(--grape-dark);
+      font-size:clamp(28px,4vw,48px);
+      line-height:1.35;
     }
 
     .hero h1 span {
-      color: var(--royal);
+      color:var(--royal);
     }
 
     .hero-description {
-      max-width: 650px;
-      margin: 0 auto 34px;
-      color: var(--muted);
-      font-size: 16px;
+      max-width:700px;
+      margin:0 auto 34px;
+      color:var(--muted);
+      font-size:16px;
     }
 
+    /* ================= SEARCH ================= */
+
     .search-panel {
-      display: grid;
-      grid-template-columns: 1.5fr 1fr 1fr auto;
-      gap: 10px;
-      padding: 13px;
-      border: 1px solid rgba(255, 255, 255, 0.9);
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.86);
-      box-shadow: var(--shadow);
-      text-align: right;
+      display:grid;
+      grid-template-columns:1.5fr 1fr 1fr auto;
+      gap:10px;
+      padding:13px;
+      border:1px solid rgba(255,255,255,.9);
+      border-radius:20px;
+      background:rgba(255,255,255,.88);
+      box-shadow:var(--shadow);
+      text-align:right;
     }
 
     .search-panel input,
     .search-panel select {
-      width: 100%;
-      min-width: 0;
-      height: 48px;
-      padding: 0 13px;
-      border: 1px solid var(--border);
-      border-radius: 11px;
-      outline: 0;
-      background: white;
-      color: var(--text);
-      font-size: 13px;
+      width:100%;
+      min-width:0;
+      height:48px;
+      padding:0 13px;
+      border:1px solid var(--border);
+      border-radius:11px;
+      outline:0;
+      background:white;
+      color:var(--text);
+      font-size:13px;
     }
 
     .search-panel input:focus,
     .search-panel select:focus {
-      border-color: var(--grape);
+      border-color:var(--grape);
+      box-shadow:0 0 0 3px rgba(113,63,158,.08);
     }
 
     .search-submit {
-      min-height: 48px;
-      padding: 0 25px;
-      border: 0;
-      border-radius: 11px;
-      background: var(--grape);
-      color: white;
-      font-weight: bold;
+      min-height:48px;
+      padding:0 25px;
+      border:0;
+      border-radius:11px;
+      background:var(--grape);
+      color:white;
+      font-weight:bold;
     }
 
-    /* Stats */
+    .advanced-search {
+      margin-top:12px;
+      padding:18px;
+      border-radius:18px;
+      background:white;
+      border:1px solid var(--border);
+      box-shadow:0 10px 30px rgba(76,38,123,.08);
+      display:none;
+    }
+
+    .advanced-search.show {
+      display:block;
+    }
+
+    .advanced-grid {
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+    }
+
+    .field label {
+      display:block;
+      margin-bottom:5px;
+      color:var(--muted);
+      font-size:11px;
+      font-weight:bold;
+    }
+
+    .field input,
+    .field select {
+      width:100%;
+      height:44px;
+      padding:0 11px;
+      border:1px solid var(--border);
+      border-radius:10px;
+      background:#fff;
+      outline:none;
+    }
+
+    .search-actions {
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .clear-button {
+      min-height:44px;
+      padding:0 20px;
+      border:1px solid var(--border);
+      border-radius:10px;
+      background:var(--lavender-light);
+      color:var(--grape-dark);
+      font-weight:bold;
+    }
+
+    .advanced-button {
+      margin-top:12px;
+      border:0;
+      background:transparent;
+      color:var(--grape);
+      font-weight:bold;
+      font-size:12px;
+    }
+
+    /* ================= STATS ================= */
 
     .stats {
-      position: relative;
-      z-index: 5;
-      margin-top: -38px;
+      position:relative;
+      z-index:5;
+      margin-top:-38px;
     }
 
     .stats-box {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      padding: 22px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background: white;
-      box-shadow: var(--shadow);
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      padding:22px;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      background:white;
+      box-shadow:var(--shadow);
     }
 
     .stat {
-      text-align: center;
-      border-left: 1px solid var(--border);
+      text-align:center;
+      border-left:1px solid var(--border);
     }
 
     .stat:last-child {
-      border-left: 0;
+      border-left:0;
     }
 
     .stat strong {
-      display: block;
-      color: var(--grape);
-      font-size: 25px;
+      display:block;
+      color:var(--grape);
+      font-size:25px;
     }
 
     .stat span {
-      color: var(--muted);
-      font-size: 12px;
+      color:var(--muted);
+      font-size:12px;
     }
 
-    /* Sections */
+    /* ================= SECTIONS ================= */
 
     .section {
-      padding: 82px 0;
+      padding:82px 0;
     }
 
     .section-heading {
-      margin-bottom: 32px;
-      text-align: center;
+      margin-bottom:32px;
+      text-align:center;
     }
 
     .section-heading h2 {
-      margin-bottom: 8px;
-      color: var(--grape-dark);
-      font-size: 29px;
+      margin-bottom:8px;
+      color:var(--grape-dark);
+      font-size:29px;
     }
 
     .section-heading p {
-      color: var(--muted);
-      font-size: 14px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .results-info {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:15px;
+      margin-bottom:18px;
+      padding:12px 16px;
+      border:1px solid var(--border);
+      border-radius:13px;
+      background:white;
+      color:var(--muted);
+      font-size:12px;
     }
 
     .property-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 22px;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:22px;
     }
 
     .property-card {
-      overflow: hidden;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background: white;
-      box-shadow: 0 7px 20px rgba(76, 38, 123, 0.07);
-      transition: 0.25s ease;
+      overflow:hidden;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      background:white;
+      box-shadow:0 7px 20px rgba(76,38,123,.07);
+      transition:.25s ease;
     }
 
     .property-card:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--shadow);
+      transform:translateY(-6px);
+      box-shadow:var(--shadow);
     }
 
     .property-image {
-      position: relative;
-      height: 205px;
-      display: grid;
-      place-items: center;
+      position:relative;
+      height:205px;
+      overflow:hidden;
+      display:grid;
+      place-items:center;
       background:
-        linear-gradient(135deg, rgba(113, 63, 158, 0.35), rgba(65, 49, 155, 0.25)),
-        linear-gradient(135deg, #d7c2ed, #8f77c4);
-      color: white;
-      font-size: 42px;
+        linear-gradient(135deg,rgba(113,63,158,.35),rgba(65,49,155,.25)),
+        linear-gradient(135deg,#d7c2ed,#8f77c4);
+      color:white;
+      font-size:42px;
     }
 
-    .property-image::after {
-      content: "تصویر ملک";
-      position: absolute;
-      bottom: 12px;
-      right: 14px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      background: rgba(0, 0, 0, 0.25);
-      font-size: 11px;
+    /* =========================================
+       عکس واقعی ملک را بعداً اینجا قرار بده
+       مثال:
+       <img src="images/house1.jpg">
+       ========================================= */
+
+    .property-image img {
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .property-placeholder {
+      text-align:center;
+    }
+
+    .property-placeholder small {
+      display:block;
+      margin-top:5px;
+      font-size:11px;
+      opacity:.8;
     }
 
     .property-badge {
-      position: absolute;
-      top: 13px;
-      right: 13px;
-      padding: 5px 10px;
-      border-radius: 20px;
-      background: white;
-      color: var(--grape);
-      font-size: 11px;
-      font-weight: bold;
+      position:absolute;
+      top:13px;
+      right:13px;
+      padding:5px 10px;
+      border-radius:20px;
+      background:white;
+      color:var(--grape);
+      font-size:11px;
+      font-weight:bold;
     }
 
     .property-body {
-      padding: 18px;
+      padding:18px;
     }
 
     .property-title {
-      margin-bottom: 6px;
-      color: var(--grape-dark);
-      font-size: 16px;
-      font-weight: bold;
+      margin-bottom:6px;
+      color:var(--grape-dark);
+      font-size:16px;
+      font-weight:bold;
     }
 
     .property-location {
-      margin-bottom: 12px;
-      color: var(--muted);
-      font-size: 12px;
+      margin-bottom:12px;
+      color:var(--muted);
+      font-size:12px;
     }
 
     .property-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin-bottom: 16px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:7px;
+      margin-bottom:16px;
     }
 
     .property-meta span {
-      padding: 4px 8px;
-      border-radius: 7px;
-      background: var(--lavender-light);
-      color: var(--grape-dark);
-      font-size: 11px;
+      padding:4px 8px;
+      border-radius:7px;
+      background:var(--lavender-light);
+      color:var(--grape-dark);
+      font-size:11px;
     }
 
     .property-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-top: 13px;
-      border-top: 1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding-top:13px;
+      border-top:1px solid var(--border);
     }
 
     .property-price {
-      color: var(--grape);
-      font-size: 13px;
-      font-weight: bold;
+      color:var(--grape);
+      font-size:13px;
+      font-weight:bold;
     }
 
     .property-link {
-      color: var(--royal);
-      font-size: 12px;
-      font-weight: bold;
+      border:0;
+      background:transparent;
+      color:var(--royal);
+      font-size:12px;
+      font-weight:bold;
     }
 
-    /* Features */
+    .no-results {
+      display:none;
+      padding:45px 20px;
+      border:1px dashed var(--border);
+      border-radius:20px;
+      background:white;
+      text-align:center;
+      color:var(--muted);
+    }
+
+    /* ================= FEATURES ================= */
 
     .features {
-      background: white;
+      background:white;
     }
 
     .feature-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 22px;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:22px;
     }
 
     .feature-card {
-      padding: 28px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background: var(--pastel);
-      text-align: center;
-      transition: 0.25s ease;
+      padding:28px;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      background:var(--pastel);
+      text-align:center;
+      transition:.25s ease;
     }
 
     .feature-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow);
+      transform:translateY(-5px);
+      box-shadow:var(--shadow);
     }
 
     .feature-icon {
-      width: 60px;
-      height: 60px;
-      display: grid;
-      place-items: center;
-      margin: 0 auto 15px;
-      border-radius: 18px;
-      background: var(--lavender);
-      color: var(--grape-dark);
-      font-size: 27px;
+      width:60px;
+      height:60px;
+      display:grid;
+      place-items:center;
+      margin:0 auto 15px;
+      border-radius:18px;
+      background:var(--lavender);
+      color:var(--grape-dark);
+      font-size:27px;
     }
 
     .feature-card h3 {
-      margin-bottom: 8px;
-      color: var(--grape-dark);
-      font-size: 17px;
+      margin-bottom:8px;
+      color:var(--grape-dark);
+      font-size:17px;
     }
 
     .feature-card p {
-      color: var(--muted);
-      font-size: 13px;
+      color:var(--muted);
+      font-size:13px;
     }
 
-    /* CTA */
+    /* ================= CTA ================= */
 
     .cta {
-      padding: 80px 0;
+      padding:80px 0;
     }
 
     .cta-box {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 25px;
-      padding: 42px;
-      border-radius: 27px;
-      background: linear-gradient(135deg, var(--grape-dark), var(--royal));
-      color: white;
-      box-shadow: var(--shadow);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:25px;
+      padding:42px;
+      border-radius:27px;
+      background:linear-gradient(135deg,var(--grape-dark),var(--royal));
+      color:white;
+      box-shadow:var(--shadow);
     }
 
     .cta-box h2 {
-      margin-bottom: 7px;
-      font-size: 25px;
+      margin-bottom:7px;
+      font-size:25px;
     }
 
     .cta-box p {
-      color: #e9def7;
-      font-size: 13px;
+      color:#e9def7;
+      font-size:13px;
     }
 
-    /* Footer */
+    /* ================= FOOTER ================= */
 
     .footer {
-      padding: 32px 0;
-      background: #251535;
-      color: #e9dff2;
+      padding:32px 0;
+      background:#251535;
+      color:#e9dff2;
     }
 
     .footer-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:20px;
+      text-align:center;
     }
 
     .footer-title {
-      color: white;
-      font-size: 23px;
-      font-weight: bold;
+      color:white;
+      font-size:23px;
+      font-weight:bold;
     }
 
-    .footer p,
-    .footer small {
-      color: #cdbedc;
-      font-size: 12px;
+    .footer p {
+      color:#cdbedc;
+      font-size:12px;
     }
 
-    /* Responsive */
+    /* ================= MODAL ================= */
 
-    @media (max-width: 900px) {
+    .modal {
+      position:fixed;
+      inset:0;
+      z-index:1000;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      background:rgba(27,15,38,.62);
+      backdrop-filter:blur(8px);
+    }
+
+    .modal.show {
+      display:flex;
+    }
+
+    .modal-box {
+      width:min(460px,100%);
+      max-height:90vh;
+      overflow:auto;
+      padding:28px;
+      border-radius:25px;
+      background:white;
+      box-shadow:0 30px 80px rgba(0,0,0,.25);
+      position:relative;
+    }
+
+    .modal-close {
+      position:absolute;
+      top:14px;
+      left:14px;
+      width:35px;
+      height:35px;
+      border:0;
+      border-radius:10px;
+      background:#f5eff9;
+      color:var(--grape-dark);
+      font-size:20px;
+    }
+
+    .modal-title {
+      margin-bottom:6px;
+      color:var(--grape-dark);
+      font-size:25px;
+      font-weight:bold;
+    }
+
+    .modal-description {
+      margin-bottom:22px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .auth-tabs {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-bottom:20px;
+    }
+
+    .auth-tab {
+      height:45px;
+      border:1px solid var(--border);
+      border-radius:10px;
+      background:var(--pastel);
+      color:var(--muted);
+      font-weight:bold;
+    }
+
+    .auth-tab.active {
+      background:var(--grape);
+      color:white;
+      border-color:var(--grape);
+    }
+
+    .auth-form {
+      display:none;
+    }
+
+    .auth-form.active {
+      display:block;
+    }
+
+    .auth-field {
+      margin-bottom:13px;
+    }
+
+    .auth-field label {
+      display:block;
+      margin-bottom:6px;
+      color:var(--grape-dark);
+      font-size:12px;
+      font-weight:bold;
+    }
+
+    .auth-field input,
+    .auth-field select {
+      width:100%;
+      height:48px;
+      padding:0 13px;
+      border:1px solid var(--border);
+      border-radius:11px;
+      outline:none;
+    }
+
+    .auth-field input:focus,
+    .auth-field select:focus {
+      border-color:var(--grape);
+      box-shadow:0 0 0 3px rgba(113,63,158,.08);
+    }
+
+    .auth-submit {
+      width:100%;
+      height:49px;
+      margin-top:8px;
+      border:0;
+      border-radius:11px;
+      background:linear-gradient(135deg,var(--grape),var(--royal));
+      color:white;
+      font-weight:bold;
+    }
+
+    .auth-message {
+      min-height:25px;
+      margin-top:12px;
+      color:var(--red);
+      font-size:12px;
+      text-align:center;
+    }
+
+    .auth-message.success {
+      color:var(--green);
+    }
+
+    .user-info {
+      margin-bottom:18px;
+      padding:14px;
+      border-radius:13px;
+      background:var(--lavender-light);
+      color:var(--grape-dark);
+      font-size:12px;
+    }
+
+    /* ================= RESPONSIVE ================= */
+
+    @media(max-width:900px) {
+
       .nav,
       .header-buttons {
-        display: none;
+        display:none;
       }
 
       .mobile-button {
-        display: block;
+        display:block;
       }
 
       .search-panel {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns:1fr 1fr;
       }
 
-      .search-submit {
-        min-height: 48px;
+      .advanced-grid {
+        grid-template-columns:1fr 1fr;
       }
 
       .property-grid,
       .feature-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns:1fr 1fr;
       }
     }
 
-    @media (max-width: 600px) {
+    @media(max-width:600px) {
+
       .container {
-        width: min(100% - 24px, 1180px);
+        width:min(100% - 24px,1180px);
       }
 
       .hero {
-        padding: 62px 0 82px;
+        padding:62px 0 82px;
+      }
+
+      .main-slogan {
+        font-size:47px;
+        letter-spacing:-1px;
       }
 
       .hero-description {
-        font-size: 14px;
+        font-size:14px;
       }
 
       .search-panel {
-        grid-template-columns: 1fr;
+        grid-template-columns:1fr;
+      }
+
+      .advanced-grid {
+        grid-template-columns:1fr;
       }
 
       .stats-box {
-        grid-template-columns: 1fr;
-        gap: 15px;
+        grid-template-columns:1fr;
+        gap:15px;
       }
 
       .stat {
-        padding-bottom: 15px;
-        border-left: 0;
-        border-bottom: 1px solid var(--border);
+        padding-bottom:15px;
+        border-left:0;
+        border-bottom:1px solid var(--border);
       }
 
       .stat:last-child {
-        padding-bottom: 0;
-        border-bottom: 0;
+        padding-bottom:0;
+        border-bottom:0;
       }
 
       .property-grid,
       .feature-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns:1fr;
       }
 
       .cta-box {
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 28px;
+        align-items:flex-start;
+        flex-direction:column;
+        padding:28px;
       }
 
       .footer-inner {
-        align-items: flex-start;
-        flex-direction: column;
+        align-items:flex-start;
+        flex-direction:column;
+      }
+
+      .results-info {
+        flex-direction:column;
+        align-items:flex-start;
       }
     }
   </style>
@@ -657,16 +982,28 @@
 
 <body>
 
+  <!-- ================= HEADER ================= -->
+
   <header class="header">
+
     <div class="container header-inner">
 
       <a href="#home" class="brand">
-        <span class="brand-symbol">س</span>
+
+        <!--
+          بعداً لوگوی خودت را اینجا قرار بده:
+          images/logo.png
+
+          فعلاً این لوگوی موقت نمایش داده می‌شود.
+        -->
+
+        <div class="brand-symbol" id="logoPlaceholder">س</div>
 
         <span>
           <span class="brand-name">سقف</span>
           <span class="brand-slogan">همه چیز زیر یک سقف</span>
         </span>
+
       </a>
 
       <nav class="nav">
@@ -676,31 +1013,58 @@
         <a href="#about">درباره ما</a>
       </nav>
 
-      <div class="header-buttons">
-        <a href="#login" class="button button-light">ورود</a>
-        <a href="#register" class="button button-primary">ثبت‌نام</a>
+      <div class="header-buttons" id="headerButtons">
+
+        <button class="button button-light" onclick="openAuth('login')">
+          ورود
+        </button>
+
+        <button class="button button-primary" onclick="openAuth('register')">
+          ثبت‌نام
+        </button>
+
       </div>
 
-      <button class="mobile-button" id="mobileButton">☰</button>
+      <button class="mobile-button" id="mobileButton">
+        ☰
+      </button>
+
     </div>
 
     <div class="container mobile-menu" id="mobileMenu">
+
       <a href="#home">خانه</a>
       <a href="#properties">املاک</a>
       <a href="#features">امکانات</a>
       <a href="#about">درباره ما</a>
-      <a href="#login">ورود</a>
-      <a href="#register">ثبت‌نام</a>
+
+      <button onclick="openAuth('login')">
+        ورود
+      </button>
+
+      <button onclick="openAuth('register')">
+        ثبت‌نام
+      </button>
+
     </div>
+
   </header>
+
 
   <main>
 
+    <!-- ================= HERO ================= -->
+
     <section class="hero" id="home">
+
       <div class="container hero-content">
 
         <div class="hero-label">
           پلتفرم حرفه‌ای خرید، فروش و اجاره املاک
+        </div>
+
+        <div class="main-slogan">
+          همه چیز <span>زیر یک سقف</span>
         </div>
 
         <h1>
@@ -709,46 +1073,127 @@
         </h1>
 
         <p class="hero-description">
-          در سقف، فایل‌های ملکی واقعی را جستجو کنید، جزئیات ملک را ببینید
-          و مستقیماً با مشاور تماس بگیرید.
-          همه چیز زیر یک سقف.
+          در سقف، فایل‌های ملکی را جستجو کنید،
+          مشخصات ملک را ببینید و با مشاور ارتباط بگیرید.
         </p>
 
+
+        <!-- جستجوی اصلی -->
+
         <form class="search-panel" id="searchForm">
+
           <input
             id="searchInput"
             type="search"
-            placeholder="شهر یا منطقه را وارد کنید"
+            placeholder="شهر، منطقه یا نام ملک..."
           >
 
           <select id="dealType">
             <option value="">نوع معامله</option>
-            <option>فروش</option>
-            <option>اجاره</option>
-            <option>رهن</option>
+            <option value="فروش">فروش</option>
+            <option value="اجاره">اجاره</option>
+            <option value="رهن">رهن</option>
           </select>
 
           <select id="propertyType">
             <option value="">نوع ملک</option>
-            <option>آپارتمان</option>
-            <option>خانه</option>
-            <option>زمین</option>
-            <option>دفتر کار</option>
+            <option value="آپارتمان">آپارتمان</option>
+            <option value="خانه">خانه</option>
+            <option value="زمین">زمین</option>
+            <option value="دفتر کار">دفتر کار</option>
           </select>
 
           <button type="submit" class="search-submit">
-            جستجوی ملک
+            🔍 جستجوی ملک
           </button>
+
         </form>
 
+
+        <button class="advanced-button" id="advancedButton">
+          ⚙ فیلترهای بیشتر
+        </button>
+
+
+        <!-- فیلترهای پیشرفته -->
+
+        <div class="advanced-search" id="advancedSearch">
+
+          <div class="advanced-grid">
+
+            <div class="field">
+              <label>حداقل متراژ</label>
+              <input id="minArea" type="number" placeholder="مثلاً ۵۰">
+            </div>
+
+            <div class="field">
+              <label>حداکثر متراژ</label>
+              <input id="maxArea" type="number" placeholder="مثلاً ۲۰۰">
+            </div>
+
+            <div class="field">
+              <label>حداقل قیمت</label>
+              <input id="minPrice" type="number" placeholder="مثلاً ۱۰۰۰">
+            </div>
+
+            <div class="field">
+              <label>حداکثر قیمت</label>
+              <input id="maxPrice" type="number" placeholder="مثلاً ۱۰۰۰۰">
+            </div>
+
+            <div class="field">
+              <label>تعداد خواب</label>
+              <select id="bedrooms">
+                <option value="">همه</option>
+                <option value="1">۱ خواب</option>
+                <option value="2">۲ خواب</option>
+                <option value="3">۳ خواب</option>
+                <option value="4">۴ خواب</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>مرتب‌سازی</label>
+              <select id="sortBy">
+                <option value="default">پیش‌فرض</option>
+                <option value="priceLow">ارزان‌ترین</option>
+                <option value="priceHigh">گران‌ترین</option>
+                <option value="areaLow">کمترین متراژ</option>
+                <option value="areaHigh">بیشترین متراژ</option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="search-actions">
+
+            <button
+              type="button"
+              class="clear-button"
+              id="clearFilters"
+            >
+              پاک کردن فیلترها
+            </button>
+
+          </div>
+
+        </div>
+
       </div>
+
     </section>
 
+
+    <!-- ================= STATS ================= -->
+
     <section class="stats">
+
       <div class="container">
+
         <div class="stats-box">
+
           <div class="stat">
-            <strong>۱۲۰۰+</strong>
+            <strong id="fileCount">۱۲۰۰+</strong>
             <span>فایل ملکی</span>
           </div>
 
@@ -761,29 +1206,89 @@
             <strong>۲۴/۷</strong>
             <span>همراه شما</span>
           </div>
+
         </div>
+
       </div>
+
     </section>
 
+
+    <!-- ================= PROPERTIES ================= -->
+
     <section class="section" id="properties">
+
       <div class="container">
 
         <div class="section-heading">
-          <h2>فایل‌های منتخب سقف</h2>
-          <p>چند نمونه از فایل‌های ملکی موجود در پلتفرم</p>
+
+          <h2>
+            فایل‌های منتخب سقف
+          </h2>
+
+          <p>
+            ملک موردنظرتان را سریع‌تر پیدا کنید
+          </p>
+
         </div>
 
-        <div class="property-grid">
 
-          <article class="property-card">
+        <div class="results-info">
+
+          <span id="resultsText">
+            ۳ فایل نمایش داده می‌شود
+          </span>
+
+          <button
+            class="clear-button"
+            onclick="clearAllFilters()"
+          >
+            حذف فیلترها
+          </button>
+
+        </div>
+
+
+        <div class="property-grid" id="propertyGrid">
+
+
+          <!-- ملک ۱ -->
+
+          <article
+            class="property-card"
+            data-title="آپارتمان مدرن و نورگیر"
+            data-location="تهران منطقه ۵"
+            data-deal="فروش"
+            data-type="آپارتمان"
+            data-area="120"
+            data-price="8500"
+            data-bedrooms="2"
+          >
+
             <div class="property-image">
-              🏠
-              <span class="property-badge">فروش</span>
+
+              <!-- بعداً عکس واقعی را جایگزین کن -->
+
+              <div class="property-placeholder">
+                🏠
+                <small>جای عکس ملک</small>
+              </div>
+
+              <span class="property-badge">
+                فروش
+              </span>
+
             </div>
 
             <div class="property-body">
-              <h3 class="property-title">آپارتمان مدرن و نورگیر</h3>
-              <p class="property-location">تهران، منطقه ۵</p>
+
+              <h3 class="property-title">
+                آپارتمان مدرن و نورگیر
+              </h3>
+
+              <p class="property-location">
+                📍 تهران، منطقه ۵
+              </p>
 
               <div class="property-meta">
                 <span>۱۲۰ متر</span>
@@ -792,21 +1297,60 @@
               </div>
 
               <div class="property-footer">
-                <span class="property-price">تماس بگیرید</span>
-                <a href="#login" class="property-link">مشاهده جزئیات ←</a>
+
+                <span class="property-price">
+                  ۸.۵ میلیارد تومان
+                </span>
+
+                <button
+                  class="property-link"
+                  onclick="showProperty('آپارتمان مدرن و نورگیر')"
+                >
+                  مشاهده جزئیات ←
+                </button>
+
               </div>
+
             </div>
+
           </article>
 
-          <article class="property-card">
+
+          <!-- ملک ۲ -->
+
+          <article
+            class="property-card"
+            data-title="خانه ویلایی دلباز"
+            data-location="کرج عظیمیه"
+            data-deal="اجاره"
+            data-type="خانه"
+            data-area="180"
+            data-price="320"
+            data-bedrooms="3"
+          >
+
             <div class="property-image">
-              🏡
-              <span class="property-badge">اجاره</span>
+
+              <div class="property-placeholder">
+                🏡
+                <small>جای عکس ملک</small>
+              </div>
+
+              <span class="property-badge">
+                اجاره
+              </span>
+
             </div>
 
             <div class="property-body">
-              <h3 class="property-title">خانه ویلایی دلباز</h3>
-              <p class="property-location">کرج، عظیمیه</p>
+
+              <h3 class="property-title">
+                خانه ویلایی دلباز
+              </h3>
+
+              <p class="property-location">
+                📍 کرج، عظیمیه
+              </p>
 
               <div class="property-meta">
                 <span>۱۸۰ متر</span>
@@ -815,21 +1359,60 @@
               </div>
 
               <div class="property-footer">
-                <span class="property-price">رهن و اجاره</span>
-                <a href="#login" class="property-link">مشاهده جزئیات ←</a>
+
+                <span class="property-price">
+                  رهن و اجاره
+                </span>
+
+                <button
+                  class="property-link"
+                  onclick="showProperty('خانه ویلایی دلباز')"
+                >
+                  مشاهده جزئیات ←
+                </button>
+
               </div>
+
             </div>
+
           </article>
 
-          <article class="property-card">
+
+          <!-- ملک ۳ -->
+
+          <article
+            class="property-card"
+            data-title="واحد اداری مجهز"
+            data-location="تهران ونک"
+            data-deal="رهن"
+            data-type="دفتر کار"
+            data-area="90"
+            data-price="450"
+            data-bedrooms="2"
+          >
+
             <div class="property-image">
-              🏢
-              <span class="property-badge">رهن</span>
+
+              <div class="property-placeholder">
+                🏢
+                <small>جای عکس ملک</small>
+              </div>
+
+              <span class="property-badge">
+                رهن
+              </span>
+
             </div>
 
             <div class="property-body">
-              <h3 class="property-title">واحد اداری مجهز</h3>
-              <p class="property-location">تهران، ونک</p>
+
+              <h3 class="property-title">
+                واحد اداری مجهز
+              </h3>
+
+              <p class="property-location">
+                📍 تهران، ونک
+              </p>
 
               <div class="property-meta">
                 <span>۹۰ متر</span>
@@ -838,129 +1421,1487 @@
               </div>
 
               <div class="property-footer">
-                <span class="property-price">قیمت توافقی</span>
-                <a href="#login" class="property-link">مشاهده جزئیات ←</a>
+
+                <span class="property-price">
+                  قیمت توافقی
+                </span>
+
+                <button
+                  class="property-link"
+                  onclick="showProperty('واحد اداری مجهز')"
+                >
+                  مشاهده جزئیات ←
+                </button>
+
               </div>
+
             </div>
+
           </article>
 
+
         </div>
+
+
+        <div class="no-results" id="noResults">
+
+          <div style="font-size:40px;margin-bottom:10px;">
+            🏠
+          </div>
+
+          <strong>
+            ملکی با این مشخصات پیدا نشد
+          </strong>
+
+          <p style="margin-top:5px;">
+            فیلترها را تغییر دهید و دوباره جستجو کنید.
+          </p>
+
+        </div>
+
       </div>
+
     </section>
 
+
+    <!-- ================= FEATURES ================= -->
+
     <section class="section features" id="features">
+
       <div class="container">
 
         <div class="section-heading">
-          <h2>چرا سقف؟</h2>
-          <p>تمام امکانات لازم برای یک تجربه بهتر در بازار املاک</p>
+
+          <h2>
+            چرا سقف؟
+          </h2>
+
+          <p>
+            تمام امکانات لازم برای یک تجربه بهتر در بازار املاک
+          </p>
+
         </div>
 
         <div class="feature-grid">
 
           <article class="feature-card">
-            <div class="feature-icon">⌕</div>
-            <h3>جستجوی آسان</h3>
+
+            <div class="feature-icon">
+              ⌕
+            </div>
+
+            <h3>
+              جستجوی حرفه‌ای
+            </h3>
+
             <p>
-              ملک موردنظر خود را بر اساس شهر، منطقه، قیمت و نوع معامله پیدا کنید.
+              ملک موردنظر خود را بر اساس شهر، منطقه،
+              قیمت، متراژ، تعداد خواب و نوع معامله پیدا کنید.
             </p>
+
           </article>
 
-          <article class="feature-card">
-            <div class="feature-icon">✓</div>
-            <h3>فایل‌های کامل</h3>
-            <p>
-              مشخصات ملک، تصاویر، امکانات و اطلاعات مشاور را یکجا مشاهده کنید.
-            </p>
-          </article>
 
           <article class="feature-card">
-            <div class="feature-icon">☎</div>
-            <h3>ارتباط مستقیم</h3>
+
+            <div class="feature-icon">
+              ✓
+            </div>
+
+            <h3>
+              فایل‌های کامل
+            </h3>
+
             <p>
-              بدون واسطه اضافی با مشاور ملک تماس بگیرید و سؤال‌های خود را بپرسید.
+              مشخصات ملک، تصاویر، امکانات و اطلاعات مشاور
+              را یکجا مشاهده کنید.
             </p>
+
+          </article>
+
+
+          <article class="feature-card">
+
+            <div class="feature-icon">
+              ☎
+            </div>
+
+            <h3>
+              ارتباط مستقیم
+            </h3>
+
+            <p>
+              مستقیماً با مشاور ملک ارتباط بگیرید
+              و سؤال‌های خود را بپرسید.
+            </p>
+
           </article>
 
         </div>
+
       </div>
+
     </section>
 
+
+    <!-- ================= CTA ================= -->
+
     <section class="cta" id="about">
+
       <div class="container">
+
         <div class="cta-box">
+
           <div>
-            <h2>مشاور املاک هستید؟</h2>
+
+            <h2>
+              مشاور املاک هستید؟
+            </h2>
+
             <p>
               فایل‌های خود را در سقف ثبت کنید و مشتریان بیشتری پیدا کنید.
             </p>
+
           </div>
 
-          <a href="#register" class="button button-white">
+          <button
+            class="button button-white"
+            onclick="openAuth('register')"
+          >
             ثبت‌نام به‌عنوان مشاور
-          </a>
+          </button>
+
         </div>
+
       </div>
+
     </section>
 
   </main>
 
+
+  <!-- ================= FOOTER ================= -->
+
   <footer class="footer">
+
     <div class="container footer-inner">
-      <div>
-        <div class="footer-title">سقف</div>
-        <p>همه چیز زیر یک سقف</p>
-      </div>
 
       <div>
-        <small>سازنده: کوروش غلامی</small>
+
+        <div class="footer-title">
+          سقف
+        </div>
+
+        <p>
+          همه چیز زیر یک سقف
+        </p>
+
       </div>
+
     </div>
+
   </footer>
 
+
+  <!-- ================= AUTH MODAL ================= -->
+
+  <div class="modal" id="authModal">
+
+    <div class="modal-box">
+
+      <button
+        class="modal-close"
+        onclick="closeAuth()"
+      >
+        ×
+      </button>
+
+
+      <div class="modal-title">
+        حساب کاربری سقف
+      </div>
+
+      <div class="modal-description">
+        وارد حساب خود شوید یا یک حساب جدید بسازید.
+      </div>
+
+
+      <div class="auth-tabs">
+
+        <button
+          class="auth-tab active"
+          id="loginTab"
+          onclick="switchAuth('login')"
+        >
+          ورود
+        </button>
+
+        <button
+          class="auth-tab"
+          id="registerTab"
+          onclick="switchAuth('register')"
+        >
+          ثبت‌نام
+        </button>
+
+      </div>
+
+
+      <!-- LOGIN -->
+
+      <form
+        class="auth-form active"
+        id="loginForm"
+      >
+
+        <div class="auth-field">
+
+          <label>
+            ایمیل
+          </label>
+
+          <input
+            id="loginEmail"
+            type="email"
+            required
+            placeholder="example@email.com"
+          >
+
+        </div>
+
+
+        <div class="auth-field">
+
+          <label>
+            رمز عبور
+          </label>
+
+          <input
+            id="loginPassword"
+            type="password"
+            required
+            placeholder="رمز عبور"
+          >
+
+        </div>
+
+
+        <button
+          class="auth-submit"
+          type="submit"
+        >
+          ورود به حساب
+        </button>
+
+      </form>
+
+
+      <!-- REGISTER -->
+
+      <form
+        class="auth-form"
+        id="registerForm"
+      >
+
+        <div class="auth-field">
+
+          <label>
+            نام
+          </label>
+
+          <input
+            id="registerName"
+            type="text"
+            required
+            placeholder="نام شما"
+          >
+
+        </div>
+
+
+        <div class="auth-field">
+
+          <label>
+            ایمیل
+          </label>
+
+          <input
+            id="registerEmail"
+            type="email"
+            required
+            placeholder="example@email.com"
+          >
+
+        </div>
+
+
+        <div class="auth-field">
+
+          <label>
+            رمز عبور
+          </label>
+
+          <input
+            id="registerPassword"
+            type="password"
+            minlength="6"
+            required
+            placeholder="حداقل ۶ کاراکتر"
+          >
+
+        </div>
+
+
+        <div class="auth-field">
+
+          <label>
+            نوع حساب
+          </label>
+
+          <select id="registerRole" required>
+
+            <option value="">
+              انتخاب کنید
+            </option>
+
+            <option value="customer">
+              مشتری
+            </option>
+
+            <option value="agent">
+              مشاور املاک
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <button
+          class="auth-submit"
+          type="submit"
+        >
+          ساخت حساب
+        </button>
+
+      </form>
+
+
+      <div
+        class="auth-message"
+        id="authMessage"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ================= USER MODAL ================= -->
+
+  <div class="modal" id="userModal">
+
+    <div class="modal-box">
+
+      <button
+        class="modal-close"
+        onclick="closeUserModal()"
+      >
+        ×
+      </button>
+
+      <div class="modal-title">
+        حساب کاربری
+      </div>
+
+      <div
+        class="user-info"
+        id="userInfo"
+      >
+      </div>
+
+      <button
+        class="auth-submit"
+        onclick="logout()"
+      >
+        خروج از حساب
+      </button>
+
+    </div>
+
+  </div>
+
+
   <script>
-    const mobileButton = document.getElementById("mobileButton");
-    const mobileMenu = document.getElementById("mobileMenu");
-    const searchForm = document.getElementById("searchForm");
+
+    /* =====================================================
+       SUPABASE
+       ===================================================== */
+
+    /*
+      این دو مقدار را با اطلاعات Supabase خودت جایگزین کن.
+
+      از Supabase Dashboard برو:
+      Settings
+      → API
+
+      Project URL را در SUPABASE_URL بگذار.
+
+      Publishable / anon key را در SUPABASE_ANON_KEY بگذار.
+
+      ❌ service_role را اینجا قرار نده.
+    */
+
+    const SUPABASE_URL =
+      "https://kdinolsgikcxhdepzvng.supabase.co/rest/v1/";
+
+    const SUPABASE_ANON_KEY =
+      "sb_publishable_WtkOdgzPsbrm_Yaigaw_Fg_t4SqR-ZO";
+
+
+    let supabaseClient = null;
+
+
+    if (
+      SUPABASE_URL !== "YOUR_SUPABASE_URL" &&
+      SUPABASE_ANON_KEY !== "YOUR_SUPABASE_ANON_KEY"
+    ) {
+
+      supabaseClient =
+        window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_ANON_KEY
+        );
+
+    }
+
+
+    /* =====================================================
+       MOBILE MENU
+       ===================================================== */
+
+    const mobileButton =
+      document.getElementById("mobileButton");
+
+    const mobileMenu =
+      document.getElementById("mobileMenu");
+
 
     mobileButton.addEventListener("click", function () {
+
       mobileMenu.classList.toggle("open");
+
     });
 
-    mobileMenu.addEventListener("click", function (event) {
+
+    mobileMenu.addEventListener("click", function(event) {
+
       if (event.target.tagName === "A") {
+
         mobileMenu.classList.remove("open");
-      }
-    });
 
-    searchForm.addEventListener("submit", function (event) {
-      event.preventDefault();
-
-      const searchText = document.getElementById("searchInput").value.trim();
-      const dealType = document.getElementById("dealType").value;
-      const propertyType = document.getElementById("propertyType").value;
-
-      let message = "لطفاً یکی از گزینه‌های جستجو را انتخاب کنید.";
-
-      if (searchText || dealType || propertyType) {
-        message = "جستجو ثبت شد. بخش اتصال به Supabase در مرحله بعد فعال می‌شود.";
       }
 
-      alert(message);
     });
 
-    document.querySelectorAll('a[href^="#"]').forEach(function (link) {
-      link.addEventListener("click", function () {
-        const target = document.querySelector(this.getAttribute("href"));
 
-        if (target) {
-          target.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-          });
+    /* =====================================================
+       AUTH MODAL
+       ===================================================== */
+
+    const authModal =
+      document.getElementById("authModal");
+
+    const userModal =
+      document.getElementById("userModal");
+
+    const authMessage =
+      document.getElementById("authMessage");
+
+
+    function openAuth(type = "login") {
+
+      authModal.classList.add("show");
+
+      document.body.classList.add("modal-open");
+
+      switchAuth(type);
+
+    }
+
+
+    function closeAuth() {
+
+      authModal.classList.remove("show");
+
+      document.body.classList.remove("modal-open");
+
+      authMessage.textContent = "";
+
+    }
+
+
+    function closeUserModal() {
+
+      userModal.classList.remove("show");
+
+      document.body.classList.remove("modal-open");
+
+    }
+
+
+    function switchAuth(type) {
+
+      const loginTab =
+        document.getElementById("loginTab");
+
+      const registerTab =
+        document.getElementById("registerTab");
+
+      const loginForm =
+        document.getElementById("loginForm");
+
+      const registerForm =
+        document.getElementById("registerForm");
+
+
+      authMessage.textContent = "";
+
+
+      if (type === "login") {
+
+        loginTab.classList.add("active");
+
+        registerTab.classList.remove("active");
+
+        loginForm.classList.add("active");
+
+        registerForm.classList.remove("active");
+
+      } else {
+
+        loginTab.classList.remove("active");
+
+        registerTab.classList.add("active");
+
+        loginForm.classList.remove("active");
+
+        registerForm.classList.add("active");
+
+      }
+
+    }
+
+
+    /* =====================================================
+       LOGIN
+       ===================================================== */
+
+    document
+      .getElementById("loginForm")
+      .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+
+        if (!supabaseClient) {
+
+          showAuthMessage(
+            "ابتدا اطلاعات Supabase را در کد وارد کنید.",
+            false
+          );
+
+          return;
+
         }
+
+
+        const email =
+          document.getElementById("loginEmail").value.trim();
+
+        const password =
+          document.getElementById("loginPassword").value;
+
+
+        showAuthMessage(
+          "در حال ورود...",
+          true
+        );
+
+
+        const { data, error } =
+          await supabaseClient.auth.signInWithPassword({
+
+            email,
+            password
+
+          });
+
+
+        if (error) {
+
+          showAuthMessage(
+            translateAuthError(error.message),
+            false
+          );
+
+          return;
+
+        }
+
+
+        showAuthMessage(
+          "ورود با موفقیت انجام شد.",
+          true
+        );
+
+
+        setTimeout(function() {
+
+          closeAuth();
+
+          updateHeader(data.user);
+
+        }, 700);
+
       });
+
+
+    /* =====================================================
+       REGISTER
+       ===================================================== */
+
+    document
+      .getElementById("registerForm")
+      .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+
+        if (!supabaseClient) {
+
+          showAuthMessage(
+            "ابتدا اطلاعات Supabase را در کد وارد کنید.",
+            false
+          );
+
+          return;
+
+        }
+
+
+        const name =
+          document.getElementById("registerName").value.trim();
+
+        const email =
+          document.getElementById("registerEmail").value.trim();
+
+        const password =
+          document.getElementById("registerPassword").value;
+
+        const role =
+          document.getElementById("registerRole").value;
+
+
+        if (!role) {
+
+          showAuthMessage(
+            "لطفاً نوع حساب را انتخاب کنید.",
+            false
+          );
+
+          return;
+
+        }
+
+
+        showAuthMessage(
+          "در حال ساخت حساب...",
+          true
+        );
+
+
+        const { data, error } =
+          await supabaseClient.auth.signUp({
+
+            email,
+            password,
+
+            options: {
+
+              data: {
+
+                full_name: name,
+
+                role: role
+
+              }
+
+            }
+
+          });
+
+
+        if (error) {
+
+          showAuthMessage(
+            translateAuthError(error.message),
+            false
+          );
+
+          return;
+
+        }
+
+
+        if (
+          data.user &&
+          data.user.identities &&
+          data.user.identities.length === 0
+        ) {
+
+          showAuthMessage(
+            "این ایمیل قبلاً ثبت شده است.",
+            false
+          );
+
+          return;
+
+        }
+
+
+        showAuthMessage(
+          "حساب با موفقیت ساخته شد. اگر تأیید ایمیل فعال باشد، ایمیل تأیید را بررسی کنید.",
+          true
+        );
+
+      });
+
+
+    /* =====================================================
+       CHECK CURRENT SESSION
+       ===================================================== */
+
+    async function checkUser() {
+
+      if (!supabaseClient) {
+        return;
+      }
+
+
+      const {
+        data
+      } =
+        await supabaseClient.auth.getSession();
+
+
+      if (data.session) {
+
+        updateHeader(
+          data.session.user
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       AUTH STATE
+       ===================================================== */
+
+    if (supabaseClient) {
+
+      supabaseClient.auth.onAuthStateChange(
+        function(event, session) {
+
+          if (session) {
+
+            updateHeader(
+              session.user
+            );
+
+          } else {
+
+            updateHeader(null);
+
+          }
+
+        }
+      );
+
+    }
+
+
+    checkUser();
+
+
+    /* =====================================================
+       HEADER USER
+       ===================================================== */
+
+    function updateHeader(user) {
+
+      const headerButtons =
+        document.getElementById("headerButtons");
+
+
+      if (!user) {
+
+        headerButtons.innerHTML = `
+
+          <button
+            class="button button-light"
+            onclick="openAuth('login')"
+          >
+            ورود
+          </button>
+
+          <button
+            class="button button-primary"
+            onclick="openAuth('register')"
+          >
+            ثبت‌نام
+          </button>
+
+        `;
+
+        return;
+
+      }
+
+
+      const name =
+        user.user_metadata?.full_name ||
+        user.email ||
+        "کاربر";
+
+
+      headerButtons.innerHTML = `
+
+        <button
+          class="button user-button"
+          onclick="openUserModal()"
+        >
+          👤 ${escapeHtml(name)}
+        </button>
+
+      `;
+
+    }
+
+
+    function openUserModal() {
+
+      if (!supabaseClient) {
+        return;
+      }
+
+
+      supabaseClient.auth.getUser()
+        .then(function(result) {
+
+          const user = result.data.user;
+
+
+          if (!user) {
+
+            openAuth("login");
+
+            return;
+
+          }
+
+
+          const name =
+            user.user_metadata?.full_name ||
+            "کاربر";
+
+          const role =
+            user.user_metadata?.role;
+
+
+          let roleText =
+            "کاربر";
+
+
+          if (role === "customer") {
+            roleText = "مشتری";
+          }
+
+          if (role === "agent") {
+            roleText = "مشاور املاک";
+          }
+
+
+          document.getElementById("userInfo").innerHTML = `
+
+            <strong>
+              ${escapeHtml(name)}
+            </strong>
+
+            <br>
+
+            ایمیل:
+            ${escapeHtml(user.email || "")}
+
+            <br>
+
+            نوع حساب:
+            ${roleText}
+
+          `;
+
+
+          userModal.classList.add("show");
+
+          document.body.classList.add("modal-open");
+
+        });
+
+    }
+
+
+    /* =====================================================
+       LOGOUT
+       ===================================================== */
+
+    async function logout() {
+
+      if (!supabaseClient) {
+        return;
+      }
+
+
+      const { error } =
+        await supabaseClient.auth.signOut();
+
+
+      if (error) {
+
+        alert(
+          translateAuthError(error.message)
+        );
+
+        return;
+
+      }
+
+
+      closeUserModal();
+
+      updateHeader(null);
+
+      alert(
+        "با موفقیت از حساب خارج شدید."
+      );
+
+    }
+
+
+    /* =====================================================
+       AUTH ERROR TRANSLATION
+       ===================================================== */
+
+    function translateAuthError(message) {
+
+      if (!message) {
+        return "خطایی رخ داد.";
+      }
+
+
+      const text =
+        message.toLowerCase();
+
+
+      if (text.includes("invalid login credentials")) {
+
+        return "ایمیل یا رمز عبور اشتباه است.";
+
+      }
+
+
+      if (text.includes("email not confirmed")) {
+
+        return "ابتدا ایمیل خود را تأیید کنید.";
+
+      }
+
+
+      if (text.includes("user already registered")) {
+
+        return "این ایمیل قبلاً ثبت شده است.";
+
+      }
+
+
+      if (text.includes("password")) {
+
+        return "رمز عبور باید حداقل ۶ کاراکتر باشد.";
+
+      }
+
+
+      return message;
+
+    }
+
+
+    function showAuthMessage(
+      message,
+      success
+    ) {
+
+      authMessage.textContent =
+        message;
+
+      authMessage.classList.toggle(
+        "success",
+        success
+      );
+
+    }
+
+
+    /* =====================================================
+       SEARCH
+       ===================================================== */
+
+    const searchForm =
+      document.getElementById("searchForm");
+
+    const advancedButton =
+      document.getElementById("advancedButton");
+
+    const advancedSearch =
+      document.getElementById("advancedSearch");
+
+
+    advancedButton.addEventListener(
+      "click",
+      function() {
+
+        advancedSearch.classList.toggle("show");
+
+        advancedButton.textContent =
+          advancedSearch.classList.contains("show")
+            ? "▲ بستن فیلترهای بیشتر"
+            : "⚙ فیلترهای بیشتر";
+
+      }
+    );
+
+
+    searchForm.addEventListener(
+      "submit",
+      function(event) {
+
+        event.preventDefault();
+
+        applyFilters();
+
+        document
+          .getElementById("properties")
+          .scrollIntoView({
+            behavior:"smooth"
+          });
+
+      }
+    );
+
+
+    [
+      "minArea",
+      "maxArea",
+      "minPrice",
+      "maxPrice",
+      "bedrooms",
+      "sortBy"
+    ].forEach(function(id) {
+
+      document
+        .getElementById(id)
+        .addEventListener(
+          "change",
+          applyFilters
+        );
+
     });
+
+
+    function applyFilters() {
+
+      const search =
+        document
+          .getElementById("searchInput")
+          .value
+          .trim()
+          .toLowerCase();
+
+
+      const deal =
+        document
+          .getElementById("dealType")
+          .value;
+
+
+      const type =
+        document
+          .getElementById("propertyType")
+          .value;
+
+
+      const minArea =
+        Number(
+          document
+            .getElementById("minArea")
+            .value
+        ) || 0;
+
+
+      const maxArea =
+        Number(
+          document
+            .getElementById("maxArea")
+            .value
+        ) || Infinity;
+
+
+      const minPrice =
+        Number(
+          document
+            .getElementById("minPrice")
+            .value
+        ) || 0;
+
+
+      const maxPrice =
+        Number(
+          document
+            .getElementById("maxPrice")
+            .value
+        ) || Infinity;
+
+
+      const bedrooms =
+        document
+          .getElementById("bedrooms")
+          .value;
+
+
+      const sortBy =
+        document
+          .getElementById("sortBy")
+          .value;
+
+
+      const cards =
+        Array.from(
+          document.querySelectorAll(
+            ".property-card"
+          )
+        );
+
+
+      let visibleCards = [];
+
+
+      cards.forEach(function(card) {
+
+        const title =
+          card.dataset.title.toLowerCase();
+
+        const location =
+          card.dataset.location.toLowerCase();
+
+        const cardDeal =
+          card.dataset.deal;
+
+        const cardType =
+          card.dataset.type;
+
+        const area =
+          Number(card.dataset.area);
+
+        const price =
+          Number(card.dataset.price);
+
+        const cardBedrooms =
+          card.dataset.bedrooms;
+
+
+        const searchMatch =
+          !search ||
+          title.includes(search) ||
+          location.includes(search);
+
+
+        const dealMatch =
+          !deal ||
+          cardDeal === deal;
+
+
+        const typeMatch =
+          !type ||
+          cardType === type;
+
+
+        const areaMatch =
+          area >= minArea &&
+          area <= maxArea;
+
+
+        const priceMatch =
+          price >= minPrice &&
+          price <= maxPrice;
+
+
+        const bedroomMatch =
+          !bedrooms ||
+          cardBedrooms === bedrooms;
+
+
+        const visible =
+          searchMatch &&
+          dealMatch &&
+          typeMatch &&
+          areaMatch &&
+          priceMatch &&
+          bedroomMatch;
+
+
+        if (visible) {
+
+          card.style.display = "";
+
+          visibleCards.push(card);
+
+        } else {
+
+          card.style.display = "none";
+
+        }
+
+      });
+
+
+      /* مرتب‌سازی */
+
+      visibleCards.sort(function(a,b) {
+
+        const areaA =
+          Number(a.dataset.area);
+
+        const areaB =
+          Number(b.dataset.area);
+
+        const priceA =
+          Number(a.dataset.price);
+
+        const priceB =
+          Number(b.dataset.price);
+
+
+        if (sortBy === "priceLow") {
+          return priceA - priceB;
+        }
+
+        if (sortBy === "priceHigh") {
+          return priceB - priceA;
+        }
+
+        if (sortBy === "areaLow") {
+          return areaA - areaB;
+        }
+
+        if (sortBy === "areaHigh") {
+          return areaB - areaA;
+        }
+
+        return 0;
+
+      });
+
+
+      const grid =
+        document.getElementById(
+          "propertyGrid"
+        );
+
+
+      visibleCards.forEach(function(card) {
+        grid.appendChild(card);
+      });
+
+
+      document.getElementById(
+        "resultsText"
+      ).textContent =
+        `${toPersianNumber(visibleCards.length)} فایل نمایش داده می‌شود`;
+
+
+      document.getElementById(
+        "noResults"
+      ).style.display =
+        visibleCards.length === 0
+          ? "block"
+          : "none";
+
+    }
+
+
+    function clearAllFilters() {
+
+      document.getElementById(
+        "searchInput"
+      ).value = "";
+
+      document.getElementById(
+        "dealType"
+      ).value = "";
+
+      document.getElementById(
+        "propertyType"
+      ).value = "";
+
+      document.getElementById(
+        "minArea"
+      ).value = "";
+
+      document.getElementById(
+        "maxArea"
+      ).value = "";
+
+      document.getElementById(
+        "minPrice"
+      ).value = "";
+
+      document.getElementById(
+        "maxPrice"
+      ).value = "";
+
+      document.getElementById(
+        "bedrooms"
+      ).value = "";
+
+      document.getElementById(
+        "sortBy"
+      ).value = "default";
+
+
+      applyFilters();
+
+    }
+
+
+    window.clearAllFilters =
+      clearAllFilters;
+
+
+    document.getElementById(
+      "clearFilters"
+    ).addEventListener(
+      "click",
+      clearAllFilters
+    );
+
+
+    /* =====================================================
+       PROPERTY DETAILS
+       ===================================================== */
+
+    function showProperty(title) {
+
+      alert(
+        "جزئیات «" +
+        title +
+        "» در مرحله بعد به صفحه اختصاصی ملک متصل می‌شود."
+      );
+
+    }
+
+
+    window.showProperty =
+      showProperty;
+
+
+    /* =====================================================
+       CLOSE MODALS WITH ESC / BACKGROUND
+       ===================================================== */
+
+    document.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (event.key === "Escape") {
+
+          closeAuth();
+
+          closeUserModal();
+
+        }
+
+      }
+    );
+
+
+    authModal.addEventListener(
+      "click",
+      function(event) {
+
+        if (event.target === authModal) {
+
+          closeAuth();
+
+        }
+
+      }
+    );
+
+
+    userModal.addEventListener(
+      "click",
+      function(event) {
+
+        if (event.target === userModal) {
+
+          closeUserModal();
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       HELPERS
+       ===================================================== */
+
+    function toPersianNumber(value) {
+
+      return String(value).replace(
+        /\d/g,
+        function(d) {
+
+          return "۰۱۲۳۴۵۶۷۸۹"[d];
+
+        }
+      );
+
+    }
+
+
+    function escapeHtml(text) {
+
+      return String(text)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+    }
+
   </script>
 
 </body>
