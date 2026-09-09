@@ -1652,45 +1652,27 @@
 
       <form
         class="auth-form active"
-        id="loginForm"
-      >
+    <div class="auth-field">
 
-        <div class="auth-field">
+  <label>
+    شماره موبایل
+  </label>
 
-          <label>
-            ایمیل
-          </label>
+  <input
+    id="loginPhone"
+    type="tel"
+    required
+    placeholder="09123456789"
+  >
 
-          <input
-          >id="loginPhone"
-type="tel"
-required
-placeholder="09123456789"
-
-        </div>
-
-
-        <div class="auth-field">
-
-          <label>
-            رمز عبور
-          </label>
-
-          <input
-            id="loginPassword"
-            type="password"
-            required
-            placeholder="رمز عبور"
-          >
-
-        </div>
+</div>
 
 
         <button
           class="auth-submit"
           type="submit"
         >
-          ورود به حساب
+          ارسال کد پیامکی
         </button>
 
       </form>
@@ -2029,13 +2011,29 @@ placeholder="09123456789"
         );
 
 
-        const { data, error } =
-          await supabaseClient.auth.signInWithPassword({
+const phone = document.getElementById("loginPhone").value.trim();
 
-            email,
-            password
+if (!phone) {
+  showAuthMessage("لطفاً شماره موبایل را وارد کنید", false);
+  return;
+}
 
-          });
+const { error } = await supabaseClient.auth.signInWithOtp({
+  phone: phone
+});
+
+if (error) {
+  showAuthMessage(
+    translateAuthError(error.message),
+    false
+  );
+  return;
+}
+
+showAuthMessage(
+  "کد تأیید به شماره شما ارسال شد 📱",
+  true
+);
 
 
         if (error) {
