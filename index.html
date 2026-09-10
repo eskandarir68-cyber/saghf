@@ -1606,179 +1606,252 @@
 
   <!-- ================= AUTH MODAL ================= -->
 
-  <div class="modal" id="authModal">
+<!-- ================= AUTH MODAL ================= -->
+<div class="modal" id="authModal">
 
-    <div class="modal-box">
+  <div class="modal-box auth-modern">
 
+    <button class="modal-close" onclick="closeAuth()">×</button>
+
+    <!-- لوگو -->
+    <div class="auth-brand">
+      <div class="auth-logo">س</div>
+      <div class="auth-brand-text">
+        <strong>سقف</strong>
+        <span>همه چیز زیر یک سقف</span>
+      </div>
+    </div>
+
+    <!-- عنوان -->
+    <div class="auth-heading">
+      <h2 id="authTitle">ورود به سقف</h2>
+      <p id="authSubtitle">
+        برای ورود به حساب خود شماره موبایلتان را وارد کنید.
+      </p>
+    </div>
+
+    <!-- تب ها -->
+    <div class="auth-tabs">
       <button
-        class="modal-close"
-        onclick="closeAuth()"
+        class="auth-tab active"
+        id="loginTab"
+        onclick="switchAuth('login')"
       >
-        ×
+        ورود
       </button>
 
-
-      <div class="modal-title">
-        حساب کاربری سقف
-      </div>
-
-      <div class="modal-description">
-        وارد حساب خود شوید یا یک حساب جدید بسازید.
-      </div>
-
-
-      <div class="auth-tabs">
-
-        <button
-          class="auth-tab active"
-          id="loginTab"
-          onclick="switchAuth('login')"
-        >
-          ورود
-        </button>
-
-        <button
-          class="auth-tab"
-          id="registerTab"
-          onclick="switchAuth('register')"
-        >
-          ثبت‌نام
-        </button>
-
-      </div>
-
-
-      <!-- LOGIN -->
-
-      <form
-        class="auth-form active"
-    <div class="auth-field">
-
-  <label>
-    شماره موبایل
-  </label>
-
-  <input
-    id="loginPhone"
-    type="tel"
-    required
-    placeholder="09123456789"
-  >
-
-</div>
-
-
-        <button
-          class="auth-submit"
-          type="submit"
-        >
-          ارسال کد پیامکی
-        </button>
-
-      </form>
-
-
-      <!-- REGISTER -->
-
-      <form
-        <form
-  class="auth-form active"
-  id="loginForm"
->
+      <button
+        class="auth-tab"
+        id="registerTab"
+        onclick="switchAuth('register')"
       >
+        ثبت‌نام
+      </button>
+    </div>
 
-        <div class="auth-field">
 
-          <label>
-            نام
-          </label>
+    <!-- ================= LOGIN ================= -->
+
+    <form
+      class="auth-form active"
+      id="loginForm"
+    >
+
+      <div class="auth-field">
+        <label>شماره موبایل</label>
+
+        <div class="input-wrapper">
+          <span class="input-icon">📱</span>
+
+          <input
+            id="loginPhone"
+            type="tel"
+            required
+            placeholder="09123456789"
+            autocomplete="tel"
+          >
+        </div>
+      </div>
+
+
+      <!-- نوع حساب -->
+
+      <div class="role-title">
+        نوع حساب
+      </div>
+
+      <div class="role-options">
+
+        <label class="role-card">
+          <input
+            type="radio"
+            name="loginRole"
+            value="customer"
+            checked
+          >
+
+          <div class="role-content">
+            <span class="role-icon">🏠</span>
+
+            <div>
+              <strong>مشتری</strong>
+              <small>جستجوی ملک و خرید</small>
+            </div>
+          </div>
+
+          <span class="role-check">✓</span>
+        </label>
+
+
+        <label class="role-card">
+          <input
+            type="radio"
+            name="loginRole"
+            value="agent"
+          >
+
+          <div class="role-content">
+            <span class="role-icon">🏢</span>
+
+            <div>
+              <strong>مشاور املاک</strong>
+              <small>ثبت و مدیریت ملک</small>
+            </div>
+          </div>
+
+          <span class="role-check">✓</span>
+        </label>
+
+      </div>
+
+
+      <button
+        class="auth-submit"
+        type="submit"
+      >
+        <span>ارسال کد تأیید</span>
+        <span>←</span>
+      </button>
+
+    </form>
+
+
+
+    <!-- ================= REGISTER ================= -->
+
+    <form
+      class="auth-form"
+      id="registerForm"
+    >
+
+      <div class="auth-field">
+        <label>نام و نام خانوادگی</label>
+
+        <div class="input-wrapper">
+          <span class="input-icon">👤</span>
 
           <input
             id="registerName"
             type="text"
             required
-            placeholder="نام شما"
+            placeholder="مثلاً کوروش غلامی"
           >
-
         </div>
+      </div>
 
 
-        <div class="auth-field">
+      <div class="auth-field">
+        <label>شماره موبایل</label>
 
-          <label>
-            ایمیل
-          </label>
+        <div class="input-wrapper">
+          <span class="input-icon">📱</span>
 
           <input
-            id="registerEmail"
-            type="email"
+            id="registerPhone"
+            type="tel"
             required
-            placeholder="example@email.com"
+            placeholder="09123456789"
+            autocomplete="tel"
           >
-
         </div>
+      </div>
 
 
-        <div class="auth-field">
+      <div class="role-title">
+        نوع حساب
+      </div>
 
-          <label>
-            رمز عبور
-          </label>
+      <div class="role-options">
 
+        <label class="role-card">
           <input
-            id="registerPassword"
-            type="password"
-            minlength="6"
-            required
-            placeholder="حداقل ۶ کاراکتر"
+            type="radio"
+            name="registerRole"
+            value="customer"
+            checked
           >
 
-        </div>
+          <div class="role-content">
+            <span class="role-icon">🏠</span>
+
+            <div>
+              <strong>مشتری</strong>
+              <small>جستجو و خرید ملک</small>
+            </div>
+          </div>
+
+          <span class="role-check">✓</span>
+        </label>
 
 
-        <div class="auth-field">
+        <label class="role-card">
+          <input
+            type="radio"
+            name="registerRole"
+            value="agent"
+          >
 
-          <label>
-            نوع حساب
-          </label>
+          <div class="role-content">
+            <span class="role-icon">🏢</span>
 
-          <select id="registerRole" required>
+            <div>
+              <strong>مشاور املاک</strong>
+              <small>ثبت و مدیریت آگهی</small>
+            </div>
+          </div>
 
-            <option value="">
-              انتخاب کنید
-            </option>
+          <span class="role-check">✓</span>
+        </label>
 
-            <option value="customer">
-              مشتری
-            </option>
-
-            <option value="agent">
-              مشاور املاک
-            </option>
-
-          </select>
-
-        </div>
+      </div>
 
 
-        <button
-          class="auth-submit"
-          type="submit"
-        >
-          ساخت حساب
-        </button>
+      <button
+        class="auth-submit"
+        type="submit"
+      >
+        <span>ادامه ثبت‌نام</span>
+        <span>←</span>
+      </button>
 
-      </form>
+    </form>
 
 
-      <div
-        class="auth-message"
-        id="authMessage"
-      ></div>
+    <!-- پیام -->
 
+    <div
+      class="auth-message"
+      id="authMessage"
+    ></div>
+
+
+    <div class="auth-security">
+      🔒 اطلاعات شما نزد سقف محفوظ است
     </div>
 
   </div>
+
+</div>
 
 
   <!-- ================= USER MODAL ================= -->
