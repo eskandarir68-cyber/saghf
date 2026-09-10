@@ -2164,16 +2164,15 @@ showAuthMessage(
 
 
         const name =
-          document.getElementById("registerName").value.trim();
+  document.getElementById("registerName").value.trim();
 
-        const email =
-          document.getElementById("registerEmail").value.trim();
+const phone =
+  document.getElementById("registerPhone").value.trim();
 
-        const password =
-          document.getElementById("registerPassword").value;
-
-        const role =
-          document.getElementById("registerRole").value;
+const role =
+  document.querySelector(
+    'input[name="registerRole"]:checked'
+  )?.value;
 
 
         if (!role) {
