@@ -2007,249 +2007,576 @@
     }
 
 
+
     function switchAuth(type) {
 
-      const loginTab =
-        document.getElementById("loginTab");
+  const loginTab = document.getElementById("loginTab");
+  const registerTab = document.getElementById("registerTab");
 
-      const registerTab =
-        document.getElementById("registerTab");
+  const loginForm = document.getElementById("loginForm");
+  const registerForm = document.getElementById("registerForm");
 
-      const loginForm =
-        document.getElementById("loginForm");
+  const oldOtp = document.getElementById("otpStep");
 
-      const registerForm =
-        document.getElementById("registerForm");
+  if (oldOtp) {
+    oldOtp.remove();
+  }
+
+  const tabs = document.querySelector(".auth-tabs");
+
+  if (tabs) {
+    tabs.style.display = "grid";
+  }
+
+  if (type === "login") {
+
+    loginTab.classList.add("active");
+    registerTab.classList.remove("active");
+
+    loginForm.classList.add("active");
+    registerForm.classList.remove("active");
+
+  } else {
+
+    loginTab.classList.remove("active");
+    registerTab.classList.add("active");
+
+    loginForm.classList.remove("active");
+    registerForm.classList.add("active");
+
+  }
+
+  setAuthMessage("", false);
+}
 
 
-      authMessage.textContent = "";
+/* =====================================================
+   PHONE NORMALIZATION
+   ===================================================== */
+
+function normalizePhone(value) {
+
+  let phone = String(value || "").trim();
+
+  phone = phone.replace(
+    /[۰-۹]/g,
+    function(d) {
+      return "۰۱۲۳۴۵۶۷۸۹".indexOf(d);
+    }
+  );
+
+  phone = phone.replace(
+    /[٠-٩]/g,
+    function(d) {
+      return "٠١٢٣٤٥٦٧٨٩".indexOf(d);
+    }
+  );
+
+  phone = phone.replace(/[\s\-()]/g, "");
+
+  if (phone.startsWith("0098")) {
+    phone = "+" + phone.substring(2);
+  }
+
+  if (phone.startsWith("09")) {
+    phone = "+98" + phone.substring(1);
+  }
+
+  return phone;
+}
 
 
-      if (type === "login") {
+/* =====================================================
+   PHONE VALIDATION
+   ===================================================== */
 
-        loginTab.classList.add("active");
+function isValidIranPhone(phone) {
+  return /^\+989\d{9}$/.test(phone);
+}
 
-        registerTab.classList.remove("active");
 
-        loginForm.classList.add("active");
+/* =====================================================
+   AUTH MESSAGE
+   ===================================================== */
 
-        registerForm.classList.remove("active");
+function setAuthMessage(message, success = false) {
 
-      } else {
+  const messageBox =
+    document.getElementById("authMessage");
 
-        loginTab.classList.remove("active");
+  if (!messageBox) return;
 
-        registerTab.classList.add("active");
+  messageBox.textContent = message;
 
-        loginForm.classList.remove("active");
+  messageBox.classList.toggle(
+    "success",
+    success
+  );
+}
 
-        registerForm.classList.add("active");
+
+/* =====================================================
+   OTP SCREEN
+   ===================================================== */
+
+function showOtpStep(mode, phone) {
+
+  const modal =
+    document.querySelector(".auth-modern");
+
+  const tabs =
+    document.querySelector(".auth-tabs");
+
+  const loginForm =
+    document.getElementById("loginForm");
+
+  const registerForm =
+    document.getElementById("registerForm");
+
+  if (!modal) return;
+
+  if (tabs) {
+    tabs.style.display = "none";
+  }
+
+  if (loginForm) {
+    loginForm.classList.remove("active");
+  }
+
+  if (registerForm) {
+    registerForm.classList.remove("active");
+  }
+
+  const oldOtp =
+    document.getElementById("otpStep");
+
+  if (oldOtp) {
+    oldOtp.remove();
+  }
+
+  const otpStep =
+    document.createElement("div");
+
+  otpStep.id = "otpStep";
+
+  otpStep.innerHTML = `
+
+    <div style="
+      text-align:center;
+      margin-bottom:20px;
+    ">
+
+      <h3 style="
+        margin-bottom:8px;
+        color:var(--grape-dark);
+      ">
+        تأیید شماره موبایل
+      </h3>
+
+      <p style="
+        margin:0;
+        color:var(--muted);
+        font-size:12px;
+      ">
+        کد ارسال‌شده به
+        <strong>${phone}</strong>
+        را وارد کنید.
+      </p>
+
+    </div>
+
+    <form
+      id="otpForm"
+      class="auth-form active"
+      style="display:block;"
+    >
+
+      <div class="auth-field">
+
+        <label for="otpCode">
+          کد تأیید
+        </label>
+
+        <div class="input-wrapper">
+
+          <span class="input-icon">
+            🔐
+          </span>
+
+          <input
+            id="otpCode"
+            type="text"
+            inputmode="numeric"
+            maxlength="6"
+            autocomplete="one-time-code"
+            placeholder="کد ۶ رقمی"
+            required
+          >
+
+        </div>
+
+      </div>
+
+      <button
+        class="auth-submit"
+        type="submit"
+      >
+        تأیید و ورود
+      </button>
+
+      <button
+        id="backToAuth"
+        type="button"
+        style="
+          width:100%;
+          margin-top:10px;
+          border:0;
+          background:transparent;
+          color:var(--grape);
+          font-weight:bold;
+        "
+      >
+        ← برگشت
+      </button>
+
+    </form>
+  `;
+
+  const messageBox =
+    document.getElementById("authMessage");
+
+  if (messageBox) {
+    modal.insertBefore(otpStep, messageBox);
+  } else {
+    modal.appendChild(otpStep);
+  }
+
+  const otpForm =
+    document.getElementById("otpForm");
+
+  const backButton =
+    document.getElementById("backToAuth");
+
+  const otpInput =
+    document.getElementById("otpCode");
+
+  otpForm.dataset.phone = phone;
+  otpForm.dataset.mode = mode;
+
+  otpForm.addEventListener(
+    "submit",
+    verifyOtpCode
+  );
+
+  backButton.addEventListener(
+    "click",
+    function() {
+      switchAuth(mode);
+    }
+  );
+
+  if (otpInput) {
+    otpInput.focus();
+  }
+
+  setAuthMessage(
+    "کد تأیید ارسال شد. پیامک خود را بررسی کنید.",
+    true
+  );
+}
+
+
+/* =====================================================
+   LOGIN OTP
+   ===================================================== */
+
+async function sendLoginOtp(event) {
+
+  event.preventDefault();
+
+  if (!supabaseClient) {
+
+    setAuthMessage(
+      "اتصال Supabase تنظیم نشده است.",
+      false
+    );
+
+    return;
+  }
+
+  const phoneInput =
+    document.getElementById("loginPhone");
+
+  const phone =
+    normalizePhone(
+      phoneInput ? phoneInput.value : ""
+    );
+
+  if (!isValidIranPhone(phone)) {
+
+    setAuthMessage(
+      "شماره موبایل را به شکل 09xxxxxxxxx وارد کنید.",
+      false
+    );
+
+    return;
+  }
+
+  setAuthMessage(
+    "در حال ارسال کد...",
+    false
+  );
+
+  const { error } =
+    await supabaseClient.auth.signInWithOtp({
+
+      phone: phone,
+
+      options: {
+        shouldCreateUser: false
+      }
+
+    });
+
+  if (error) {
+
+    setAuthMessage(
+      error.message ||
+      "ارسال کد انجام نشد.",
+      false
+    );
+
+    return;
+  }
+
+  showOtpStep(
+    "login",
+    phone
+  );
+}
+
+
+/* =====================================================
+   REGISTER OTP
+   ===================================================== */
+
+async function sendRegisterOtp(event) {
+
+  event.preventDefault();
+
+  if (!supabaseClient) {
+
+    setAuthMessage(
+      "اتصال Supabase تنظیم نشده است.",
+      false
+    );
+
+    return;
+  }
+
+  const nameInput =
+    document.getElementById("registerName");
+
+  const phoneInput =
+    document.getElementById("registerPhone");
+
+  const name =
+    nameInput ? nameInput.value.trim() : "";
+
+  const phone =
+    normalizePhone(
+      phoneInput ? phoneInput.value : ""
+    );
+
+  const role =
+    document.querySelector(
+      'input[name="registerRole"]:checked'
+    )?.value;
+
+  if (!name) {
+
+    setAuthMessage(
+      "نام و نام خانوادگی را وارد کنید.",
+      false
+    );
+
+    return;
+  }
+
+  if (!isValidIranPhone(phone)) {
+
+    setAuthMessage(
+      "شماره موبایل را به شکل 09xxxxxxxxx وارد کنید.",
+      false
+    );
+
+    return;
+  }
+
+  if (!role) {
+
+    setAuthMessage(
+      "نوع حساب را انتخاب کنید.",
+      false
+    );
+
+    return;
+  }
+
+  setAuthMessage(
+    "در حال ارسال کد...",
+    false
+  );
+
+  const { error } =
+    await supabaseClient.auth.signInWithOtp({
+
+      phone: phone,
+
+      options: {
+
+        shouldCreateUser: true,
+
+        data: {
+          full_name: name,
+          role: role
+        }
 
       }
 
-    }
+    });
 
+  if (error) {
 
-    /* =====================================================
-       LOGIN
-       ===================================================== */
+    setAuthMessage(
+      error.message ||
+      "ارسال کد انجام نشد.",
+      false
+    );
 
-    document
-      .getElementById("loginForm")
-      .addEventListener("submit", async function(event) {
+    return;
+  }
 
-        event.preventDefault();
-
-
-        if (!supabaseClient) {
-
-          showAuthMessage(
-            "ابتدا اطلاعات Supabase را در کد وارد کنید.",
-            false
-          );
-
-          return;
-
-        }
-
-
-        const email =
-          document.getElementById("loginEmail").value.trim();
-
-        const password =
-          document.getElementById("loginPassword").value;
-
-
-        showAuthMessage(
-          "در حال ورود...",
-          true
-        );
-
-
-const phone = document.getElementById("loginPhone").value.trim();
-
-if (!phone) {
-  showAuthMessage("لطفاً شماره موبایل را وارد کنید", false);
-  return;
+  showOtpStep(
+    "register",
+    phone
+  );
 }
 
-const { error } = await supabaseClient.auth.signInWithOtp({
-  phone: phone
-});
 
-if (error) {
-  showAuthMessage(
-    translateAuthError(error.message),
+/* =====================================================
+   VERIFY OTP
+   ===================================================== */
+
+async function verifyOtpCode(event) {
+
+  event.preventDefault();
+
+  if (!supabaseClient) {
+
+    setAuthMessage(
+      "اتصال Supabase تنظیم نشده است.",
+      false
+    );
+
+    return;
+  }
+
+  const form =
+    event.currentTarget;
+
+  const phone =
+    form.dataset.phone;
+
+  const otpInput =
+    document.getElementById("otpCode");
+
+  const code =
+    otpInput ? otpInput.value.trim() : "";
+
+  if (!/^\d{6}$/.test(code)) {
+
+    setAuthMessage(
+      "کد باید ۶ رقمی باشد.",
+      false
+    );
+
+    return;
+  }
+
+  setAuthMessage(
+    "در حال بررسی کد...",
     false
   );
-  return;
+
+  const { data, error } =
+    await supabaseClient.auth.verifyOtp({
+
+      phone: phone,
+
+      token: code,
+
+      type: "sms"
+
+    });
+
+  if (error) {
+
+    setAuthMessage(
+      error.message ||
+      "کد واردشده صحیح نیست یا منقضی شده است.",
+      false
+    );
+
+    return;
+  }
+
+  setAuthMessage(
+    "ورود با موفقیت انجام شد.",
+    true
+  );
+
+  if (typeof updateHeader === "function") {
+    updateHeader(data.user);
+  }
+
+  setTimeout(
+    function() {
+      closeAuth();
+    },
+    500
+  );
 }
 
-showAuthMessage(
-  "کد تأیید به شماره شما ارسال شد 📱",
-  true
-);
+
+/* =====================================================
+   CONNECT AUTH FORMS
+   ===================================================== */
+
+const loginFormElement =
+  document.getElementById("loginForm");
+
+if (loginFormElement) {
+
+  loginFormElement.addEventListener(
+    "submit",
+    sendLoginOtp
+  );
+
+}
 
 
-        if (error) {
+const registerFormElement =
+  document.getElementById("registerForm");
 
-          showAuthMessage(
-            translateAuthError(error.message),
-            false
-          );
+if (registerFormElement) {
 
-          return;
+  registerFormElement.addEventListener(
+    "submit",
+    sendRegisterOtp
+  );
 
-        }
-
-
-        showAuthMessage(
-          "ورود با موفقیت انجام شد.",
-          true
-        );
-
-
-        setTimeout(function() {
-
-          closeAuth();
-
-          updateHeader(data.user);
-
-        }, 700);
-
-      });
-
-
-    /* =====================================================
-       REGISTER
-       ===================================================== */
-
-    document
-      .getElementById("registerForm")
-      .addEventListener("submit", async function(event) {
-
-        event.preventDefault();
-
-
-        if (!supabaseClient) {
-
-          showAuthMessage(
-            "ابتدا اطلاعات Supabase را در کد وارد کنید.",
-            false
-          );
-
-          return;
-
-        }
-
-
-        const name =
-  document.getElementById("registerName").value.trim();
-
-const phone =
-  document.getElementById("registerPhone").value.trim();
-
-const role =
-  document.querySelector(
-    'input[name="registerRole"]:checked'
-  )?.value;
-
-
-        if (!role) {
-
-          showAuthMessage(
-            "لطفاً نوع حساب را انتخاب کنید.",
-            false
-          );
-
-          return;
-
-        }
-
-
-        showAuthMessage(
-          "در حال ساخت حساب...",
-          true
-        );
-
-
-        const { data, error } =
-          await supabaseClient.auth.signUp({
-
-            email,
-            password,
-
-            options: {
-
-              data: {
-
-                full_name: name,
-
-                role: role
-
-              }
-
-            }
-
-          });
-
-
-        if (error) {
-
-          showAuthMessage(
-            translateAuthError(error.message),
-            false
-          );
-
-          return;
-
-        }
-
-
-        if (
-          data.user &&
-          data.user.identities &&
-          data.user.identities.length === 0
-        ) {
-
-          showAuthMessage(
-            "این ایمیل قبلاً ثبت شده است.",
-            false
-          );
-
-          return;
-
-        }
-
-
-        showAuthMessage(
-          "حساب با موفقیت ساخته شد. اگر تأیید ایمیل فعال باشد، ایمیل تأیید را بررسی کنید.",
-          true
-        );
-
-      });
-
-
+}
     /* =====================================================
        CHECK CURRENT SESSION
        ===================================================== */
