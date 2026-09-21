@@ -1,321 +1,975 @@
 ```css
-/* =========================================
-   سقف | طراحی جدید ورود و ثبت‌نام
-   فقط ظاهر — منطق JavaScript تغییر نمی‌کند
-========================================= */
+/* =========================================================
+   سقف | استایل کامل سایت
+   نسخه اصلاح‌شده:
+   - صفحه اصلی
+   - هدر
+   - سایدبار
+   - هیرو
+   - جستجو
+   - کارت ملک
+   - موبایل
+   - ورود و ثبت‌نام
+   - OTP
+========================================================= */
 
-:root {
-  --primary: #6c3cff;
-  --primary-dark: #4d20c9;
-  --purple-light: #9b7cff;
-  --bg: #f7f5ff;
-  --card: #ffffff;
-  --text: #17131f;
-  --muted: #777184;
-  --border: #e9e4f2;
-  --shadow: 0 20px 60px rgba(74, 45, 150, .13);
+:root{
+  --primary:#6c3cff;
+  --primary-dark:#4d20c9;
+  --purple-light:#9b7cff;
+  --bg:#f7f5ff;
+  --card:#fff;
+  --text:#17131f;
+  --muted:#777184;
+  --border:#e9e4f2;
+  --shadow:0 20px 60px rgba(74,45,150,.13);
 }
 
-* {
-  box-sizing: border-box;
+*{
+  box-sizing:border-box;
 }
 
-body {
-  margin: 0;
-  direction: rtl;
-  font-family: "Vazirmatn", "Tahoma", sans-serif;
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  direction:rtl;
+  font-family:"Vazirmatn","Tahoma",Arial,sans-serif;
   background:
-    radial-gradient(circle at 85% 10%, rgba(108,60,255,.12), transparent 30%),
-    radial-gradient(circle at 10% 90%, rgba(155,124,255,.10), transparent 28%),
+    radial-gradient(circle at 85% 10%,rgba(108,60,255,.10),transparent 30%),
+    radial-gradient(circle at 10% 90%,rgba(155,124,255,.08),transparent 28%),
     var(--bg);
-  color: var(--text);
+  color:var(--text);
 }
 
-/* =========================
-   صفحه احراز هویت
-========================= */
-
-.auth-page {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 30px 18px;
+button,
+input,
+select{
+  font-family:inherit;
 }
 
-/* کارت اصلی */
-
-.auth-container,
-.auth-card {
-  width: min(460px, 100%);
-  background: rgba(255,255,255,.94);
-  border: 1px solid rgba(255,255,255,.8);
-  border-radius: 28px;
-  box-shadow: var(--shadow);
-  padding: 38px 34px;
-  position: relative;
-  overflow: hidden;
+button{
+  cursor:pointer;
 }
 
-/* نوار بالای کارت */
-
-.auth-container::before,
-.auth-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 5px;
-  background: linear-gradient(
-    90deg,
-    #4d20c9,
-    #6c3cff,
-    #9b7cff
-  );
+a{
+  color:inherit;
+  text-decoration:none;
 }
 
-/* لوگو */
+/* =========================================================
+   صفحه
+========================================================= */
 
-.auth-logo {
-  width: 72px;
-  height: 72px;
-  object-fit: cover;
-  border-radius: 20px;
-  display: block;
-  margin: 0 auto 18px;
-  box-shadow: 0 10px 25px rgba(108,60,255,.2);
+.page{
+  width:100%;
+  min-height:100vh;
 }
 
-/* عنوان */
+/* =========================================================
+   HEADER
+========================================================= */
 
-.auth-title {
-  text-align: center;
-  font-size: 28px;
-  font-weight: 900;
-  margin: 0 0 8px;
-  color: #17131f;
+.header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  height:76px;
+  background:rgba(255,255,255,.94);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(18px);
+  display:flex;
+  align-items:center;
+  gap:25px;
+  padding:0 4%;
 }
 
-.auth-subtitle {
-  text-align: center;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.8;
-  margin: 0 0 30px;
+.brand{
+  display:flex;
+  align-items:center;
+  flex-shrink:0;
 }
 
-/* =========================
-   تب‌های ورود / ثبت نام
-========================= */
-
-.auth-tabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  background: #f3f0fa;
-  padding: 5px;
-  border-radius: 15px;
-  margin-bottom: 25px;
+.brand img{
+  width:54px;
+  height:54px;
+  object-fit:contain;
+  border-radius:15px;
 }
 
-.auth-tabs button {
-  border: 0;
-  background: transparent;
-  color: #777184;
-  padding: 12px;
-  border-radius: 11px;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: .2s ease;
+.nav{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:25px;
+  flex:1;
 }
 
-.auth-tabs button:hover {
-  color: var(--primary);
+.nav a{
+  font-size:13px;
+  font-weight:700;
+  color:#625d6c;
+  transition:.2s ease;
+  white-space:nowrap;
 }
 
-.auth-tabs button.active {
-  background: white;
-  color: var(--primary);
-  box-shadow: 0 5px 15px rgba(0,0,0,.06);
+.nav a:hover,
+.nav a.active{
+  color:var(--primary);
 }
 
-/* =========================
-   فرم
-========================= */
-
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  gap: 17px;
+.head-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
 }
 
-.auth-form label {
-  font-size: 13px;
-  font-weight: 700;
-  color: #403a4b;
-  margin-bottom: -9px;
+.icon{
+  width:40px;
+  height:40px;
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:12px;
+  font-size:20px;
+  color:#514b5d;
 }
 
-.auth-form input,
-.auth-form select {
-  width: 100%;
-  height: 52px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: #faf9fc;
-  padding: 0 16px;
-  outline: none;
-  font-family: inherit;
-  font-size: 14px;
-  color: var(--text);
-  transition: .2s ease;
+.icon:hover{
+  color:var(--primary);
+  border-color:#cfc2f8;
 }
 
-.auth-form input:focus,
-.auth-form select:focus {
-  background: white;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(108,60,255,.09);
+.auth{
+  height:42px;
+  padding:0 18px;
+  border:0;
+  border-radius:13px;
+  color:#fff;
+  font-weight:800;
+  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+  box-shadow:0 8px 20px rgba(108,60,255,.22);
 }
 
-/* شماره موبایل */
+/* =========================================================
+   LAYOUT
+========================================================= */
 
-.phone-input {
-  direction: ltr;
-  text-align: left;
-  letter-spacing: .5px;
+.layout{
+  width:min(1450px,94%);
+  margin:28px auto 0;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 300px;
+  gap:25px;
 }
 
-/* =========================
-   دکمه اصلی
-========================= */
-
-.auth-form button[type="submit"],
-.auth-submit,
-#continueBtn {
-  width: 100%;
-  height: 54px;
-  border: 0;
-  border-radius: 15px;
-  background: linear-gradient(
-    135deg,
-    #6c3cff,
-    #4d20c9
-  );
-  color: white;
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 800;
-  cursor: pointer;
-  box-shadow: 0 10px 25px rgba(108,60,255,.25);
-  transition: .2s ease;
+.main{
+  min-width:0;
 }
 
-.auth-form button[type="submit"]:hover,
-.auth-submit:hover,
-#continueBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 30px rgba(108,60,255,.32);
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+  position:relative;
+  min-height:475px;
+  overflow:visible;
+  border-radius:30px;
 }
 
-.auth-form button[type="submit"]:active,
-.auth-submit:active,
-#continueBtn:active {
-  transform: translateY(0);
+.hero > img{
+  width:100%;
+  height:475px;
+  display:block;
+  object-fit:cover;
+  border-radius:30px;
+  box-shadow:0 25px 70px rgba(40,25,90,.18);
 }
 
-/* =========================
+.hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:30px;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(18,12,35,.10),
+      rgba(18,12,35,.08) 45%,
+      rgba(18,12,35,.62)
+    );
+  pointer-events:none;
+}
+
+.hero-copy{
+  position:absolute;
+  z-index:2;
+  right:48px;
+  top:65px;
+  max-width:520px;
+  color:#fff;
+}
+
+.hero-copy h1{
+  margin:0 0 15px;
+  font-size:48px;
+  line-height:1.35;
+  font-weight:950;
+  text-shadow:0 5px 25px rgba(0,0,0,.22);
+}
+
+.hero-copy p{
+  margin:0;
+  max-width:470px;
+  font-size:16px;
+  line-height:2;
+  color:rgba(255,255,255,.92);
+}
+
+/* =========================================================
+   SEARCH BOX
+========================================================= */
+
+.searchbox{
+  position:absolute;
+  z-index:5;
+  right:35px;
+  left:35px;
+  bottom:-65px;
+  background:rgba(255,255,255,.97);
+  border:1px solid rgba(255,255,255,.8);
+  border-radius:23px;
+  padding:16px;
+  box-shadow:0 20px 50px rgba(45,30,90,.18);
+}
+
+.tabs{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  margin-bottom:12px;
+  overflow:auto;
+}
+
+.tab{
+  flex:0 0 auto;
+  border:0;
+  background:#f5f2fa;
+  color:#686171;
+  border-radius:11px;
+  padding:10px 17px;
+  font-weight:700;
+  font-size:13px;
+}
+
+.tab:hover{
+  color:var(--primary);
+}
+
+.tab.active{
+  color:#fff;
+  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+}
+
+.fields{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1fr 125px;
+  gap:9px;
+}
+
+.field{
+  width:100%;
+  height:48px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:#faf9fc;
+  padding:0 12px;
+  color:#413c4b;
+  outline:none;
+}
+
+.field:focus{
+  border-color:var(--primary);
+  background:#fff;
+  box-shadow:0 0 0 3px rgba(108,60,255,.08);
+}
+
+.searchbtn{
+  border:0;
+  border-radius:12px;
+  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+  color:#fff;
+  font-weight:800;
+  font-size:14px;
+}
+
+/* =========================================================
+   CATEGORIES
+========================================================= */
+
+.categories{
+  margin-top:105px;
+  display:grid;
+  grid-template-columns:repeat(8,1fr);
+  gap:12px;
+}
+
+.cat{
+  min-height:105px;
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:18px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  transition:.2s ease;
+  box-shadow:0 8px 25px rgba(50,30,100,.04);
+}
+
+.cat:hover{
+  transform:translateY(-4px);
+  border-color:#d4c8fa;
+  box-shadow:0 12px 30px rgba(50,30,100,.10);
+}
+
+.cat b{
+  width:42px;
+  height:42px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:13px;
+  background:#f0ebff;
+  color:var(--primary);
+  font-size:21px;
+}
+
+.cat span{
+  font-size:12px;
+  font-weight:800;
+  color:#514b5c;
+}
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:35px 0 18px;
+}
+
+.section-head h2{
+  margin:0;
+  font-size:22px;
+}
+
+.section-head a{
+  color:var(--primary);
+  font-size:13px;
+  font-weight:800;
+}
+
+/* =========================================================
+   PROPERTY CARDS
+========================================================= */
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+}
+
+.card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:19px;
+  overflow:hidden;
+  box-shadow:0 8px 25px rgba(50,30,100,.05);
+  transition:.25s ease;
+}
+
+.card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 18px 40px rgba(50,30,100,.11);
+}
+
+.card-img{
+  height:190px;
+  position:relative;
+  overflow:hidden;
+}
+
+.card-img img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+}
+
+.fav{
+  position:absolute;
+  top:10px;
+  left:10px;
+  width:36px;
+  height:36px;
+  border:0;
+  border-radius:50%;
+  background:rgba(255,255,255,.92);
+  color:#625b6d;
+  font-size:19px;
+}
+
+.badge{
+  position:absolute;
+  top:10px;
+  right:10px;
+  padding:6px 11px;
+  border-radius:9px;
+  background:#fff;
+  color:#55505f;
+  font-size:11px;
+  font-weight:800;
+}
+
+.badge.sale{
+  color:var(--primary);
+}
+
+.card-body{
+  padding:15px;
+}
+
+.card-title{
+  font-weight:900;
+  font-size:14px;
+  margin-bottom:8px;
+}
+
+.meta{
+  color:#817b89;
+  font-size:12px;
+  margin-bottom:12px;
+}
+
+.price{
+  color:var(--primary);
+  font-weight:900;
+  font-size:13px;
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+aside{
+  min-width:0;
+}
+
+.side{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:23px;
+  overflow:hidden;
+  box-shadow:0 12px 35px rgba(50,30,100,.06);
+}
+
+.side-head{
+  padding:23px;
+  display:flex;
+  justify-content:center;
+  border-bottom:1px solid var(--border);
+}
+
+.side-head img{
+  width:65px;
+  height:65px;
+  object-fit:contain;
+  border-radius:17px;
+}
+
+.profile{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:18px;
+  border-bottom:1px solid var(--border);
+}
+
+.avatar{
+  width:45px;
+  height:45px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:14px;
+  background:#f0ebff;
+}
+
+.profile div:nth-child(2){
+  display:flex;
+  flex-direction:column;
+  flex:1;
+}
+
+.profile strong{
+  font-size:13px;
+}
+
+.profile small{
+  color:#88818f;
+  margin-top:4px;
+  font-size:11px;
+}
+
+.profile > span{
+  color:#aaa3b1;
+  font-size:23px;
+}
+
+.side-menu{
+  padding:10px;
+}
+
+.side-menu a{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:45px;
+  padding:0 13px;
+  border-radius:11px;
+  color:#686171;
+  font-size:12px;
+  font-weight:700;
+  margin-bottom:4px;
+}
+
+.side-menu a:hover,
+.side-menu a.active{
+  color:var(--primary);
+  background:#f2efff;
+}
+
+.side-menu i{
+  margin-right:auto;
+  min-width:21px;
+  height:21px;
+  border-radius:50%;
+  background:#6c3cff;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-style:normal;
+  font-size:10px;
+}
+
+/* =========================================================
+   WHY
+========================================================= */
+
+.why{
+  margin-top:17px;
+  padding:22px;
+  background:linear-gradient(145deg,#fff,#f5f1ff);
+  border:1px solid var(--border);
+  border-radius:23px;
+}
+
+.why h3{
+  margin:0 0 15px;
+  font-size:17px;
+}
+
+.why p{
+  margin:10px 0;
+  color:#6e6877;
+  font-size:12px;
+  line-height:1.8;
+}
+
+.why button{
+  width:100%;
+  height:42px;
+  margin-top:8px;
+  border:1px solid #d9cffb;
+  background:#fff;
+  color:var(--primary);
+  border-radius:11px;
+  font-weight:800;
+}
+
+/* =========================================================
+   PHONES
+========================================================= */
+
+.phones{
+  width:min(1200px,94%);
+  margin:65px auto 35px;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:18px;
+}
+
+.phone{
+  overflow:hidden;
+  border-radius:24px;
+  background:#fff;
+  border:1px solid var(--border);
+  box-shadow:0 15px 40px rgba(50,30,100,.09);
+}
+
+.phone img{
+  width:100%;
+  height:auto;
+  display:block;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer{
+  text-align:center;
+  padding:35px 20px;
+  color:#817a89;
+  font-size:12px;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast{
+  position:fixed;
+  z-index:1000;
+  bottom:25px;
+  right:50%;
+  transform:translateX(50%) translateY(30px);
+  opacity:0;
+  pointer-events:none;
+  background:#211b2b;
+  color:#fff;
+  padding:12px 20px;
+  border-radius:13px;
+  font-size:13px;
+  transition:.25s ease;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(50%) translateY(0);
+}
+
+/* =========================================================
+   AUTH MODAL
+========================================================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:500;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(20,14,32,.58);
+  backdrop-filter:blur(8px);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:.25s ease;
+}
+
+.modal.show{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+
+.modal-box{
+  width:min(470px,100%);
+  max-height:92vh;
+  overflow:auto;
+  position:relative;
+  background:rgba(255,255,255,.98);
+  border:1px solid rgba(255,255,255,.8);
+  border-radius:28px;
+  padding:30px;
+  box-shadow:0 30px 90px rgba(20,10,50,.30);
+}
+
+.modal-box::before{
+  content:"";
+  position:absolute;
+  top:0;
+  right:0;
+  left:0;
+  height:5px;
+  background:linear-gradient(90deg,#4d20c9,#6c3cff,#9b7cff);
+}
+
+.modal-close{
+  position:absolute;
+  top:13px;
+  left:13px;
+  width:35px;
+  height:35px;
+  border:0;
+  border-radius:10px;
+  background:#f4f1f8;
+  color:#625c6c;
+  font-size:24px;
+  line-height:1;
+}
+
+.auth-brand{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  margin:5px 0 20px;
+}
+
+.auth-logo-img{
+  width:58px;
+  height:58px;
+  object-fit:contain;
+  border-radius:16px;
+  box-shadow:0 8px 20px rgba(108,60,255,.16);
+}
+
+.auth-brand div{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+
+.auth-brand strong{
+  font-size:23px;
+  font-weight:950;
+}
+
+.auth-brand span{
+  font-size:11px;
+  color:#817a89;
+}
+
+.auth-heading{
+  text-align:center;
+  margin-bottom:22px;
+}
+
+.auth-heading h2{
+  margin:0 0 7px;
+  font-size:25px;
+  font-weight:950;
+}
+
+.auth-heading p{
+  margin:0;
+  color:#7b7484;
+  font-size:12px;
+  line-height:1.8;
+}
+
+/* =========================================================
+   AUTH TABS
+========================================================= */
+
+.auth-tabs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:5px;
+  padding:5px;
+  background:#f3f0fa;
+  border-radius:15px;
+  margin-bottom:20px;
+}
+
+.auth-tab{
+  height:43px;
+  border:0;
+  border-radius:11px;
+  background:transparent;
+  color:#777184;
+  font-weight:800;
+  font-size:13px;
+}
+
+.auth-tab.active{
+  color:var(--primary);
+  background:#fff;
+  box-shadow:0 5px 15px rgba(0,0,0,.06);
+}
+
+/* =========================================================
+   AUTH FORM
+========================================================= */
+
+.auth-form{
+  display:none;
+  flex-direction:column;
+  gap:11px;
+}
+
+.auth-form.active{
+  display:flex;
+}
+
+.auth-form > label{
+  color:#403a4b;
+  font-size:12px;
+  font-weight:800;
+  margin-top:3px;
+}
+
+.auth-form input[type="text"],
+.auth-form input[type="tel"]{
+  width:100%;
+  height:51px;
+  border:1px solid var(--border);
+  border-radius:13px;
+  background:#faf9fc;
+  outline:none;
+  padding:0 15px;
+  color:#27222e;
+  font-size:14px;
+  direction:ltr;
+  text-align:left;
+  transition:.2s ease;
+}
+
+.auth-form input:focus{
+  background:#fff;
+  border-color:var(--primary);
+  box-shadow:0 0 0 4px rgba(108,60,255,.08);
+}
+
+.role-title{
+  color:#403a4b;
+  font-size:12px;
+  font-weight:800;
+  margin-top:5px;
+}
+
+.role-options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+
+.role-card{
+  position:relative;
+  min-height:75px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:5px;
+  padding:10px;
+  border:1px solid var(--border);
+  border-radius:13px;
+  background:#faf9fc;
+  cursor:pointer;
+  transition:.2s ease;
+}
+
+.role-card:hover{
+  border-color:#cdbff8;
+}
+
+.role-card:has(input:checked){
+  border-color:var(--primary);
+  background:#f5f1ff;
+  box-shadow:0 0 0 2px rgba(108,60,255,.06);
+}
+
+.role-card input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.role-card b{
+  font-size:12px;
+}
+
+.role-card small{
+  color:#847d8d;
+  font-size:10px;
+}
+
+/* =========================================================
+   AUTH BUTTON
+========================================================= */
+
+.modal-btn{
+  width:100%;
+  height:53px;
+  border:0;
+  border-radius:14px;
+  margin-top:7px;
+  background:linear-gradient(135deg,#6c3cff,#4d20c9);
+  color:#fff;
+  font-size:14px;
+  font-weight:900;
+  box-shadow:0 10px 25px rgba(108,60,255,.24);
+  transition:.2s ease;
+}
+
+.modal-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 30px rgba(108,60,255,.32);
+}
+
+.modal-btn:active{
+  transform:translateY(0);
+}
+
+/* =========================================================
    OTP
-========================= */
+========================================================= */
 
-.otp-section {
-  margin-top: 5px;
+#otpStep h3{
+  margin:0;
+  text-align:center;
+  font-size:21px;
 }
 
-.otp-input {
-  direction: ltr;
-  text-align: center;
-  font-size: 22px !important;
-  font-weight: 800;
-  letter-spacing: 8px;
+#otpText{
+  margin:0 0 8px;
+  color:#777184;
+  font-size:12px;
+  text-align:center;
+  line-height:1.8;
 }
 
-/* =========================
-   پیام‌ها
-========================= */
-
-.auth-message {
-  padding: 12px 14px;
-  border-radius: 12px;
-  font-size: 13px;
-  line-height: 1.8;
-  text-align: center;
+#otpCode{
+  direction:ltr;
+  text-align:center;
+  letter-spacing:8px;
+  font-size:22px;
+  font-weight:900;
 }
 
-.auth-error {
-  background: #fff0f0;
-  color: #c62828;
-  border: 1px solid #ffd5d5;
+.back-btn{
+  width:100%;
+  height:44px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:#f8f6fb;
+  color:#625b6c;
+  font-weight:800;
+  margin-top:3px;
 }
 
-.auth-success {
-  background: #effcf4;
-  color: #18864b;
-  border: 1px solid #ccefdc;
-}
-
-/* =========================
-   لینک‌ها
-========================= */
-
-.auth-link {
-  color: var(--primary);
-  font-weight: 700;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.auth-link:hover {
-  text-decoration: underline;
-}
-
-/* =========================
-   پایین کارت
-========================= */
-
-.auth-footer {
-  text-align: center;
-  margin-top: 23px;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.8;
-}
-
-/* =========================
-   طراحی موبایل
-========================= */
-
-@media (max-width: 600px) {
-
-  .auth-page {
-    padding: 15px;
-  }
-
-  .auth-container,
-  .auth-card {
-    padding: 32px 22px;
-    border-radius: 24px;
-  }
-
-  .auth-title {
-    font-size: 24px;
-  }
-
-  .auth-subtitle {
-    font-size: 13px;
-  }
-}
+/* =========================================================
+   AUTH MESSAGE
+=========
 ```
