@@ -1,1458 +1,1743 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>سقف | همه چیز زیر یک سقف</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <title>سقف | همه چیز زیر یک سقف</title>
 
-<style>
-:root{
-  --primary:#6c3cff;
-  --primary-dark:#4d20c9;
-  --purple-light:#9b7cff;
-  --bg:#f7f5ff;
-  --card:#fff;
-  --text:#17131f;
-  --muted:#777184;
-  --border:#e9e4f2;
-  --shadow:0 20px 60px rgba(74,45,150,.13);
-}
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-*{
-  box-sizing:border-box;
-}
+  <style>
+    :root {
+      --grape: #713f9e;
+      --grape-dark: #4b2677;
+      --lavender: #d9c6f1;
+      --lavender-light: #f3edfb;
+      --royal: #41319b;
+      --pastel: #faf7ff;
+      --white: #ffffff;
+      --text: #21182d;
+      --muted: #766c82;
+      --border: #e8dfef;
+      --green: #20936d;
+      --red: #c94962;
+      --shadow: 0 18px 45px rgba(76, 38, 123, 0.13);
+      --radius: 22px;
+      --font: Tahoma, Arial, sans-serif;
+    }
 
-html{
-  scroll-behavior:smooth;
-}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-body{
-  margin:0;
-  direction:rtl;
-  font-family:"Vazirmatn","Tahoma",Arial,sans-serif;
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-width: 320px;
+      background: var(--pastel);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.8;
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    /* ================= HEADER ================= */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,.95);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(14px);
+    }
+
+    .header-inner {
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--grape-dark);
+    }
+
+    /* =========================================
+       لوگوی واقعی را بعداً اینجا قرار بده
+       فایل پیشنهادی:
+       images/logo.png
+       ========================================= */
+
+    .brand-logo {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      border-radius: 14px;
+      display: block;
+    }
+
+    .brand-symbol {
+      width: 50px;
+      height: 50px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: linear-gradient(135deg,var(--grape),var(--royal));
+      color: white;
+      font-size: 25px;
+      font-weight: bold;
+      box-shadow: 0 9px 20px rgba(113,63,158,.3);
+    }
+
+    .brand-name {
+      display: block;
+      font-size: 23px;
+      font-weight: bold;
+      line-height: 1.1;
+    }
+
+    .brand-slogan {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav a {
+      transition: .2s;
+    }
+
+    .nav a:hover {
+      color: var(--grape);
+    }
+
+    .header-buttons {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 19px;
+      border: 0;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: bold;
+      transition: .2s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button-primary {
+      background: linear-gradient(135deg,var(--grape),var(--royal));
+      color: white;
+      box-shadow: 0 8px 20px rgba(113,63,158,.25);
+    }
+
+    .button-light {
+      background: var(--lavender-light);
+      color: var(--grape-dark);
+    }
+
+    .button-white {
+      background: white;
+      color: var(--grape-dark);
+    }
+
+    .user-button {
+      background: #eee5fa;
+      color: var(--grape-dark);
+    }
+
+    .logout-button {
+      background: #fff0f3;
+      color: var(--red);
+    }
+
+    .mobile-button {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--lavender-light);
+      color: var(--grape-dark);
+      font-size: 22px;
+    }
+
+    .mobile-menu {
+      display: none;
+      padding: 14px 0 18px;
+      border-top: 1px solid var(--border);
+    }
+
+    .mobile-menu.open {
+      display: grid;
+      gap: 5px;
+    }
+
+    .mobile-menu a,
+    .mobile-menu button {
+      padding: 9px 12px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .mobile-menu a:hover,
+    .mobile-menu button:hover {
+      background: var(--lavender-light);
+      color: var(--grape);
+    }
+
+    /* ================= HERO ================= */
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 88px 0 105px;
+      background:
+        radial-gradient(circle at 8% 15%,rgba(217,198,241,.9),transparent 29%),
+        radial-gradient(circle at 90% 85%,rgba(65,49,155,.18),transparent 34%),
+        linear-gradient(135deg,#fdfaff,#eee5fa);
+    }
+
+    .hero::after {
+      content:"";
+      position:absolute;
+      width:300px;
+      height:300px;
+      left:-110px;
+      bottom:-160px;
+      border-radius:50%;
+      background:rgba(113,63,158,.08);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .hero-label {
+      display:inline-block;
+      margin-bottom:22px;
+      padding:8px 18px;
+      border:1px solid var(--lavender);
+      border-radius:50px;
+      background:rgba(255,255,255,.78);
+      color:var(--grape);
+      font-size:13px;
+      font-weight:bold;
+    }
+
+    /* شعار اصلی بزرگ‌تر */
+
+    .main-slogan {
+      margin: 0 auto 18px;
+      color: var(--grape-dark);
+      font-size: clamp(46px,8vw,88px);
+      line-height: 1.15;
+      font-weight: 900;
+      letter-spacing: -2px;
+      text-shadow: 0 8px 30px rgba(76,38,123,.12);
+    }
+
+    .main-slogan span {
+      color: var(--royal);
+      background: linear-gradient(135deg,var(--grape),var(--royal));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    .hero h1 {
+      margin-bottom:18px;
+      color:var(--grape-dark);
+      font-size:clamp(28px,4vw,48px);
+      line-height:1.35;
+    }
+
+    .hero h1 span {
+      color:var(--royal);
+    }
+
+    .hero-description {
+      max-width:700px;
+      margin:0 auto 34px;
+      color:var(--muted);
+      font-size:16px;
+    }
+
+    /* ================= SEARCH ================= */
+
+    .search-panel {
+      display:grid;
+      grid-template-columns:1.5fr 1fr 1fr auto;
+      gap:10px;
+      padding:13px;
+      border:1px solid rgba(255,255,255,.9);
+      border-radius:20px;
+      background:rgba(255,255,255,.88);
+      box-shadow:var(--shadow);
+      text-align:right;
+    }
+
+    .search-panel input,
+    .search-panel select {
+      width:100%;
+      min-width:0;
+      height:48px;
+      padding:0 13px;
+      border:1px solid var(--border);
+      border-radius:11px;
+      outline:0;
+      background:white;
+      color:var(--text);
+      font-size:13px;
+    }
+
+    .search-panel input:focus,
+    .search-panel select:focus {
+      border-color:var(--grape);
+      box-shadow:0 0 0 3px rgba(113,63,158,.08);
+    }
+
+    .search-submit {
+      min-height:48px;
+      padding:0 25px;
+      border:0;
+      border-radius:11px;
+      background:var(--grape);
+      color:white;
+      font-weight:bold;
+    }
+
+    .advanced-search {
+      margin-top:12px;
+      padding:18px;
+      border-radius:18px;
+      background:white;
+      border:1px solid var(--border);
+      box-shadow:0 10px 30px rgba(76,38,123,.08);
+      display:none;
+    }
+
+    .advanced-search.show {
+      display:block;
+    }
+
+    .advanced-grid {
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+    }
+
+    .field label {
+      display:block;
+      margin-bottom:5px;
+      color:var(--muted);
+      font-size:11px;
+      font-weight:bold;
+    }
+
+    .field input,
+    .field select {
+      width:100%;
+      height:44px;
+      padding:0 11px;
+      border:1px solid var(--border);
+      border-radius:10px;
+      background:#fff;
+      outline:none;
+    }
+
+    .search-actions {
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .clear-button {
+      min-height:44px;
+      padding:0 20px;
+      border:1px solid var(--border);
+      border-radius:10px;
+      background:var(--lavender-light);
+      color:var(--grape-dark);
+      font-weight:bold;
+    }
+
+    .advanced-button {
+      margin-top:12px;
+      border:0;
+      background:transparent;
+      color:var(--grape);
+      font-weight:bold;
+      font-size:12px;
+    }
+
+    /* ================= STATS ================= */
+
+    .stats {
+      position:relative;
+      z-index:5;
+      margin-top:-38px;
+    }
+
+    .stats-box {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      padding:22px;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      background:white;
+      box-shadow:var(--shadow);
+    }
+
+    .stat {
+      text-align:center;
+      border-left:1px solid var(--border);
+    }
+
+    .stat:last-child {
+      border-left:0;
+    }
+
+    .stat strong {
+      display:block;
+      color:var(--grape);
+      font-size:25px;
+    }
+
+    .stat span {
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    /* ================= SECTIONS ================= */
+
+    .section {
+      padding:82px 0;
+    }
+
+    .section-heading {
+      margin-bottom:32px;
+      text-align:center;
+    }
+
+    .section-heading h2 {
+      margin-bottom:8px;
+      color:var(--grape-dark);
+      font-size:29px;
+    }
+
+    .section-heading p {
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .results-info {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:15px;
+      margin-bottom:18px;
+      padding:12px 16px;
+      border:1px solid var(--border);
+      border-radius:13px;
+      background:white;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .property-grid {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:22px;
+    }
+
+    .property-card {
+      overflow:hidden;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      background:white;
+      box-shadow:0 7px 20px rgba(76,38,123,.07);
+      transition:.25s ease;
+    }
+
+    .property-card:hover {
+      transform:translateY(-6px);
+      box-shadow:var(--shadow);
+    }
+
+    .property-image {
+      position:relative;
+      height:205px;
+      overflow:hidden;
+      display:grid;
+      place-items:center;
+      background:
+        linear-gradient(135deg,rgba(113,63,158,.35),rgba(65,49,155,.25)),
+        linear-gradient(135deg,#d7c2ed,#8f77c4);
+      color:white;
+      font-size:42px;
+    }
+
+    /* =========================================
+       عکس واقعی ملک را بعداً اینجا قرار بده
+       مثال:
+       <img src="images/house1.jpg">
+       ========================================= */
+
+    .property-image img {
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .property-placeholder {
+      text-align:center;
+    }
+
+    .property-placeholder small {
+      display:block;
+      margin-top:5px;
+      font-size:11px;
+      opacity:.8;
+    }
+
+    .property-badge {
+      position:absolute;
+      top:13px;
+      right:13px;
+      padding:5px 10px;
+      border-radius:20px;
+      background:white;
+      color:var(--grape);
+      font-size:11px;
+      font-weight:bold;
+    }
+
+    .property-body {
+      padding:18px;
+    }
+
+    .property-title {
+      margin-bottom:6px;
+      color:var(--grape-dark);
+      font-size:16px;
+      font-weight:bold;
+    }
+
+    .property-location {
+      margin-bottom:12px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .property-meta {
+      display:flex;
+      flex-wrap:wrap;
+      gap:7px;
+      margin-bottom:16px;
+    }
+
+    .property-meta span {
+      padding:4px 8px;
+      border-radius:7px;
+      background:var(--lavender-light);
+      color:var(--grape-dark);
+      font-size:11px;
+    }
+
+    .property-footer {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding-top:13px;
+      border-top:1px solid var(--border);
+    }
+
+    .property-price {
+      color:var(--grape);
+      font-size:13px;
+      font-weight:bold;
+    }
+
+    .property-link {
+      border:0;
+      background:transparent;
+      color:var(--royal);
+      font-size:12px;
+      font-weight:bold;
+    }
+
+    .no-results {
+      display:none;
+      padding:45px 20px;
+      border:1px dashed var(--border);
+      border-radius:20px;
+      background:white;
+      text-align:center;
+      color:var(--muted);
+    }
+
+    /* ================= FEATURES ================= */
+
+    .features {
+      background:white;
+    }
+
+    .feature-grid {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:22px;
+    }
+
+    .feature-card {
+      padding:28px;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      background:var(--pastel);
+      text-align:center;
+      transition:.25s ease;
+    }
+
+    .feature-card:hover {
+      transform:translateY(-5px);
+      box-shadow:var(--shadow);
+    }
+
+    .feature-icon {
+      width:60px;
+      height:60px;
+      display:grid;
+      place-items:center;
+      margin:0 auto 15px;
+      border-radius:18px;
+      background:var(--lavender);
+      color:var(--grape-dark);
+      font-size:27px;
+    }
+
+    .feature-card h3 {
+      margin-bottom:8px;
+      color:var(--grape-dark);
+      font-size:17px;
+    }
+
+    .feature-card p {
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    /* ================= CTA ================= */
+
+    .cta {
+      padding:80px 0;
+    }
+
+    .cta-box {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:25px;
+      padding:42px;
+      border-radius:27px;
+      background:linear-gradient(135deg,var(--grape-dark),var(--royal));
+      color:white;
+      box-shadow:var(--shadow);
+    }
+
+    .cta-box h2 {
+      margin-bottom:7px;
+      font-size:25px;
+    }
+
+    .cta-box p {
+      color:#e9def7;
+      font-size:13px;
+    }
+
+    /* ================= FOOTER ================= */
+
+    .footer {
+      padding:32px 0;
+      background:#251535;
+      color:#e9dff2;
+    }
+
+    .footer-inner {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:20px;
+      text-align:center;
+    }
+
+    .footer-title {
+      color:white;
+      font-size:23px;
+      font-weight:bold;
+    }
+
+    .footer p {
+      color:#cdbedc;
+      font-size:12px;
+    }
+
+    /* ================= MODAL ================= */
+
+    .modal {
+      position:fixed;
+      inset:0;
+      z-index:1000;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      background:rgba(27,15,38,.62);
+      backdrop-filter:blur(8px);
+    }
+
+    .modal.show {
+      display:flex;
+    }
+
+    .modal-box {
+      width:min(460px,100%);
+      max-height:90vh;
+      overflow:auto;
+      padding:28px;
+      border-radius:25px;
+      background:white;
+      box-shadow:0 30px 80px rgba(0,0,0,.25);
+      position:relative;
+    }
+
+    .modal-close {
+      position:absolute;
+      top:14px;
+      left:14px;
+      width:35px;
+      height:35px;
+      border:0;
+      border-radius:10px;
+      background:#f5eff9;
+      color:var(--grape-dark);
+      font-size:20px;
+    }
+
+    .modal-title {
+      margin-bottom:6px;
+      color:var(--grape-dark);
+      font-size:25px;
+      font-weight:bold;
+    }
+
+    .modal-description {
+      margin-bottom:22px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .auth-tabs {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-bottom:20px;
+    }
+
+    .auth-tab {
+      height:45px;
+      border:1px solid var(--border);
+      border-radius:10px;
+      background:var(--pastel);
+      color:var(--muted);
+      font-weight:bold;
+    }
+
+    .auth-tab.active {
+      background:var(--grape);
+      color:white;
+      border-color:var(--grape);
+    }
+
+    .auth-form {
+      display:none;
+    }
+
+    .auth-form.active {
+      display:block;
+    }
+
+    .auth-field {
+      margin-bottom:13px;
+    }
+
+    .auth-field label {
+      display:block;
+      margin-bottom:6px;
+      color:var(--grape-dark);
+      font-size:12px;
+      font-weight:bold;
+    }
+
+    .auth-field input,
+    .auth-field select {
+      width:100%;
+      height:48px;
+      padding:0 13px;
+      border:1px solid var(--border);
+      border-radius:11px;
+      outline:none;
+    }
+
+    .auth-field input:focus,
+    .auth-field select:focus {
+      border-color:var(--grape);
+      box-shadow:0 0 0 3px rgba(113,63,158,.08);
+    }
+
+    .auth-submit {
+      width:100%;
+      height:49px;
+      margin-top:8px;
+      border:0;
+      border-radius:11px;
+      background:linear-gradient(135deg,var(--grape),var(--royal));
+      color:white;
+      font-weight:bold;
+    }
+
+    .auth-message {
+      min-height:25px;
+      margin-top:12px;
+      color:var(--red);
+      font-size:12px;
+      text-align:center;
+    }
+
+    .auth-message.success {
+      color:var(--green);
+    }
+
+    .user-info {
+      margin-bottom:18px;
+      padding:14px;
+      border-radius:13px;
+      background:var(--lavender-light);
+      color:var(--grape-dark);
+      font-size:12px;
+    }
+
+    /* ================= RESPONSIVE ================= */
+
+    @media(max-width:900px) {
+
+      .nav,
+      .header-buttons {
+        display:none;
+      }
+
+      .mobile-button {
+        display:block;
+      }
+
+      .search-panel {
+        grid-template-columns:1fr 1fr;
+      }
+
+      .advanced-grid {
+        grid-template-columns:1fr 1fr;
+      }
+
+      .property-grid,
+      .feature-grid {
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media(max-width:600px) {
+
+      .container {
+        width:min(100% - 24px,1180px);
+      }
+
+      .hero {
+        padding:62px 0 82px;
+      }
+
+      .main-slogan {
+        font-size:47px;
+        letter-spacing:-1px;
+      }
+
+      .hero-description {
+        font-size:14px;
+      }
+
+      .search-panel {
+        grid-template-columns:1fr;
+      }
+
+      .advanced-grid {
+        grid-template-columns:1fr;
+      }
+
+      .stats-box {
+        grid-template-columns:1fr;
+        gap:15px;
+      }
+
+      .stat {
+        padding-bottom:15px;
+        border-left:0;
+        border-bottom:1px solid var(--border);
+      }
+
+      .stat:last-child {
+        padding-bottom:0;
+        border-bottom:0;
+      }
+
+      .property-grid,
+      .feature-grid {
+        grid-template-columns:1fr;
+      }
+
+      .cta-box {
+        align-items:flex-start;
+        flex-direction:column;
+        padding:28px;
+      }
+
+      .footer-inner {
+        align-items:flex-start;
+        flex-direction:column;
+      }
+
+      .results-info {
+        flex-direction:column;
+        align-items:flex-start;
+      }
+    }
+ /* =========================================
+   سقف | طراحی جدید ورود و ثبت‌نام
+   فقط ظاهر — منطق JavaScript دست‌نخورده
+========================================= */
+
+.auth-modern {
+  width: min(470px, 94vw);
+  max-height: 92vh;
+  padding: 30px 28px 24px;
+  border-radius: 30px;
   background:
-    radial-gradient(circle at 85% 10%,rgba(108,60,255,.12),transparent 30%),
-    radial-gradient(circle at 10% 90%,rgba(155,124,255,.10),transparent 28%),
-    var(--bg);
-  color:var(--text);
+    radial-gradient(circle at 100% 0%, rgba(113,63,158,.10), transparent 30%),
+    #fff;
+  box-shadow: 0 30px 90px rgba(35,18,55,.28);
+  border: 1px solid rgba(232,223,239,.8);
 }
 
-button,
-input,
-select{
-  font-family:inherit;
+.auth-modern .modal-close {
+  top: 18px;
+  left: 18px;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: #f5effa;
+  color: #4b2677;
+  font-size: 22px;
+  transition: .2s;
 }
 
-button{
-  cursor:pointer;
+.auth-modern .modal-close:hover {
+  background: #eadcf8;
+  transform: rotate(90deg);
 }
 
-a{
-  color:inherit;
-  text-decoration:none;
+.auth-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 3px 0 20px;
 }
 
-/* ================= HEADER ================= */
-
-.header{
-  position:sticky;
-  top:0;
-  z-index:100;
-  height:76px;
-  background:rgba(255,255,255,.96);
-  border-bottom:1px solid var(--border);
-  backdrop-filter:blur(18px);
-  display:flex;
-  align-items:center;
-  gap:25px;
-  padding:0 4%;
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  flex-shrink:0;
-}
-
-.brand img{
-  width:54px;
-  height:54px;
-  object-fit:contain;
-  border-radius:15px;
-}
-
-.nav{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:24px;
-  flex:1;
-}
-
-.nav a{
-  font-size:13px;
-  font-weight:700;
-  color:#625d6c;
-  transition:.2s;
-  white-space:nowrap;
-}
-
-.nav a:hover,
-.nav a.active{
-  color:var(--primary);
-}
-
-.head-actions{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-.icon{
-  width:40px;
-  height:40px;
-  border:1px solid var(--border);
-  background:#fff;
-  border-radius:12px;
-  font-size:20px;
-  color:#514b5d;
-}
-
-.auth{
-  height:42px;
-  padding:0 18px;
-  border:0;
-  border-radius:13px;
-  color:#fff;
-  font-weight:800;
-  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-  box-shadow:0 8px 20px rgba(108,60,255,.22);
-}
-
-/* ================= LAYOUT ================= */
-
-.layout{
-  width:min(1450px,94%);
-  margin:28px auto 0;
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 300px;
-  gap:25px;
-}
-
-.main{
-  min-width:0;
-}
-
-/* ================= HERO ================= */
-
-.hero{
-  position:relative;
-  min-height:475px;
-}
-
-.hero>img{
-  width:100%;
-  height:475px;
-  display:block;
-  object-fit:cover;
-  border-radius:30px;
-  box-shadow:0 25px 70px rgba(40,25,90,.18);
-}
-
-.hero:after{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:30px;
-  background:linear-gradient(
-    90deg,
-    rgba(18,12,35,.08),
-    rgba(18,12,35,.12) 40%,
-    rgba(18,12,35,.68)
-  );
-  pointer-events:none;
-}
-
-.hero-copy{
-  position:absolute;
-  z-index:2;
-  right:48px;
-  top:65px;
-  max-width:520px;
-  color:#fff;
-}
-
-.hero-copy h1{
-  margin:0 0 15px;
-  font-size:48px;
-  line-height:1.35;
-  font-weight:950;
-  text-shadow:0 5px 25px rgba(0,0,0,.22);
-}
-
-.hero-copy p{
-  margin:0;
-  max-width:470px;
-  font-size:16px;
-  line-height:2;
-  color:rgba(255,255,255,.94);
-}
-
-/* ================= SEARCH ================= */
-
-.searchbox{
-  position:absolute;
-  z-index:5;
-  right:35px;
-  left:35px;
-  bottom:-65px;
-  background:rgba(255,255,255,.98);
-  border-radius:23px;
-  padding:16px;
-  box-shadow:0 20px 50px rgba(45,30,90,.20);
-}
-
-.tabs{
-  display:flex;
-  gap:7px;
-  margin-bottom:12px;
-  overflow:auto;
-}
-
-.tab{
-  flex:0 0 auto;
-  border:0;
-  background:#f5f2fa;
-  color:#686171;
-  border-radius:11px;
-  padding:10px 17px;
-  font-weight:700;
-  font-size:13px;
-}
-
-.tab.active{
-  color:#fff;
-  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-}
-
-.fields{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr 1fr 125px;
-  gap:9px;
-}
-
-.field{
-  width:100%;
-  height:48px;
-  border:1px solid var(--border);
-  border-radius:12px;
-  background:#faf9fc;
-  padding:0 12px;
-  color:#413c4b;
-  outline:none;
-}
-
-.field:focus{
-  border-color:var(--primary);
-  background:#fff;
-  box-shadow:0 0 0 3px rgba(108,60,255,.08);
-}
-
-.searchbtn{
-  border:0;
-  border-radius:12px;
-  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-  color:#fff;
-  font-weight:800;
-}
-
-/* ================= CATEGORIES ================= */
-
-.categories{
-  margin-top:105px;
-  display:grid;
-  grid-template-columns:repeat(8,1fr);
-  gap:12px;
-}
-
-.cat{
-  min-height:105px;
-  border:1px solid var(--border);
-  background:#fff;
-  border-radius:18px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  transition:.2s;
-}
-
-.cat:hover{
-  transform:translateY(-4px);
-  border-color:#d4c8fa;
-  box-shadow:0 12px 30px rgba(50,30,100,.10);
-}
-
-.cat b{
-  width:42px;
-  height:42px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:13px;
-  background:#f0ebff;
-  color:var(--primary);
-  font-size:21px;
-}
-
-.cat span{
-  font-size:12px;
-  font-weight:800;
-  color:#514b5c;
-}
-
-/* ================= SECTION ================= */
-
-.section-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin:35px 0 18px;
-}
-
-.section-head h2{
-  margin:0;
-  font-size:22px;
-}
-
-.section-head a{
-  color:var(--primary);
-  font-size:13px;
-  font-weight:800;
-}
-
-/* ================= CARDS ================= */
-
-.cards{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:16px;
-}
-
-.card{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:19px;
-  overflow:hidden;
-  box-shadow:0 8px 25px rgba(50,30,100,.05);
-  transition:.25s;
-}
-
-.card:hover{
-  transform:translateY(-5px);
-  box-shadow:0 18px 40px rgba(50,30,100,.11);
-}
-
-.card-img{
-  height:190px;
-  position:relative;
-  overflow:hidden;
-}
-
-.card-img img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.fav{
-  position:absolute;
-  top:10px;
-  left:10px;
-  width:36px;
-  height:36px;
-  border:0;
-  border-radius:50%;
-  background:rgba(255,255,255,.92);
-  color:#625b6d;
-  font-size:19px;
-}
-
-.badge{
-  position:absolute;
-  top:10px;
-  right:10px;
-  padding:6px 11px;
-  border-radius:9px;
-  background:#fff;
-  color:#55505f;
-  font-size:11px;
-  font-weight:800;
-}
-
-.badge.sale{
-  color:var(--primary);
-}
-
-.card-body{
-  padding:15px;
+.auth-logo {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: linear-gradient(135deg,#713f9e,#41319b);
+  color: white;
+  font-size: 27px;
+  font-weight: 900;
+  box-shadow: 0 10px 25px rgba(113,63,158,.25);
 }
 
-.card-title{
-  font-weight:900;
-  font-size:14px;
-  margin-bottom:8px;
+.auth-brand-text {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
 }
 
-.meta{
-  color:#817b89;
-  font-size:12px;
-  margin-bottom:12px;
+.auth-brand-text strong {
+  color: #4b2677;
+  font-size: 23px;
+  line-height: 1.2;
 }
 
-.price{
-  color:var(--primary);
-  font-weight:900;
-  font-size:13px;
+.auth-brand-text span {
+  margin-top: 3px;
+  color: #766c82;
+  font-size: 10px;
 }
 
-/* ================= SIDEBAR ================= */
-
-aside{
-  min-width:0;
-}
-
-.side{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:23px;
-  overflow:hidden;
-  box-shadow:0 12px 35px rgba(50,30,100,.06);
-}
-
-.side-head{
-  padding:23px;
-  display:flex;
-  justify-content:center;
-  border-bottom:1px solid var(--border);
-}
-
-.side-head img{
-  width:65px;
-  height:65px;
-  object-fit:contain;
-  border-radius:17px;
-}
-
-.profile{
-  display:flex;
-  align-items:center;
-  gap:11px;
-  padding:18px;
-  border-bottom:1px solid var(--border);
-}
-
-.avatar{
-  width:45px;
-  height:45px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:14px;
-  background:#f0ebff;
-}
-
-.profile div:nth-child(2){
-  display:flex;
-  flex-direction:column;
-  flex:1;
-}
-
-.profile strong{
-  font-size:13px;
-}
-
-.profile small{
-  color:#88818f;
-  margin-top:4px;
-  font-size:11px;
-}
-
-.profile>span{
-  color:#aaa3b1;
-  font-size:23px;
-}
-
-.side-menu{
-  padding:10px;
-}
-
-.side-menu a{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  min-height:45px;
-  padding:0 13px;
-  border-radius:11px;
-  color:#686171;
-  font-size:12px;
-  font-weight:700;
-  margin-bottom:4px;
-}
-
-.side-menu a:hover,
-.side-menu a.active{
-  color:var(--primary);
-  background:#f2efff;
-}
-
-.side-menu i{
-  margin-right:auto;
-  min-width:21px;
-  height:21px;
-  border-radius:50%;
-  background:#6c3cff;
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-style:normal;
-  font-size:10px;
-}
-
-/* ================= WHY ================= */
-
-.why{
-  margin-top:17px;
-  padding:22px;
-  background:linear-gradient(145deg,#fff,#f5f1ff);
-  border:1px solid var(--border);
-  border-radius:23px;
-}
-
-.why h3{
-  margin:0 0 15px;
-  font-size:17px;
-}
-
-.why p{
-  margin:10px 0;
-  color:#6e6877;
-  font-size:12px;
-  line-height:1.8;
-}
-
-.why button{
-  width:100%;
-  height:42px;
-  margin-top:8px;
-  border:1px solid #d9cffb;
-  background:#fff;
-  color:var(--primary);
-  border-radius:11px;
-  font-weight:800;
-}
-
-/* ================= PHONES ================= */
-
-.phones{
-  width:min(1200px,94%);
-  margin:65px auto 35px;
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:18px;
-}
-
-.phone{
-  overflow:hidden;
-  border-radius:24px;
-  background:#fff;
-  border:1px solid var(--border);
-  box-shadow:0 15px 40px rgba(50,30,100,.09);
-}
-
-.phone img{
-  width:100%;
-  display:block;
-}
-
-/* ================= FOOTER ================= */
-
-.footer{
-  text-align:center;
-  padding:35px 20px;
-  color:#817a89;
-  font-size:12px;
-}
-
-/* ================= TOAST ================= */
-
-.toast{
-  position:fixed;
-  z-index:1000;
-  bottom:25px;
-  right:50%;
-  transform:translateX(50%) translateY(30px);
-  opacity:0;
-  pointer-events:none;
-  background:#211b2b;
-  color:#fff;
-  padding:12px 20px;
-  border-radius:13px;
-  font-size:13px;
-  transition:.25s;
-}
-
-.toast.show{
-  opacity:1;
-  transform:translateX(50%) translateY(0);
-}
-
-/* ================= MODAL ================= */
-
-.modal{
-  position:fixed;
-  inset:0;
-  z-index:500;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  background:rgba(20,14,32,.60);
-  backdrop-filter:blur(8px);
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
-  transition:.25s;
-}
-
-.modal.show{
-  opacity:1;
-  visibility:visible;
-  pointer-events:auto;
-}
-
-.modal-box{
-  width:min(470px,100%);
-  max-height:92vh;
-  overflow:auto;
-  position:relative;
-  background:#fff;
-  border-radius:28px;
-  padding:30px;
-  box-shadow:0 30px 90px rgba(20,10,50,.30);
-}
-
-.modal-box:before{
-  content:"";
-  position:absolute;
-  top:0;
-  right:0;
-  left:0;
-  height:5px;
-  background:linear-gradient(90deg,#4d20c9,#6c3cff,#9b7cff);
-}
-
-.modal-close{
-  position:absolute;
-  top:13px;
-  left:13px;
-  width:35px;
-  height:35px;
-  border:0;
-  border-radius:10px;
-  background:#f4f1f8;
-  color:#625c6c;
-  font-size:24px;
+.auth-heading {
+  text-align: center;
+  margin-bottom: 22px;
 }
 
-.auth-brand{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:12px;
-  margin:5px 0 20px;
+.auth-heading h2 {
+  margin: 0 0 7px;
+  color: #21182d;
+  font-size: 25px;
+  font-weight: 900;
 }
 
-.auth-logo-img{
-  width:58px;
-  height:58px;
-  object-fit:contain;
-  border-radius:16px;
+.auth-heading p {
+  margin: 0;
+  color: #766c82;
+  font-size: 12px;
+  line-height: 1.9;
 }
 
-.auth-brand div{
-  display:flex;
-  flex-direction:column;
-  gap:3px;
+.auth-modern .auth-tabs {
+  padding: 5px;
+  gap: 5px;
+  margin-bottom: 22px;
+  border-radius: 15px;
+  background: #f5f0fa;
 }
 
-.auth-brand strong{
-  font-size:23px;
-  font-weight:950;
+.auth-modern .auth-tab {
+  height: 45px;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: #766c82;
+  font-size: 13px;
+  font-weight: 800;
+  transition: .2s;
 }
 
-.auth-brand span{
-  font-size:11px;
-  color:#817a89;
+.auth-modern .auth-tab:hover {
+  color: #713f9e;
 }
 
-.auth-heading{
-  text-align:center;
-  margin-bottom:22px;
+.auth-modern .auth-tab.active {
+  background: white;
+  color: #713f9e;
+  box-shadow: 0 5px 16px rgba(76,38,123,.10);
 }
 
-.auth-heading h2{
-  margin:0 0 7px;
-  font-size:25px;
-  font-weight:950;
+.auth-modern .auth-field {
+  margin-bottom: 16px;
 }
 
-.auth-heading p{
-  margin:0;
-  color:#7b7484;
-  font-size:12px;
-  line-height:1.8;
+.auth-modern .auth-field label {
+  margin-bottom: 8px;
+  color: #4b2677;
+  font-size: 12px;
+  font-weight: 800;
 }
 
-/* ================= AUTH TABS ================= */
-
-.auth-tabs{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:5px;
-  padding:5px;
-  background:#f3f0fa;
-  border-radius:15px;
-  margin-bottom:20px;
-}
-
-.auth-tab{
-  height:43px;
-  border:0;
-  border-radius:11px;
-  background:transparent;
-  color:#777184;
-  font-weight:800;
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
-.auth-tab.active{
-  color:var(--primary);
-  background:#fff;
-  box-shadow:0 5px 15px rgba(0,0,0,.06);
+.auth-modern .input-wrapper input {
+  width: 100%;
+  height: 53px;
+  padding: 0 46px 0 15px;
+  border: 1px solid #e8dfef;
+  border-radius: 14px;
+  outline: none;
+  background: #faf8fd;
+  color: #21182d;
+  font-size: 14px;
+  transition: .2s;
 }
-
-/* ================= AUTH FORM ================= */
 
-.auth-form{
-  display:none;
-  flex-direction:column;
-  gap:11px;
+.auth-modern .input-wrapper input::placeholder {
+  color: #aaa1b1;
 }
 
-.auth-form.active{
-  display:flex;
+.auth-modern .input-wrapper input:focus {
+  background: white;
+  border-color: #713f9e;
+  box-shadow: 0 0 0 4px rgba(113,63,158,.09);
 }
 
-.auth-form>label{
-  color:#403a4b;
-  font-size:12px;
-  font-weight:800;
+.input-icon {
+  position: absolute;
+  right: 15px;
+  z-index: 2;
+  font-size: 17px;
+  pointer-events: none;
 }
 
-.auth-form input[type="text"],
-.auth-form input[type="tel"]{
-  width:100%;
-  height:51px;
-  border:1px solid var(--border);
-  border-radius:13px;
-  background:#faf9fc;
-  outline:none;
-  padding:0 15px;
-  color:#27222e;
-  font-size:14px;
-  direction:ltr;
-  text-align:left;
+.role-title {
+  margin: 20px 0 10px;
+  color: #4b2677;
+  font-size: 12px;
+  font-weight: 800;
 }
 
-.auth-form input:focus{
-  background:#fff;
-  border-color:var(--primary);
-  box-shadow:0 0 0 4px rgba(108,60,255,.08);
+.role-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
 
-.role-title{
-  color:#403a4b;
-  font-size:12px;
-  font-weight:800;
-  margin-top:5px;
+.role-card {
+  position: relative;
+  display: block;
+  padding: 13px 11px;
+  border: 1px solid #e8dfef;
+  border-radius: 15px;
+  background: #faf8fd;
+  cursor: pointer;
+  transition: .2s ease;
 }
 
-.role-options{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
+.role-card:hover {
+  border-color: #cbb4e2;
+  transform: translateY(-1px);
 }
 
-.role-card{
-  position:relative;
-  min-height:75px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  gap:5px;
-  padding:10px;
-  border:1px solid var(--border);
-  border-radius:13px;
-  background:#faf9fc;
-  cursor:pointer;
+.role-card input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
 }
 
-.role-card:has(input:checked){
-  border-color:var(--primary);
-  background:#f5f1ff;
+.role-content {
+  display: flex;
+  align-items: center;
+  gap: 9px;
 }
 
-.role-card input{
-  position:absolute;
-  opacity:0;
-  pointer-events:none;
+.role-icon {
+  width: 39px;
+  height: 39px;
+  flex: 0 0 39px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: #eee4f8;
+  font-size: 18px;
 }
 
-.role-card b{
-  font-size:12px;
+.role-content strong {
+  display: block;
+  margin-bottom: 2px;
+  color: #3c294b;
+  font-size: 11px;
 }
 
-.role-card small{
-  color:#847d8d;
-  font-size:10px;
+.role-content small {
+  display: block;
+  color: #8a8092;
+  font-size: 9px;
+  line-height: 1.5;
 }
 
-/* ================= BUTTON ================= */
-
-.modal-btn{
-  width:100%;
-  height:53px;
-  border:0;
-  border-radius:14px;
-  margin-top:7px;
-  background:linear-gradient(135deg,#6c3cff,#4d20c9);
-  color:#fff;
-  font-size:14px;
-  font-weight:900;
-  box-shadow:0 10px 25px rgba(108,60,255,.24);
+.role-check {
+  position: absolute;
+  top: 9px;
+  left: 9px;
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #d9cbe5;
+  border-radius: 50%;
+  color: transparent;
+  font-size: 10px;
 }
 
-.modal-btn:hover{
-  transform:translateY(-2px);
+.role-card:has(input:checked) {
+  border-color: #713f9e;
+  background: linear-gradient(135deg,#faf5ff,#f3edfb);
+  box-shadow: 0 7px 20px rgba(113,63,158,.10);
 }
-
-/* ================= OTP ================= */
 
-#otpStep h3{
-  margin:0;
-  text-align:center;
-  font-size:21px;
+.role-card:has(input:checked) .role-icon {
+  background: #713f9e;
+  color: white;
 }
 
-#otpText{
-  margin:0 0 8px;
-  color:#777184;
-  font-size:12px;
-  text-align:center;
-  line-height:1.8;
+.role-card:has(input:checked) .role-check {
+  border-color: #713f9e;
+  background: #713f9e;
+  color: white;
 }
 
-#otpCode{
-  direction:ltr;
-  text-align:center;
-  letter-spacing:8px;
-  font-size:22px;
-  font-weight:900;
+.auth-modern .auth-submit {
+  width: 100%;
+  min-height: 54px;
+  margin-top: 20px;
+  border: 0;
+  border-radius: 15px;
+  background: linear-gradient(135deg,#713f9e,#41319b);
+  color: white;
+  font-size: 14px;
+  font-weight: 900;
+  box-shadow: 0 12px 25px rgba(113,63,158,.25);
+  transition: .2s ease;
 }
 
-.back-btn{
-  width:100%;
-  height:44px;
-  border:1px solid var(--border);
-  border-radius:12px;
-  background:#f8f6fb;
-  color:#625b6c;
-  font-weight:800;
+.auth-modern .auth-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px rgba(113,63,158,.32);
 }
 
-/* ================= MESSAGE ================= */
-
-.auth-message{
-  min-height:0;
-  margin-top:13px;
-  padding:0;
-  border-radius:11px;
-  font-size:12px;
-  line-height:1.8;
-  text-align:center;
-  color:#c62828;
+.auth-modern .auth-submit:active {
+  transform: translateY(0);
 }
 
-.auth-message:not(:empty){
-  padding:10px 12px;
-  background:#fff0f0;
-  border:1px solid #ffd5d5;
+.auth-modern .auth-message {
+  min-height: 22px;
+  margin-top: 12px;
+  text-align: center;
+  color: #c94962;
+  font-size: 11px;
+  line-height: 1.8;
 }
 
-.auth-message.success{
-  color:#18864b;
-  background:#effcf4;
-  border-color:#ccefdc;
+.auth-modern .auth-message.success {
+  color: #20936d;
 }
 
-.auth-security{
-  display:block;
-  margin-top:17px;
-  text-align:center;
-  color:#9a93a2;
-  font-size:10px;
+.auth-security {
+  margin-top: 17px;
+  padding-top: 14px;
+  border-top: 1px solid #eee7f2;
+  color: #93899b;
+  text-align: center;
+  font-size: 10px;
 }
-
-/* ================= TABLET ================= */
-
-@media(max-width:1100px){
 
-  .nav{
-    gap:14px;
+@media (max-width: 500px) {
+  .auth-modern {
+    padding: 27px 20px 20px;
+    border-radius: 25px;
   }
 
-  .nav a{
-    font-size:11px;
+  .auth-heading h2 {
+    font-size: 22px;
   }
 
-  .layout{
-    grid-template-columns:1fr;
+  .role-options {
+    grid-template-columns: 1fr;
   }
 
-  aside{
-    display:none;
-  }
-
-  .cards{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .categories{
-    grid-template-columns:repeat(4,1fr);
-  }
-
-  .phones{
-    grid-template-columns:repeat(3,1fr);
-  }
-
-  .fields{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .searchbtn{
-    min-height:48px;
+  .role-card {
+    padding: 11px;
   }
 }
+  /* =========================================================
+     سقف — طراحی کامل مطابق طرح مرجع
+  ========================================================= */
+  :root{--ui-purple:#7027a5;--ui-purple2:#4f237f;--ui-pink:#ef2f6c;--ui-bg:#fbf8fd;--ui-line:#ebe5ef;--ui-text:#30253a;--ui-muted:#7b7182}
+  body{background:linear-gradient(135deg,#f7d9ec 0%,#f9edf7 28%,#f4eefa 100%);color:var(--ui-text)}
+  .header{position:sticky;top:0;background:rgba(255,255,255,.97);box-shadow:0 3px 20px rgba(58,26,78,.08);border-bottom:1px solid #eee8f2}
+  .header-inner{min-height:74px;max-width:1180px}
+  .brand{gap:9px}.brand-logo{width:56px;height:56px;object-fit:contain;border-radius:0}.brand-name{font-size:19px;color:#54207d}.brand-slogan{font-size:9px;color:#786b80}
+  .nav{gap:23px;font-size:11px;font-weight:700}.nav a:first-child{color:var(--ui-pink);position:relative}.nav a:first-child:after{content:"";position:absolute;right:0;left:0;bottom:-25px;height:3px;border-radius:4px;background:var(--ui-pink)}
+  .button{border-radius:22px}.button-primary{background:linear-gradient(90deg,#6124a3,#ef2f6c);box-shadow:none}.button-light{background:#f7edf5;color:#5d287d}
+  main{padding-right:238px}
 
-/* ================= MOBILE ================= */
+  /* نوار کناری */
+  .saghf-sidebar{position:absolute;top:88px;right:max(24px,calc((100vw - 1280px)/2));width:205px;background:#fff;border:1px solid #eee7f1;border-radius:19px;box-shadow:0 12px 38px rgba(62,28,87,.12);padding:0 11px 12px;z-index:20}
+  .side-brand{height:84px;margin:0 -11px 8px;padding:12px;background:linear-gradient(135deg,#792aa9,#ed2f68);color:#fff;border-radius:19px 19px 0 0;display:flex;align-items:center;justify-content:center;gap:7px}.side-brand img{width:48px;height:48px;object-fit:contain;filter:brightness(0) invert(1)}.side-brand strong{display:block;font-size:14px}.side-brand small{display:block;font-size:8px}
+  .side-user{display:flex;align-items:center;gap:8px;padding:10px 5px 13px;border-bottom:1px solid var(--ui-line);font-size:9px}.side-user .avatar{width:37px;height:37px;border-radius:50%;display:grid;place-items:center;background:#eee6f3;color:#5c267c;font-weight:900}.side-user strong{display:block;font-size:10px}.side-user small{display:block;color:#999;font-size:8px}.side-user span{margin-right:auto;font-size:22px}
+  .side-nav{padding:7px 0}.side-nav a{display:flex;align-items:center;gap:9px;padding:10px 9px;border-radius:9px;color:#655b6c;font-size:10px;font-weight:700}.side-nav a:hover,.side-nav a.active{background:#faeef7;color:#7027a5}.side-nav a b{margin-right:auto;background:#ef2f6c;color:#fff;border-radius:50%;min-width:17px;height:17px;display:grid;place-items:center;font-size:8px}
+  .side-help{margin-top:10px;padding:15px 11px;border-radius:15px;background:linear-gradient(180deg,#fff0f8,#f9e9f6);text-align:right}.help-logo{font-size:29px;color:#a91b82}.side-help h3{font-size:15px;color:#4d205f;margin:3px 0 8px}.side-help p{font-size:8px;color:#675c6c;margin:6px 0}.side-help p:before{content:"✓";color:#8b2caf;font-weight:900;margin-left:5px}.side-help button{width:100%;height:30px;margin-top:8px;border:0;border-radius:16px;background:linear-gradient(90deg,#6c21a5,#ed2e6d);color:#fff;font-size:9px;font-weight:800}
 
-@media(max-width:700px){
+  /* هیرو */
+  .hero{margin:18px max(24px,calc((100vw - 1280px)/2)) 0;min-height:395px;padding:0;border-radius:18px;background:#7029a0;box-shadow:0 12px 35px rgba(60,27,85,.15);overflow:visible}
+  .hero-content{max-width:none;height:395px;position:relative;padding:0;display:block}
+  .hero-photo{position:absolute;right:0;left:auto;top:0;width:61%;height:100%;overflow:hidden;border-radius:0 18px 18px 0}.hero-photo img{width:100%;height:100%;object-fit:cover}.hero-photo:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(91,24,126,.86) 0%,rgba(91,24,126,.48) 30%,rgba(91,24,126,.04) 72%)}
+  .hero-content:before{content:"";position:absolute;inset:0;z-index:2;border-radius:18px;background:linear-gradient(90deg,rgba(102,30,145,.98) 0%,rgba(102,30,145,.92) 29%,rgba(102,30,145,.15) 62%,transparent 100%);pointer-events:none}
+  .hero-copy{position:absolute;z-index:3;left:0;right:auto;width:49%;padding:58px 48px 0;color:#fff;text-align:right}.hero-label{margin:0 0 12px;padding:0;border:0;background:none;color:#fff;font-size:11px}.main-slogan{font-size:38px;line-height:1.35;color:#fff;margin:0 0 10px;text-shadow:none;letter-spacing:0}.main-slogan span{color:#fff;background:none}.hero-description{max-width:330px;margin:0;color:#f4e9fa;font-size:11px;text-align:right}
+  .search-panel{position:absolute;z-index:7;left:24px;right:auto;bottom:18px;width:59%;display:grid;grid-template-columns:repeat(4,1fr);gap:7px;padding:10px;border:0;border-radius:17px;background:#fff;box-shadow:0 13px 35px rgba(34,10,49,.24)}.search-tabs{grid-column:1/-1;display:flex;justify-content:space-around;border-bottom:1px solid #eee;padding-bottom:4px}.search-tabs button{border:0;background:transparent;color:#5e5365;font-size:9px;font-weight:800;padding:6px 8px}.search-tabs button.active{color:#6d1ca3;border-bottom:2px solid #8c35ba}.search-panel input,.search-panel select{height:42px;border-radius:9px;font-size:10px}.search-submit{height:42px;background:linear-gradient(90deg,#6d1da6,#ec2d6d);border-radius:9px;font-size:10px}.advanced-button{position:absolute;z-index:8;left:35px;bottom:-25px;color:#fff;background:transparent;font-size:9px}
 
-  .header{
-    height:65px;
-    padding:0 14px;
-  }
+  /* دسته بندی */
+  .quick-categories{padding:43px 0 20px}.category-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:11px}.category-card{min-height:72px;background:#fff;border:1px solid #ece7f0;border-radius:13px;box-shadow:0 4px 15px rgba(72,31,94,.05);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#54485d;font-size:9px;font-weight:800;transition:.2s}.category-card b{font-size:24px;color:#7624a4}.category-card:nth-child(2n) b{color:#bd2a9a}.category-card:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(72,31,94,.1)}
 
-  .brand img{
-    width:45px;
-    height:45px;
-  }
+  /* املاک */
+  .properties-section{padding:30px 0 55px}.section-heading-row{display:flex;align-items:end;justify-content:space-between;text-align:right}.section-heading-row h2{font-size:19px;margin:0}.section-heading-row p{font-size:9px;color:var(--ui-muted)}.see-all{font-size:9px;color:#8a2ca7;font-weight:800}.results-info{background:transparent;border:0;padding:0;margin-bottom:10px;justify-content:flex-start}.results-info .clear-button{display:none}.property-grid{grid-template-columns:repeat(4,1fr);gap:13px}.property-card{border-radius:14px;box-shadow:0 5px 18px rgba(66,29,88,.08)}.property-image{height:145px}.property-image img{transition:.3s}.property-card:hover .property-image img{transform:scale(1.04)}.heart{position:absolute;top:9px;right:9px;width:27px;height:27px;border:0;border-radius:50%;background:rgba(255,255,255,.92);color:#7d6687;font-size:18px;line-height:1}.property-badge{top:auto;bottom:9px;right:auto;left:9px;background:linear-gradient(90deg,#6f1ba4,#ed2c6c);color:#fff;padding:4px 11px;font-size:8px}.property-body{padding:12px}.property-title{font-size:11px;margin-bottom:3px}.property-location{font-size:8px;margin-bottom:8px}.property-meta{gap:4px;margin-bottom:9px}.property-meta span{font-size:7px;padding:3px 5px}.property-price{font-size:9px}.property-link{font-size:8px}
 
-  .nav{
-    display:none;
-  }
+  /* بخش امکانات و معرفی */
+  .features{padding:52px 0;background:#fff}.feature-grid{grid-template-columns:repeat(3,1fr);gap:16px}.feature-card{border-radius:16px;padding:22px}.feature-card h3{font-size:15px}.feature-card p{font-size:11px}.feature-icon{width:52px;height:52px;border-radius:15px;font-size:23px}.cta{padding:50px 0}.footer{background:#251631}
 
-  .head-actions{
-    margin-right:auto;
-  }
+  /* نمایش اپلیکیشن در انتهای صفحه، مطابق پایین تصویر مرجع */
+  .app-showcase{padding:35px 0 75px;overflow:hidden}.app-showcase-title{text-align:center;margin-bottom:25px}.app-showcase-title h2{font-size:20px;color:#4e245f;margin-bottom:5px}.app-showcase-title p{font-size:10px;color:#84798a}.phone-row{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;align-items:end}.phone{background:#17131d;border-radius:28px;padding:7px;box-shadow:0 18px 40px rgba(46,19,62,.2);transform:translateY(0);transition:.2s}.phone:hover{transform:translateY(-6px)}.phone-screen{height:420px;border-radius:22px;overflow:hidden;background:#fff;position:relative}.phone-top{height:30px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:7px;color:#555}.phone-logo{height:42px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #eee;font-size:11px;color:#7027a5;font-weight:900}.phone-hero{height:110px;margin:8px;border-radius:10px;background:linear-gradient(135deg,#7629a7,#ef2f6c);color:#fff;padding:12px;font-size:11px;font-weight:900}.phone-hero small{display:block;font-size:7px;margin-top:8px;font-weight:500}.phone-tabs{display:flex;justify-content:space-around;font-size:7px;color:#777;padding:7px}.phone-search{margin:4px 8px;padding:8px;border:1px solid #eee;border-radius:7px;font-size:7px;color:#999}.phone-list{padding:5px 8px}.phone-card{display:flex;gap:7px;padding:7px 0;border-bottom:1px solid #eee;font-size:7px}.phone-thumb{width:48px;height:38px;border-radius:6px;background:linear-gradient(135deg,#d6c2e5,#8d6db0);flex:none}.phone-price{color:#d82a68;font-weight:900;margin-top:3px}.phone-btn{margin:8px;height:28px;border-radius:7px;background:linear-gradient(90deg,#6824a5,#ef2f6c);color:#fff;display:grid;place-items:center;font-size:7px}.phone:nth-child(2),.phone:nth-child(4){transform:translateY(18px)}
 
-  .icon{
-    display:none;
-  }
-
-  .auth{
-    height:39px;
-    padding:0 13px;
-    font-size:11px;
-  }
-
-  .layout{
-    width:calc(100% - 20px);
-    margin-top:15px;
-  }
-
-  .hero{
-    min-height:560px;
-  }
-
-  .hero>img{
-    height:560px;
-    border-radius:22px;
-  }
-
-  .hero-copy{
-    right:25px;
-    left:25px;
-    top:35px;
-  }
-
-  .hero-copy h1{
-    font-size:32px;
-  }
-
-  .hero-copy p{
-    font-size:13px;
-  }
-
-  .searchbox{
-    right:12px;
-    left:12px;
-    bottom:-145px;
-    padding:12px;
-  }
-
-  .tabs{
-    margin-bottom:10px;
-  }
-
-  .tab{
-    padding:8px 12px;
-    font-size:11px;
-  }
-
-  .fields{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .field{
-    height:44px;
-    font-size:11px;
-  }
-
-  .searchbtn{
-    grid-column:1/-1;
-    height:46px;
-  }
-
-  .categories{
-    margin-top:175px;
-    grid-template-columns:repeat(4,1fr);
-    gap:8px;
-  }
-
-  .cat{
-    min-height:85px;
-  }
-
-  .cat b{
-    width:35px;
-    height:35px;
-    font-size:17px;
-  }
-
-  .cat span{
-    font-size:10px;
-  }
-
-  .cards{
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-  }
-
-  .card-img{
-    height:145px;
-  }
-
-  .card-body{
-    padding:11px;
-  }
-
-  .card-title{
-    font-size:11px;
-  }
-
-  .meta,
-  .price{
-    font-size:10px;
-  }
-
-  .phones{
-    width:calc(100% - 20px);
-    grid-template-columns:1fr 1fr;
-  }
-
-  .phone:last-child{
-    display:none;
-  }
-
-  .modal{
-    padding:12px;
-  }
-
-  .modal-box{
-    padding:25px 20px;
-    border-radius:23px;
-  }
-
-  .auth-heading h2{
-    font-size:22px;
-  }
-}
-
-@media(max-width:420px){
-
-  .cards{
-    grid-template-columns:1fr;
-  }
-
-  .categories{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .fields{
-    grid-template-columns:1fr;
-  }
-
-  .hero-copy h1{
-    font-size:29px;
-  }
-
-  .role-options{
-    grid-template-columns:1fr;
-  }
-}
-</style>
+  .mobile-bottom-nav{display:none}
+  @media(max-width:1050px){main{padding-right:0}.saghf-sidebar{display:none}.hero{margin-left:18px;margin-right:18px}.category-grid{grid-template-columns:repeat(4,1fr)}.property-grid{grid-template-columns:repeat(2,1fr)}.phone-row{grid-template-columns:repeat(3,1fr)}.phone:nth-child(4),.phone:nth-child(5){display:none}}
+  @media(max-width:700px){body{padding-bottom:66px}.header-inner{min-height:65px}.brand-logo{width:45px;height:45px}.brand-name{font-size:17px}.brand-slogan{font-size:8px}.hero{margin:9px 12px 0;min-height:575px;border-radius:17px}.hero-content{height:575px}.hero-photo{width:100%;height:285px;right:0;left:0;border-radius:17px 17px 0 0}.hero-photo:after{background:linear-gradient(180deg,rgba(82,22,113,.08),rgba(89,23,123,.1) 45%,rgba(102,28,145,.85) 78%,rgba(103,28,145,.98))}.hero-content:before{background:linear-gradient(180deg,transparent 25%,rgba(100,27,142,.18) 43%,rgba(102,28,145,.97) 65%,rgba(103,28,145,.99) 100%)}.hero-copy{left:0;right:0;width:100%;padding:200px 22px 0}.main-slogan{font-size:29px;line-height:1.32}.hero-description{font-size:9px;max-width:290px}.search-panel{left:12px;right:12px;bottom:14px;width:auto;grid-template-columns:1fr 1fr;padding:8px;border-radius:13px}.search-tabs{overflow:auto;white-space:nowrap;justify-content:flex-start;gap:2px}.search-tabs button{font-size:7px;padding:5px 6px}.search-panel input,.search-panel select,.search-submit{height:38px;font-size:8px}.search-submit{grid-column:1/-1}.advanced-button{left:15px;bottom:-24px;font-size:8px}.quick-categories{padding:40px 0 12px}.category-grid{grid-template-columns:repeat(4,1fr);gap:6px}.category-card{min-height:63px;font-size:7px;border-radius:10px}.category-card b{font-size:20px}.properties-section{padding:28px 0 45px}.section-heading-row h2{font-size:16px}.property-grid{grid-template-columns:1fr 1fr;gap:8px}.property-image{height:115px}.property-body{padding:8px}.property-title{font-size:9px}.property-location{font-size:7px}.property-meta span{font-size:6px}.property-price{font-size:7px}.property-link{font-size:6px}.features{padding:42px 0}.feature-grid{grid-template-columns:1fr}.cta{padding:40px 0}.cta-box{padding:25px;display:block;text-align:center}.cta-box .button{margin-top:15px}.app-showcase{padding:30px 0 55px}.phone-row{grid-template-columns:repeat(2,1fr);gap:12px;padding:0 14px}.phone{border-radius:21px;padding:5px}.phone-screen{height:340px;border-radius:17px}.phone:nth-child(2),.phone:nth-child(4){transform:none}.phone:nth-child(5){display:none}.mobile-bottom-nav{position:fixed;z-index:1001;bottom:0;right:0;left:0;height:62px;background:rgba(255,255,255,.98);border-top:1px solid #e8e1ed;display:grid;grid-template-columns:repeat(5,1fr);box-shadow:0 -5px 25px rgba(50,20,70,.1)}.mobile-bottom-nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;color:#85798b;font-size:8px}.mobile-bottom-nav a b{font-size:19px;font-weight:500}.mobile-bottom-nav a.active{color:#9d207f}.mobile-menu{background:#fff}}
+  </style>
 </head>
 
 <body>
 
-<div class="page">
+  <!-- ================= HEADER ================= -->
 
-<header class="header">
+  <header class="header">
 
-  <a class="brand" href="#home">
-    <img src="assets/logo.png" alt="سقف">
-  </a>
+    <div class="container header-inner">
 
-  <nav class="nav">
-    <a class="active" href="#home">خانه</a>
-    <a href="#search">جستجوی ملک</a>
-    <a href="#needs">نیازهای ملکی</a>
-    <a href="#consultants">مشاوران</a>
-    <a href="#advisor">سقف برای مشاور</a>
-    <a href="#services">خدمات و دانش</a>
+      <a href="#home" class="brand">
+
+        <!--
+          بعداً لوگوی خودت را اینجا قرار بده:
+          images/logo.png
+
+          فعلاً این لوگوی موقت نمایش داده می‌شود.
+        -->
+
+        <img class="brand-logo" src="logo.jpg.jpg" alt="سقف">
+      
+
+        <span>
+          <span class="brand-name">سقف</span>
+          <span class="brand-slogan">همه چیز زیر یک سقف</span>
+        </span>
+
+      </a>
+
+      <nav class="nav">
+        <a href="#home">خانه</a>
+        <a href="#properties">املاک</a>
+        <a href="#features">امکانات</a>
+        <a href="#about">درباره ما</a>
+      </nav>
+
+      <div class="header-buttons" id="headerButtons">
+
+        <button class="button button-light" onclick="openAuth('login')">
+          ورود
+        </button>
+
+        <button class="button button-primary" onclick="openAuth('register')">
+          ثبت‌نام
+        </button>
+
+      </div>
+
+      <button class="mobile-button" id="mobileButton">
+        ☰
+      </button>
+
+    </div>
+
+    <div class="container mobile-menu" id="mobileMenu">
+
+      <a href="#home">خانه</a>
+      <a href="#properties">املاک</a>
+      <a href="#features">امکانات</a>
+      <a href="#about">درباره ما</a>
+
+      <button onclick="openAuth('login')">
+        ورود
+      </button>
+
+      <button onclick="openAuth('register')">
+        ثبت‌نام
+      </button>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- ================= DESKTOP SIDEBAR ================= -->
+  <aside class="saghf-sidebar" id="saghfSidebar">
+    <div class="side-brand">
+      <img src="logo.jpg.jpg" alt="سقف">
+      <div><strong>سقف</strong><small>همه چیز زیر یک سقف</small></div>
+    </div>
+    <div class="side-user">
+      <div class="avatar">ع</div>
+      <div><strong>علی احمدی</strong><small>کاربر عادی</small></div>
+      <span>‹</span>
+    </div>
+    <nav class="side-nav">
+      <a class="active" href="#home">⌂ <span>داشبورد</span></a>
+      <a href="#properties">▣ <span>آگهی‌های من</span></a>
+      <a href="#properties">♧ <span>نیازهای من</span></a>
+      <a href="#properties">♡ <span>علاقه‌مندی‌ها</span></a>
+      <a href="#features">▢ <span>پیام‌ها</span><b>3</b></a>
+      <a href="#about">⚙ <span>تنظیمات</span></a>
+      <a href="#home">↪ <span>خروج</span></a>
+    </nav>
+    <div class="side-help">
+      <div class="help-logo">⌂</div>
+      <h3>چرا سقف؟</h3>
+      <p>دسترسی به املاک متنوع و به‌روز</p>
+      <p>مشاوران معتبر و تأییدشده</p>
+      <p>ابزارهای هوشمند و کاربردی</p>
+      <button onclick="openAuth('register')">بیشتر بدانید ←</button>
+    </div>
+  </aside>
+
+  <main>
+
+    <!-- ================= HERO ================= -->
+
+    <section class="hero" id="home">
+      <div class="container hero-content">
+        <div class="hero-copy">
+          <div class="hero-label">پلتفرم حرفه‌ای املاک ایران</div>
+          <h1 class="main-slogan">همه چیز برای ملک<br><span>زیر یک سقف</span></h1>
+          <p class="hero-description">خرید، فروش، اجاره، مشاوره و خدمات تخصصی؛ همه در یک پلتفرم.</p>
+        </div>
+        <div class="hero-photo">
+          <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85" alt="خانه مدرن">
+        </div>
+        <form class="search-panel" id="searchForm">
+          <div class="search-tabs">
+            <button type="button" class="active">⌂ خرید</button>
+            <button type="button">⌂ فروش</button>
+            <button type="button">♧ اجاره</button>
+            <button type="button">▱ زمین</button>
+            <button type="button">▤ مغازه</button>
+            <button type="button">▥ اداری</button>
+          </div>
+          <input id="searchInput" type="search" placeholder="شهر یا منطقه؛ مثلاً تهران">
+          <select id="dealType"><option value="">محدوده قیمت</option><option value="فروش">فروش</option><option value="اجاره">اجاره</option><option value="رهن">رهن</option></select>
+          <select id="propertyType"><option value="">نوع ملک؛ همه انواع</option><option value="آپارتمان">آپارتمان</option><option value="خانه">خانه</option><option value="زمین">زمین</option><option value="دفتر کار">دفتر کار</option></select>
+          <button type="submit" class="search-submit">⌕ جستجو</button>
+        </form>
+        <button class="advanced-button" id="advancedButton">⚙ فیلترهای بیشتر</button>
+        <div class="advanced-search" id="advancedSearch">
+          <div class="advanced-grid">
+            <div class="field"><label>حداقل متراژ</label><input id="minArea" type="number" placeholder="مثلاً ۵۰"></div>
+            <div class="field"><label>حداکثر متراژ</label><input id="maxArea" type="number" placeholder="مثلاً ۲۰۰"></div>
+            <div class="field"><label>حداقل قیمت</label><input id="minPrice" type="number" placeholder="مثلاً ۱۰۰۰"></div>
+            <div class="field"><label>حداکثر قیمت</label><input id="maxPrice" type="number" placeholder="مثلاً ۱۰۰۰۰"></div>
+            <div class="field"><label>تعداد خواب</label><select id="bedrooms"><option value="">همه</option><option value="1">۱ خواب</option><option value="2">۲ خواب</option><option value="3">۳ خواب</option><option value="4">۴ خواب</option></select></div>
+            <div class="field"><label>مرتب‌سازی</label><select id="sortBy"><option value="default">پیش‌فرض</option><option value="priceLow">ارزان‌ترین</option><option value="priceHigh">گران‌ترین</option><option value="areaLow">کمترین متراژ</option><option value="areaHigh">بیشترین متراژ</option></select></div>
+          </div>
+          <div class="search-actions"><button type="button" class="clear-button" id="clearFilters">پاک کردن فیلترها</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= QUICK CATEGORIES ================= -->
+    <section class="quick-categories">
+      <div class="container category-grid">
+        <a href="#properties" class="category-card"><b>⌂</b><span>خرید</span></a>
+        <a href="#properties" class="category-card"><b>⌕</b><span>اجاره</span></a>
+        <a href="#properties" class="category-card"><b>♧</b><span>زمین</span></a>
+        <a href="#properties" class="category-card"><b>▤</b><span>مغازه</span></a>
+        <a href="#properties" class="category-card"><b>▥</b><span>اداری</span></a>
+        <a href="#features" class="category-card"><b>♙</b><span>مشاوران</span></a>
+        <a href="#features" class="category-card"><b>♢</b><span>دانش و آموزش</span></a>
+        <a href="#features" class="category-card"><b>▤</b><span>سایر خدمات</span></a>
+      </div>
+    </section>
+
+    <!-- ================= PROPERTIES ================= -->
+
+    <section class="section properties-section" id="properties">
+      <div class="container">
+        <div class="section-heading section-heading-row">
+          <div><h2>ویژه‌های امروز 🔥</h2><p>فایل‌های تازه و منتخب سقف</p></div>
+          <a href="#properties" class="see-all">مشاهده همه ←</a>
+        </div>
+        <div class="results-info"><span id="resultsText">۴ فایل نمایش داده می‌شود</span><button class="clear-button" onclick="clearAllFilters()">حذف فیلترها</button></div>
+        <div class="property-grid" id="propertyGrid">
+          <article class="property-card" data-title="آپارتمان ۱۲۰ متری خوش نقشه" data-location="تهران منطقه ۲" data-deal="فروش" data-type="آپارتمان" data-area="120" data-price="8500" data-bedrooms="2">
+            <div class="property-image"><img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=85" alt="آپارتمان مدرن"><span class="property-badge">فروش</span><button class="heart">♡</button></div>
+            <div class="property-body"><h3 class="property-title">آپارتمان ۱۲۰ متری خوش نقشه</h3><p class="property-location">تهران، منطقه ۲</p><div class="property-meta"><span>۱۲۰ متر</span><span>۲ خواب</span><span>پارکینگ</span></div><div class="property-footer"><span class="property-price">۸.۵ میلیارد تومان</span><button class="property-link" onclick="showProperty('آپارتمان ۱۲۰ متری خوش نقشه')">جزئیات ←</button></div></div>
+          </article>
+          <article class="property-card" data-title="ویلای مدرن ۲۵۰ متری" data-location="مازندران نوشهر" data-deal="فروش" data-type="خانه" data-area="250" data-price="8800" data-bedrooms="3">
+            <div class="property-image"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=85" alt="ویلای مدرن"><span class="property-badge sale">فروش</span><button class="heart">♡</button></div>
+            <div class="property-body"><h3 class="property-title">ویلای مدرن ۲۵۰ متری</h3><p class="property-location">مازندران، نوشهر</p><div class="property-meta"><span>۲۵۰ متر</span><span>۳ خواب</span><span>حیاط</span></div><div class="property-footer"><span class="property-price">۸.۸ میلیارد تومان</span><button class="property-link" onclick="showProperty('ویلای مدرن ۲۵۰ متری')">جزئیات ←</button></div></div>
+          </article>
+          <article class="property-card" data-title="مغازه ۴۵ متری بازار بزرگ" data-location="تهران بازار بزرگ" data-deal="فروش" data-type="مغازه" data-area="45" data-price="4200" data-bedrooms="0">
+            <div class="property-image"><img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=85" alt="واحد تجاری"><span class="property-badge">فروش</span><button class="heart">♡</button></div>
+            <div class="property-body"><h3 class="property-title">مغازه ۴۵ متری بازار بزرگ</h3><p class="property-location">تهران، بازار بزرگ</p><div class="property-meta"><span>۴۵ متر</span><span>تجاری</span><span>ویترین</span></div><div class="property-footer"><span class="property-price">۴.۲ میلیارد تومان</span><button class="property-link" onclick="showProperty('مغازه ۴۵ متری بازار بزرگ')">جزئیات ←</button></div></div>
+          </article>
+          <article class="property-card" data-title="دفتر کار ۸۰ متری" data-location="تهران ولیعصر" data-deal="اجاره" data-type="دفتر کار" data-area="80" data-price="150" data-bedrooms="2">
+            <div class="property-image"><img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=900&q=85" alt="دفتر کار"><span class="property-badge rent">اجاره</span><button class="heart">♡</button></div>
+            <div class="property-body"><h3 class="property-title">دفتر کار ۸۰ متری</h3><p class="property-location">تهران، ولیعصر</p><div class="property-meta"><span>۸۰ متر</span><span>۲ اتاق</span><span>آسانسور</span></div><div class="property-footer"><span class="property-price">۱۵۰ میلیون / ماه</span><button class="property-link" onclick="showProperty('دفتر کار ۸۰ متری')">جزئیات ←</button></div></div>
+          </article>
+        </div>
+        <div class="no-results" id="noResults"><div style="font-size:40px;margin-bottom:10px">🏠</div><strong>ملکی با این مشخصات پیدا نشد</strong><p style="margin-top:5px">فیلترها را تغییر دهید و دوباره جستجو کنید.</p></div>
+      </div>
+    </section>
+
+    <!-- ================= FEATURES ================= -->
+
+    <section class="section features" id="features">
+
+      <div class="container">
+
+        <div class="section-heading">
+
+          <h2>
+            چرا سقف؟
+          </h2>
+
+          <p>
+            تمام امکانات لازم برای یک تجربه بهتر در بازار املاک
+          </p>
+
+        </div>
+
+        <div class="feature-grid">
+
+          <article class="feature-card">
+
+            <div class="feature-icon">
+              ⌕
+            </div>
+
+            <h3>
+              جستجوی حرفه‌ای
+            </h3>
+
+            <p>
+              ملک موردنظر خود را بر اساس شهر، منطقه،
+              قیمت، متراژ، تعداد خواب و نوع معامله پیدا کنید.
+            </p>
+
+          </article>
+
+
+          <article class="feature-card">
+
+            <div class="feature-icon">
+              ✓
+            </div>
+
+            <h3>
+              فایل‌های کامل
+            </h3>
+
+            <p>
+              مشخصات ملک، تصاویر، امکانات و اطلاعات مشاور
+              را یکجا مشاهده کنید.
+            </p>
+
+          </article>
+
+
+          <article class="feature-card">
+
+            <div class="feature-icon">
+              ☎
+            </div>
+
+            <h3>
+              ارتباط مستقیم
+            </h3>
+
+            <p>
+              مستقیماً با مشاور ملک ارتباط بگیرید
+              و سؤال‌های خود را بپرسید.
+            </p>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= CTA ================= -->
+
+    <section class="cta" id="about">
+
+      <div class="container">
+
+        <div class="cta-box">
+
+          <div>
+
+            <h2>
+              مشاور املاک هستید؟
+            </h2>
+
+            <p>
+              فایل‌های خود را در سقف ثبت کنید و مشتریان بیشتری پیدا کنید.
+            </p>
+
+          </div>
+
+          <button
+            class="button button-white"
+            onclick="openAuth('register')"
+          >
+            ثبت‌نام به‌عنوان مشاور
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <nav class="mobile-bottom-nav">
+    <a class="active" href="#home"><b>⌂</b><span>خانه</span></a>
+    <a href="#properties"><b>⌕</b><span>جستجو</span></a>
+    <a href="#properties"><b>♡</b><span>علاقه‌مندی</span></a>
+    <a href="#features"><b>♙</b><span>پروفایل</span></a>
+    <a href="#features"><b>☷</b><span>بیشتر</span></a>
   </nav>
 
-  <div class="head-actions">
-    <button class="icon" aria-label="جستجو">⌕</button>
-    <button class="icon" aria-label="علاقه‌مندی‌ها">♡</button>
-    <button class="auth" id="authBtn">ورود / ثبت نام</button>
-  </div>
-
-</header>
-
-<div class="layout" id="home">
-
-<main class="main">
-
-<section class="hero">
-
-  <img src="assets/hero-villa-clean.jpg" alt="ویلای مدرن">
-
-  <div class="hero-copy">
-    <h1>همه چیز برای ملک<br>زیر یک سقف</h1>
-    <p>
-      خرید، فروش، اجاره، مشاوره و خدمات تخصصی؛
-      همه در یک پلتفرم.
-    </p>
-  </div>
-
-  <div class="searchbox" id="search">
-
-    <div class="tabs">
-      <button class="tab active" data-type="خرید">⌂ خرید</button>
-      <button class="tab" data-type="فروش">فروش</button>
-      <button class="tab" data-type="اجاره">اجاره</button>
-      <button class="tab" data-type="زمین">زمین</button>
-      <button class="tab" data-type="مغازه">مغازه</button>
-      <button class="tab" data-type="اداری">اداری</button>
+  <!-- ================= APP SHOWCASE ================= -->
+  <section class="app-showcase" id="appPreview">
+    <div class="container">
+      <div class="app-showcase-title">
+        <h2>سقف، روی موبایل هم کنار شماست</h2>
+        <p>جستجو، مشاهده ملک، ارتباط با مشاور و مدیریت حساب کاربری</p>
+      </div>
+      <div class="phone-row">
+        <div class="phone"><div class="phone-screen"><div class="phone-top">9:41</div><div class="phone-logo">⌂ سقف</div><div class="phone-hero">همه چیز برای ملک<br>زیر یک سقف<small>خرید، فروش و اجاره با سقف</small></div><div class="phone-tabs">خرید　 اجاره　 فروش</div><div class="phone-search">⌕ جستجوی ملک...</div><div class="phone-list"><div class="phone-card"><div class="phone-thumb"></div><div>آپارتمان ۱۲۰ متری<br><span class="phone-price">۸.۵ میلیارد تومان</span></div></div><div class="phone-card"><div class="phone-thumb"></div><div>ویلای مدرن<br><span class="phone-price">۸.۸ میلیارد تومان</span></div></div></div></div></div>
+        <div class="phone"><div class="phone-screen"><div class="phone-top">9:41</div><div class="phone-logo">جستجوی ملک</div><div class="phone-search">تهران　⌄</div><div class="phone-search">نوع ملک　⌄</div><div class="phone-search">قیمت　⌄</div><div class="phone-btn">جستجوی ملک</div><div class="phone-list"><div class="phone-card"><div class="phone-thumb"></div><div>آپارتمان ۱۲۰ متری<br><span class="phone-price">۸.۵ میلیارد</span></div></div><div class="phone-card"><div class="phone-thumb"></div><div>خانه ویلایی<br><span class="phone-price">۸.۸ میلیارد</span></div></div></div></div></div>
+        <div class="phone"><div class="phone-screen"><div class="phone-top">9:41</div><div class="phone-logo">جزئیات ملک</div><div class="phone-hero" style="height:150px">🏠<small>آپارتمان مدرن و نورگیر</small></div><div class="phone-list"><div class="phone-card"><div>۱۲۰ متر　۲ خواب　پارکینگ<br><span class="phone-price">۸.۵ میلیارد تومان</span></div></div><div class="phone-card"><div>تهران، منطقه ۲<br>مشاور تأییدشده</div></div></div><div class="phone-btn">تماس با مشاور</div></div></div>
+        <div class="phone"><div class="phone-screen"><div class="phone-top">9:41</div><div class="phone-logo">پروفایل مشاور</div><div class="phone-hero" style="height:95px">سلام محمد رضایی<small>مشاور املاک تأییدشده</small></div><div class="phone-list"><div class="phone-card"><div>۴۸ آگهی　۳۲ مشتری　۷ سال تجربه</div></div><div class="phone-card"><div>آخرین آگهی‌ها</div></div></div><div class="phone-btn">تماس با مشاور</div></div></div>
+        <div class="phone"><div class="phone-screen"><div class="phone-top">9:41</div><div class="phone-logo">حساب کاربری</div><div class="phone-hero" style="height:95px">محمد رضایی<small>کاربر سقف</small></div><div class="phone-list"><div class="phone-card"><div>آگهی‌های من</div></div><div class="phone-card"><div>علاقه‌مندی‌ها</div></div><div class="phone-card"><div>تنظیمات</div></div></div><div class="phone-btn">ویرایش پروفایل</div></div></div>
+      </div>
     </div>
+  </section>
 
-    <div class="fields">
+  <!-- ================= FOOTER ================= -->
 
-      <select class="field" id="price">
-        <option value="">محدوده قیمت</option>
-        <option>زیر ۲ میلیارد</option>
-        <option>۲ تا ۵ میلیارد</option>
-        <option>۵ تا ۱۰ میلیارد</option>
-        <option>بالای ۱۰ میلیارد</option>
-      </select>
+  <footer class="footer">
 
-      <select class="field" id="propertyType">
-        <option value="">نوع ملک</option>
-        <option>آپارتمان</option>
-        <option>ویلا</option>
-        <option>زمین</option>
-        <option>مغازه</option>
-        <option>دفتر</option>
-      </select>
-
-      <select class="field" id="area">
-        <option value="">محدوده</option>
-        <option>زیر ۱۰۰ متر</option>
-        <option>۱۰۰ تا ۲۰۰ متر</option>
-        <option>۲۰۰ تا ۵۰۰ متر</option>
-        <option>بالای ۵۰۰ متر</option>
-      </select>
-
-      <select class="field" id="city">
-        <option value="">شهر: تهران</option>
-        <option>تهران</option>
-        <option>کرج</option>
-        <option>مشهد</option>
-        <option>شیراز</option>
-        <option>نوشهر</option>
-      </select>
-
-      <button class="searchbtn" id="searchBtn">⌕ جستجو</button>
-
-    </div>
-  </div>
-
-</section>
-
-<div class="categories" id="services">
-
-  <div class="cat"><b>⌂</b><span>خرید</span></div>
-  <div class="cat"><b>⌕</b><span>اجاره</span></div>
-  <div class="cat"><b>♧</b><span>زمین</span></div>
-  <div class="cat"><b>▣</b><span>مغازه</span></div>
-  <div class="cat"><b>▥</b><span>اداری</span></div>
-  <div class="cat"><b>♙</b><span>مشاوران</span></div>
-  <div class="cat"><b>◇</b><span>دانش و آموزش</span></div>
-  <div class="cat"><b>▤</b><span>سایر خدمات</span></div>
-
-</div>
-
-<div class="section-head">
-
-  <h2>🔥 ویژگی‌های امروز</h2>
-
-  <a href="#properties">
-    مشاهده همه ←
-  </a>
-
-</div>
-
-<div class="cards" id="properties">
-
-  <article class="card">
-
-    <div class="card-img">
-      <img src="assets/property-4.jpg" alt="دفتر کار">
-      <button class="fav">♡</button>
-      <span class="badge">اجاره</span>
-    </div>
-
-    <div class="card-body">
-      <div class="card-title">دفتر کار ۸۰ متری</div>
-      <div class="meta">تهران، ولیعصر</div>
-      <div class="price">تومان ۱۸,۵۰۰,۰۰۰ / ماه</div>
-    </div>
-
-  </article>
-
-  <article class="card">
-
-    <div class="card-img">
-      <img src="assets/property-3.jpg" alt="مغازه">
-      <button class="fav">♡</button>
-      <span class="badge sale">فروش</span>
-    </div>
-
-    <div class="card-body">
-      <div class="card-title">مغازه ۴۵ متری</div>
-      <div class="meta">تهران، بازار بزرگ</div>
-      <div class="price">تومان ۴,۲۰۰,۰۰۰,۰۰۰</div>
-    </div>
-
-  </article>
-
-  <article class="card">
-
-    <div class="card-img">
-      <img src="assets/property-2.jpg" alt="ویلا">
-      <button class="fav">♡</button>
-      <span class="badge sale">فروش</span>
-    </div>
-
-    <div class="card-body">
-      <div class="card-title">ویلا ۲۵۰ متری، ۳ خوابه</div>
-      <div class="meta">مازندران، نوشهر</div>
-      <div class="price">تومان ۸,۵۰۰,۰۰۰,۰۰۰</div>
-    </div>
-
-  </article>
-
-  <article class="card">
-
-    <div class="card-img">
-      <img src="assets/property-1.jpg" alt="آپارتمان">
-      <button class="fav">♡</button>
-      <span class="badge">اجاره</span>
-    </div>
-
-    <div class="card-body">
-      <div class="card-title">آپارتمان ۱۴۰ متری، ۲ خوابه</div>
-      <div class="meta">تهران، منطقه ۲</div>
-      <div class="price">تومان ۲۵,۰۰۰,۰۰۰ / ماه</div>
-    </div>
-
-  </article>
-
-</div>
-
-</main>
-
-<aside>
-
-<div class="side">
-
-  <div class="side-head">
-    <img src="assets/logo.png" alt="سقف">
-  </div>
-
-  <div class="profile">
-
-    <div class="avatar">👤</div>
-
-    <div>
-      <strong id="profileName">علی احمدی</strong>
-      <small id="profileRole">کاربر عادی</small>
-    </div>
-
-    <span>›</span>
-
-  </div>
-
-  <div class="side-menu">
-
-    <a class="active" href="#home">⌂ داشبورد</a>
-    <a href="#properties">▣ آگهی‌های من</a>
-    <a href="#needs">♧ نیازهای من</a>
-    <a href="#">♡ علاقه‌مندی‌ها</a>
-    <a href="#">▢ پیام‌ها <i>3</i></a>
-    <a href="#">⚙ تنظیمات</a>
-    <a href="#" id="logout">↪ خروج</a>
-
-  </div>
-
-</div>
-
-<div class="why" id="needs">
-
-  <h3>چرا سقف؟</h3>
-
-  <p>✓ دسترسی به املاک متنوع و به‌روز</p>
-  <p>✓ مشاوران معتبر و تاییدشده</p>
-  <p>✓ ابزارهای هوشمند و کاربردی</p>
-  <p>✓ تجربه ساده و امن</p>
-
-  <button>بیشتر بدانید</button>
-
-</div>
-
-</aside>
-
-</div>
-
-<div class="phones">
-
-  <div class="phone">
-    <img src="assets/mobile-1.jpg" alt="نسخه موبایل سقف">
-  </div>
-
-  <div class="phone">
-    <img src="assets/mobile-2.jpg" alt="جستجوی ملک">
-  </div>
-
-  <div class="phone">
-    <img src="assets/mobile-3.jpg" alt="جزئیات ملک">
-  </div>
-
-  <div class="phone">
-    <img src="assets/mobile-4.jpg" alt="پنل مشاور">
-  </div>
-
-  <div class="phone">
-    <img src="assets/mobile-5.jpg" alt="پروفایل مشاور">
-  </div>
-
-</div>
-
-<footer class="footer">
-  سقف | همه چیز زیر یک سقف
-</footer>
-
-</div>
-
-<div class="toast" id="toast"></div>
-
-<!-- ================= AUTH MODAL ================= -->
-
-<div class="modal" id="authModal" aria-hidden="true">
-
-  <div class="modal-box auth-modern">
-
-    <button class="modal-close" id="modalClose" type="button">×</button>
-
-    <div class="auth-brand">
-
-      <img
-        src="assets/logo.png"
-        alt="سقف"
-        class="auth-logo-img"
-      >
+    <div class="container footer-inner">
 
       <div>
-        <strong>سقف</strong>
-        <span>همه چیز زیر یک سقف</span>
+
+        <div class="footer-title">
+          سقف
+        </div>
+
+        <p>
+          همه چیز زیر یک سقف
+        </p>
+
       </div>
 
     </div>
 
-    <div class="auth-heading">
+  </footer>
 
-      <h2 id="authTitle">
-        ورود به سقف
-      </h2>
 
-      <p id="authSubtitle">
-        برای ورود به حساب، شماره موبایلتان را وارد کنید.
-      </p>
+  <!-- ================= AUTH MODAL ================= -->
 
+<!-- ================= AUTH MODAL ================= -->
+<div class="modal" id="authModal">
+
+  <div class="modal-box auth-modern">
+
+    <button class="modal-close" onclick="closeAuth()">×</button>
+
+    <!-- لوگو -->
+    <div class="auth-brand">
+      <div class="auth-logo">س</div>
+      <div class="auth-brand-text">
+        <strong>سقف</strong>
+        <span>همه چیز زیر یک سقف</span>
+      </div>
     </div>
 
-    <div class="auth-tabs">
+    <!-- عنوان -->
+    <div class="auth-heading">
+      <h2 id="authTitle">ورود به سقف</h2>
+      <p id="authSubtitle">
+        برای ورود به حساب خود شماره موبایلتان را وارد کنید.
+      </p>
+    </div>
 
+    <!-- تب ها -->
+    <div class="auth-tabs">
       <button
         class="auth-tab active"
         id="loginTab"
-        type="button"
+        onclick="switchAuth('login')"
       >
         ورود
       </button>
@@ -1460,29 +1745,38 @@ aside{
       <button
         class="auth-tab"
         id="registerTab"
-        type="button"
+        onclick="switchAuth('register')"
       >
         ثبت‌نام
       </button>
-
     </div>
 
-    <!-- LOGIN -->
 
-    <form id="loginForm" class="auth-form active">
+    <!-- ================= LOGIN ================= -->
 
-      <label>
-        شماره موبایل
-      </label>
+    <form
+      class="auth-form active"
+      id="loginForm"
+    >
 
-      <input
-        id="loginPhone"
-        type="tel"
-        inputmode="tel"
-        autocomplete="tel"
-        placeholder="09123456789"
-        required
-      >
+      <div class="auth-field">
+        <label>شماره موبایل</label>
+
+        <div class="input-wrapper">
+          <span class="input-icon">📱</span>
+
+          <input
+            id="loginPhone"
+            type="tel"
+            required
+            placeholder="09123456789"
+            autocomplete="tel"
+          >
+        </div>
+      </div>
+
+
+      <!-- نوع حساب -->
 
       <div class="role-title">
         نوع حساب
@@ -1491,7 +1785,6 @@ aside{
       <div class="role-options">
 
         <label class="role-card">
-
           <input
             type="radio"
             name="loginRole"
@@ -1499,62 +1792,92 @@ aside{
             checked
           >
 
-          <b>🏠 مشتری</b>
-          <small>جستجو و خرید ملک</small>
+          <div class="role-content">
+            <span class="role-icon">🏠</span>
 
+            <div>
+              <strong>مشتری</strong>
+              <small>جستجوی ملک و خرید</small>
+            </div>
+          </div>
+
+          <span class="role-check">✓</span>
         </label>
 
-        <label class="role-card">
 
+        <label class="role-card">
           <input
             type="radio"
             name="loginRole"
             value="agent"
           >
 
-          <b>🏢 مشاور املاک</b>
-          <small>ثبت و مدیریت ملک</small>
+          <div class="role-content">
+            <span class="role-icon">🏢</span>
 
+            <div>
+              <strong>مشاور املاک</strong>
+              <small>ثبت و مدیریت ملک</small>
+            </div>
+          </div>
+
+          <span class="role-check">✓</span>
         </label>
 
       </div>
 
+
       <button
-        class="modal-btn"
+        class="auth-submit"
         type="submit"
       >
-        ارسال کد تأیید ←
+        <span>ارسال کد تأیید</span>
+        <span>←</span>
       </button>
 
     </form>
 
-    <!-- REGISTER -->
 
-    <form id="registerForm" class="auth-form">
 
-      <label>
-        نام و نام خانوادگی
-      </label>
+    <!-- ================= REGISTER ================= -->
 
-      <input
-        id="registerName"
-        type="text"
-        placeholder="مثلاً کوروش غلامی"
-        required
-      >
+    <form
+      class="auth-form"
+      id="registerForm"
+    >
 
-      <label>
-        شماره موبایل
-      </label>
+      <div class="auth-field">
+        <label>نام و نام خانوادگی</label>
 
-      <input
-        id="registerPhone"
-        type="tel"
-        inputmode="tel"
-        autocomplete="tel"
-        placeholder="09123456789"
-        required
-      >
+        <div class="input-wrapper">
+          <span class="input-icon">👤</span>
+
+          <input
+            id="registerName"
+            type="text"
+            required
+            placeholder="مثلاً کوروش غلامی"
+          >
+        </div>
+      </div>
+
+
+      <div class="auth-field">
+        <label>شماره موبایل</label>
+
+        <div class="input-wrapper">
+          <span class="input-icon">📱</span>
+
+          <input
+            id="registerPhone"
+            type="tel"
+            required
+            placeholder="09123456789"
+            autocomplete="tel"
+          >
+        </div>
+      </div>
+
 
       <div class="role-title">
         نوع حساب
@@ -1563,7 +1886,6 @@ aside{
       <div class="role-options">
 
         <label class="role-card">
-
           <input
             type="radio"
             name="registerRole"
@@ -1571,736 +1893,1517 @@ aside{
             checked
           >
 
-          <b>🏠 مشتری</b>
-          <small>جستجو و خرید ملک</small>
+          <div class="role-content">
+            <span class="role-icon">🏠</span>
 
+            <div>
+              <strong>مشتری</strong>
+              <small>جستجو و خرید ملک</small>
+            </div>
+          </div>
+
+          <span class="role-check">✓</span>
         </label>
 
-        <label class="role-card">
 
+        <label class="role-card">
           <input
             type="radio"
             name="registerRole"
             value="agent"
           >
 
-          <b>🏢 مشاور املاک</b>
-          <small>ثبت و مدیریت آگهی</small>
+          <div class="role-content">
+            <span class="role-icon">🏢</span>
 
+            <div>
+              <strong>مشاور املاک</strong>
+              <small>ثبت و مدیریت آگهی</small>
+            </div>
+          </div>
+
+          <span class="role-check">✓</span>
         </label>
 
       </div>
 
+
       <button
-        class="modal-btn"
+        class="auth-submit"
         type="submit"
       >
-        ادامه ثبت‌نام ←
+        <span>ادامه ثبت‌نام</span>
+        <span>←</span>
       </button>
 
     </form>
 
-    <!-- OTP -->
 
-    <div id="otpStep" class="auth-form">
+    <!-- پیام -->
 
-      <h3>
-        تأیید شماره موبایل
-      </h3>
+    <div
+      class="auth-message"
+      id="authMessage"
+    ></div>
 
-      <p id="otpText"></p>
 
-      <label>
-        کد تأیید
-      </label>
-
-      <input
-        id="otpCode"
-        type="text"
-        inputmode="numeric"
-        maxlength="6"
-        autocomplete="one-time-code"
-        placeholder="کد ۶ رقمی"
-      >
-
-      <button
-        id="verifyOtp"
-        class="modal-btn"
-        type="button"
-      >
-        تأیید و ورود
-      </button>
-
-      <button
-        id="backAuth"
-        class="back-btn"
-        type="button"
-      >
-        ← برگشت
-      </button>
-
-    </div>
-
-    <div id="authMessage" class="auth-message"></div>
-
-    <small class="auth-security">
+    <div class="auth-security">
       🔒 اطلاعات شما نزد سقف محفوظ است
-    </small>
+    </div>
 
   </div>
 
 </div>
 
-<script>
 
-const SUPABASE_URL =
-"https://kdinolsgikcxhdepzvng.supabase.co";
+  <!-- ================= USER MODAL ================= -->
 
-const SUPABASE_ANON_KEY =
-"sb_publishable_WtkOdgzPsbrm_Yaigaw_Fg_t4SqR-ZO";
+  <div class="modal" id="userModal">
 
-const supabaseClient =
-window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
+    <div class="modal-box">
 
-const modal =
-document.getElementById('authModal');
+      <button
+        class="modal-close"
+        onclick="closeUserModal()"
+      >
+        ×
+      </button>
 
-const toast =
-document.getElementById('toast');
+      <div class="modal-title">
+        حساب کاربری
+      </div>
 
-const authBtn =
-document.getElementById('authBtn');
+      <div
+        class="user-info"
+        id="userInfo"
+      >
+      </div>
 
-const modalClose =
-document.getElementById('modalClose');
+      <button
+        class="auth-submit"
+        onclick="logout()"
+      >
+        خروج از حساب
+      </button>
 
-const loginForm =
-document.getElementById('loginForm');
+    </div>
 
-const registerForm =
-document.getElementById('registerForm');
+  </div>
 
-const loginTab =
-document.getElementById('loginTab');
 
-const registerTab =
-document.getElementById('registerTab');
+  <script>
 
-const otpStep =
-document.getElementById('otpStep');
+    /* =====================================================
+       SUPABASE
+       ===================================================== */
 
-const authMessage =
-document.getElementById('authMessage');
+    /*
+      این دو مقدار را با اطلاعات Supabase خودت جایگزین کن.
 
-let otpPhone = '';
-let authMode = 'login';
+      از Supabase Dashboard برو:
+      Settings
+      → API
 
+      Project URL را در SUPABASE_URL بگذار.
 
-function toastMsg(msg){
+      Publishable / anon key را در SUPABASE_ANON_KEY بگذار.
 
-  toast.textContent = msg;
+      ❌ service_role را اینجا قرار نده.
+    */
 
-  toast.classList.add('show');
+    const SUPABASE_URL =
+      "https://kdinolsgikcxhdepzvng.supabase.co";
 
-  setTimeout(
-    ()=>toast.classList.remove('show'),
-    2800
-  );
+    const SUPABASE_ANON_KEY =
+      "sb_publishable_WtkOdgzPsbrm_Yaigaw_Fg_t4SqR-ZO";
 
-}
 
+    let supabaseClient = null;
 
-function setMsg(msg,ok=false){
 
-  authMessage.textContent = msg;
+    if (
+      SUPABASE_URL !== "YOUR_SUPABASE_URL" &&
+      SUPABASE_ANON_KEY !== "YOUR_SUPABASE_ANON_KEY"
+    ) {
 
-  authMessage.classList.toggle(
-    'success',
-    ok
-  );
+      supabaseClient =
+        window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_ANON_KEY
+        );
 
-}
-
-
-function normalizePhone(v){
-
-  let p =
-    String(v || '')
-    .trim()
-    .replace(
-      /[۰-۹]/g,
-      d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)
-    )
-    .replace(
-      /[٠-٩]/g,
-      d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)
-    )
-    .replace(/[\s\-()]/g,'');
-
-  if(p.startsWith('0098')){
-    p='+'+p.slice(2);
-  }
-
-  if(p.startsWith('09')){
-    p='+98'+p.slice(1);
-  }
-
-  return p;
-}
-
-
-function validPhone(p){
-
-  return /^\+989\d{9}$/.test(p);
-
-}
-
-
-function openAuth(mode='login'){
-
-  authMode = mode;
-
-  modal.classList.add('show');
-
-  modal.setAttribute(
-    'aria-hidden',
-    'false'
-  );
-
-  showMainAuth();
-
-  switchTab(mode);
-
-  setMsg('');
-
-}
-
-
-function closeAuth(){
-
-  modal.classList.remove('show');
-
-  modal.setAttribute(
-    'aria-hidden',
-    'true'
-  );
-
-  setMsg('');
-
-}
-
-
-function showMainAuth(){
-
-  loginForm.classList.add('active');
-
-  registerForm.classList.remove('active');
-
-  otpStep.classList.remove('active');
-
-  document.querySelector('.auth-tabs').style.display='grid';
-
-}
-
-
-function switchTab(mode){
-
-  authMode = mode;
-
-  loginTab.classList.toggle(
-    'active',
-    mode==='login'
-  );
-
-  registerTab.classList.toggle(
-    'active',
-    mode==='register'
-  );
-
-  loginForm.classList.toggle(
-    'active',
-    mode==='login'
-  );
-
-  registerForm.classList.toggle(
-    'active',
-    mode==='register'
-  );
-
-  otpStep.classList.remove('active');
-
-  document.querySelector('.auth-tabs').style.display='grid';
-
-  setMsg('');
-
-}
-
-
-function showOtp(phone,mode){
-
-  otpPhone = phone;
-
-  authMode = mode;
-
-  loginForm.classList.remove('active');
-
-  registerForm.classList.remove('active');
-
-  otpStep.classList.add('active');
-
-  document.querySelector('.auth-tabs').style.display='none';
-
-  document.getElementById('otpText').textContent =
-    'کد ارسال‌شده به '+phone+' را وارد کنید.';
-
-  document.getElementById('otpCode').value='';
-
-  document.getElementById('otpCode').focus();
-
-  setMsg(
-    'کد تأیید ارسال شد. پیامک خود را بررسی کنید.',
-    true
-  );
-
-}
-
-
-loginTab.onclick =
-()=>switchTab('login');
-
-
-registerTab.onclick =
-()=>switchTab('register');
-
-
-modalClose.onclick =
-closeAuth;
-
-
-modal.onclick =
-e=>{
-  if(e.target===modal){
-    closeAuth();
-  }
-};
-
-
-document.addEventListener(
-  'keydown',
-  e=>{
-    if(e.key==='Escape'){
-      closeAuth();
-    }
-  }
-);
-
-
-authBtn.onclick =
-async()=>{
-
-  const {data} =
-    await supabaseClient.auth.getSession();
-
-  if(data.session){
-
-    toastMsg(
-      'شما وارد حساب کاربری هستید.'
-    );
-
-  }else{
-
-    openAuth('login');
-
-  }
-
-};
-
-
-/* LOGIN */
-
-loginForm.addEventListener(
-  'submit',
-  async e=>{
-
-    e.preventDefault();
-
-    const phone =
-      normalizePhone(
-        document.getElementById(
-          'loginPhone'
-        ).value
-      );
-
-    if(!validPhone(phone)){
-
-      setMsg(
-        'شماره موبایل را به شکل 09xxxxxxxxx وارد کنید.'
-      );
-
-      return;
     }
 
-    setMsg('در حال ارسال کد...');
 
-    const {error} =
-      await supabaseClient.auth.signInWithOtp({
+    /* =====================================================
+       MOBILE MENU
+       ===================================================== */
 
-        phone,
+    const mobileButton =
+      document.getElementById("mobileButton");
 
-        options:{
-          shouldCreateUser:false
-        }
-
-      });
-
-    if(error){
-
-      setMsg(
-        error.message ||
-        'ارسال کد انجام نشد.'
-      );
-
-      return;
-    }
-
-    showOtp(phone,'login');
-
-  }
-);
+    const mobileMenu =
+      document.getElementById("mobileMenu");
 
 
-/* REGISTER */
+    mobileButton.addEventListener("click", function () {
 
-registerForm.addEventListener(
-  'submit',
-  async e=>{
-
-    e.preventDefault();
-
-    const name =
-      document.getElementById(
-        'registerName'
-      ).value.trim();
-
-    const phone =
-      normalizePhone(
-        document.getElementById(
-          'registerPhone'
-        ).value
-      );
-
-    const role =
-      document.querySelector(
-        'input[name="registerRole"]:checked'
-      )?.value;
-
-    if(!name){
-
-      setMsg(
-        'نام و نام خانوادگی را وارد کنید.'
-      );
-
-      return;
-    }
-
-    if(!validPhone(phone)){
-
-      setMsg(
-        'شماره موبایل را به شکل 09xxxxxxxxx وارد کنید.'
-      );
-
-      return;
-    }
-
-    setMsg('در حال ارسال کد...');
-
-    const {error} =
-      await supabaseClient.auth.signInWithOtp({
-
-        phone,
-
-        options:{
-          shouldCreateUser:true,
-
-          data:{
-            full_name:name,
-            role
-          }
-
-        }
-
-      });
-
-    if(error){
-
-      setMsg(
-        error.message ||
-        'ارسال کد انجام نشد.'
-      );
-
-      return;
-    }
-
-    showOtp(phone,'register');
-
-  }
-);
-
-
-/* VERIFY OTP */
-
-document.getElementById(
-  'verifyOtp'
-).onclick =
-async()=>{
-
-  const code =
-    document.getElementById(
-      'otpCode'
-    ).value.trim();
-
-  if(!/^\d{6}$/.test(code)){
-
-    setMsg(
-      'کد باید ۶ رقمی باشد.'
-    );
-
-    return;
-  }
-
-  setMsg('در حال بررسی کد...');
-
-  const {data,error} =
-    await supabaseClient.auth.verifyOtp({
-
-      phone:otpPhone,
-
-      token:code,
-
-      type:'sms'
+      mobileMenu.classList.toggle("open");
 
     });
 
-  if(error){
 
-    setMsg(
-      error.message ||
-      'کد واردشده صحیح نیست یا منقضی شده است.'
+    mobileMenu.addEventListener("click", function(event) {
+
+      if (event.target.tagName === "A") {
+
+        mobileMenu.classList.remove("open");
+
+      }
+
+    });
+
+
+    /* =====================================================
+       AUTH MODAL
+       ===================================================== */
+
+    const authModal =
+      document.getElementById("authModal");
+
+    const userModal =
+      document.getElementById("userModal");
+
+    const authMessage =
+      document.getElementById("authMessage");
+
+
+    function openAuth(type = "login") {
+
+      authModal.classList.add("show");
+
+      document.body.classList.add("modal-open");
+
+      switchAuth(type);
+
+    }
+
+
+    function closeAuth() {
+
+      authModal.classList.remove("show");
+
+      document.body.classList.remove("modal-open");
+
+      authMessage.textContent = "";
+
+    }
+
+
+    function closeUserModal() {
+
+      userModal.classList.remove("show");
+
+      document.body.classList.remove("modal-open");
+
+    }
+
+
+
+    function switchAuth(type) {
+
+  const loginTab = document.getElementById("loginTab");
+  const registerTab = document.getElementById("registerTab");
+
+  const loginForm = document.getElementById("loginForm");
+  const registerForm = document.getElementById("registerForm");
+
+  const oldOtp = document.getElementById("otpStep");
+
+  if (oldOtp) {
+    oldOtp.remove();
+  }
+
+  const tabs = document.querySelector(".auth-tabs");
+
+  if (tabs) {
+    tabs.style.display = "grid";
+  }
+
+  if (type === "login") {
+
+    loginTab.classList.add("active");
+    registerTab.classList.remove("active");
+
+    loginForm.classList.add("active");
+    registerForm.classList.remove("active");
+
+  } else {
+
+    loginTab.classList.remove("active");
+    registerTab.classList.add("active");
+
+    loginForm.classList.remove("active");
+    registerForm.classList.add("active");
+
+  }
+
+  setAuthMessage("", false);
+}
+
+
+/* =====================================================
+   PHONE NORMALIZATION
+   ===================================================== */
+
+function normalizePhone(value) {
+
+  let phone = String(value || "").trim();
+
+  phone = phone.replace(
+    /[۰-۹]/g,
+    function(d) {
+      return "۰۱۲۳۴۵۶۷۸۹".indexOf(d);
+    }
+  );
+
+  phone = phone.replace(
+    /[٠-٩]/g,
+    function(d) {
+      return "٠١٢٣٤٥٦٧٨٩".indexOf(d);
+    }
+  );
+
+  phone = phone.replace(/[\s\-()]/g, "");
+
+  if (phone.startsWith("0098")) {
+    phone = "+" + phone.substring(2);
+  }
+
+  if (phone.startsWith("09")) {
+    phone = "+98" + phone.substring(1);
+  }
+
+  return phone;
+}
+
+
+/* =====================================================
+   PHONE VALIDATION
+   ===================================================== */
+
+function isValidIranPhone(phone) {
+  return /^\+989\d{9}$/.test(phone);
+}
+
+
+/* =====================================================
+   AUTH MESSAGE
+   ===================================================== */
+
+function setAuthMessage(message, success = false) {
+
+  const messageBox =
+    document.getElementById("authMessage");
+
+  if (!messageBox) return;
+
+  messageBox.textContent = message;
+
+  messageBox.classList.toggle(
+    "success",
+    success
+  );
+}
+
+
+/* =====================================================
+   OTP SCREEN
+   ===================================================== */
+
+function showOtpStep(mode, phone) {
+
+  const modal =
+    document.querySelector(".auth-modern");
+
+  const tabs =
+    document.querySelector(".auth-tabs");
+
+  const loginForm =
+    document.getElementById("loginForm");
+
+  const registerForm =
+    document.getElementById("registerForm");
+
+  if (!modal) return;
+
+  if (tabs) {
+    tabs.style.display = "none";
+  }
+
+  if (loginForm) {
+    loginForm.classList.remove("active");
+  }
+
+  if (registerForm) {
+    registerForm.classList.remove("active");
+  }
+
+  const oldOtp =
+    document.getElementById("otpStep");
+
+  if (oldOtp) {
+    oldOtp.remove();
+  }
+
+  const otpStep =
+    document.createElement("div");
+
+  otpStep.id = "otpStep";
+
+  otpStep.innerHTML = `
+
+    <div style="
+      text-align:center;
+      margin-bottom:20px;
+    ">
+
+      <h3 style="
+        margin-bottom:8px;
+        color:var(--grape-dark);
+      ">
+        تأیید شماره موبایل
+      </h3>
+
+      <p style="
+        margin:0;
+        color:var(--muted);
+        font-size:12px;
+      ">
+        کد ارسال‌شده به
+        <strong>${phone}</strong>
+        را وارد کنید.
+      </p>
+
+    </div>
+
+    <form
+      id="otpForm"
+      class="auth-form active"
+      style="display:block;"
+    >
+
+      <div class="auth-field">
+
+        <label for="otpCode">
+          کد تأیید
+        </label>
+
+        <div class="input-wrapper">
+
+          <span class="input-icon">
+            🔐
+          </span>
+
+          <input
+            id="otpCode"
+            type="text"
+            inputmode="numeric"
+            maxlength="6"
+            autocomplete="one-time-code"
+            placeholder="کد ۶ رقمی"
+            required
+          >
+
+        </div>
+
+      </div>
+
+      <button
+        class="auth-submit"
+        type="submit"
+      >
+        تأیید و ورود
+      </button>
+
+      <button
+        id="backToAuth"
+        type="button"
+        style="
+          width:100%;
+          margin-top:10px;
+          border:0;
+          background:transparent;
+          color:var(--grape);
+          font-weight:bold;
+        "
+      >
+        ← برگشت
+      </button>
+
+    </form>
+  `;
+
+  const messageBox =
+    document.getElementById("authMessage");
+
+  if (messageBox) {
+    modal.insertBefore(otpStep, messageBox);
+  } else {
+    modal.appendChild(otpStep);
+  }
+
+  const otpForm =
+    document.getElementById("otpForm");
+
+  const backButton =
+    document.getElementById("backToAuth");
+
+  const otpInput =
+    document.getElementById("otpCode");
+
+  otpForm.dataset.phone = phone;
+  otpForm.dataset.mode = mode;
+
+  otpForm.addEventListener(
+    "submit",
+    verifyOtpCode
+  );
+
+  backButton.addEventListener(
+    "click",
+    function() {
+      switchAuth(mode);
+    }
+  );
+
+  if (otpInput) {
+    otpInput.focus();
+  }
+
+  setAuthMessage(
+    "کد تأیید ارسال شد. پیامک خود را بررسی کنید.",
+    true
+  );
+}
+
+
+/* =====================================================
+   LOGIN OTP
+   ===================================================== */
+
+async function sendLoginOtp(event) {
+
+  event.preventDefault();
+
+  if (!supabaseClient) {
+
+    setAuthMessage(
+      "اتصال Supabase تنظیم نشده است.",
+      false
     );
 
     return;
   }
 
-  setMsg(
-    'ورود با موفقیت انجام شد.',
+  const phoneInput =
+    document.getElementById("loginPhone");
+
+  const phone =
+    normalizePhone(
+      phoneInput ? phoneInput.value : ""
+    );
+
+  if (!isValidIranPhone(phone)) {
+
+    setAuthMessage(
+      "شماره موبایل را به شکل 09xxxxxxxxx وارد کنید.",
+      false
+    );
+
+    return;
+  }
+
+  setAuthMessage(
+    "در حال ارسال کد...",
+    false
+  );
+
+  const { error } =
+    await supabaseClient.auth.signInWithOtp({
+
+      phone: phone,
+
+      options: {
+        shouldCreateUser: false
+      }
+
+    });
+
+  if (error) {
+
+    setAuthMessage(
+      error.message ||
+      "ارسال کد انجام نشد.",
+      false
+    );
+
+    return;
+  }
+
+  showOtpStep(
+    "login",
+    phone
+  );
+}
+
+
+/* =====================================================
+   REGISTER OTP
+   ===================================================== */
+
+async function sendRegisterOtp(event) {
+
+  event.preventDefault();
+
+  if (!supabaseClient) {
+
+    setAuthMessage(
+      "اتصال Supabase تنظیم نشده است.",
+      false
+    );
+
+    return;
+  }
+
+  const nameInput =
+    document.getElementById("registerName");
+
+  const phoneInput =
+    document.getElementById("registerPhone");
+
+  const name =
+    nameInput ? nameInput.value.trim() : "";
+
+  const phone =
+    normalizePhone(
+      phoneInput ? phoneInput.value : ""
+    );
+
+  const role =
+    document.querySelector(
+      'input[name="registerRole"]:checked'
+    )?.value;
+
+  if (!name) {
+
+    setAuthMessage(
+      "نام و نام خانوادگی را وارد کنید.",
+      false
+    );
+
+    return;
+  }
+
+  if (!isValidIranPhone(phone)) {
+
+    setAuthMessage(
+      "شماره موبایل را به شکل 09xxxxxxxxx وارد کنید.",
+      false
+    );
+
+    return;
+  }
+
+  if (!role) {
+
+    setAuthMessage(
+      "نوع حساب را انتخاب کنید.",
+      false
+    );
+
+    return;
+  }
+
+  setAuthMessage(
+    "در حال ارسال کد...",
+    false
+  );
+
+  const { error } =
+    await supabaseClient.auth.signInWithOtp({
+
+      phone: phone,
+
+      options: {
+
+        shouldCreateUser: true,
+
+        data: {
+          full_name: name,
+          role: role
+        }
+
+      }
+
+    });
+
+  if (error) {
+
+    setAuthMessage(
+      error.message ||
+      "ارسال کد انجام نشد.",
+      false
+    );
+
+    return;
+  }
+
+  showOtpStep(
+    "register",
+    phone
+  );
+}
+
+
+/* =====================================================
+   VERIFY OTP
+   ===================================================== */
+
+async function verifyOtpCode(event) {
+
+  event.preventDefault();
+
+  if (!supabaseClient) {
+
+    setAuthMessage(
+      "اتصال Supabase تنظیم نشده است.",
+      false
+    );
+
+    return;
+  }
+
+  const form =
+    event.currentTarget;
+
+  const phone =
+    form.dataset.phone;
+
+  const otpInput =
+    document.getElementById("otpCode");
+
+  const code =
+    otpInput ? otpInput.value.trim() : "";
+
+  if (!/^\d{6}$/.test(code)) {
+
+    setAuthMessage(
+      "کد باید ۶ رقمی باشد.",
+      false
+    );
+
+    return;
+  }
+
+  setAuthMessage(
+    "در حال بررسی کد...",
+    false
+  );
+
+  const { data, error } =
+    await supabaseClient.auth.verifyOtp({
+
+      phone: phone,
+
+      token: code,
+
+      type: "sms"
+
+    });
+
+  if (error) {
+
+    setAuthMessage(
+      error.message ||
+      "کد واردشده صحیح نیست یا منقضی شده است.",
+      false
+    );
+
+    return;
+  }
+
+  setAuthMessage(
+    "ورود با موفقیت انجام شد.",
     true
   );
 
-  updateAuthUI(data.user);
+  if (typeof updateHeader === "function") {
+    updateHeader(data.user);
+  }
 
   setTimeout(
-    closeAuth,
-    600
+    function() {
+      closeAuth();
+    },
+    500
   );
-
-};
-
-
-/* BACK */
-
-document.getElementById(
-  'backAuth'
-).onclick =
-()=>switchTab(authMode);
+}
 
 
-/* AUTH UI */
+/* =====================================================
+   CONNECT AUTH FORMS
+   ===================================================== */
 
-function updateAuthUI(user){
+const loginFormElement =
+  document.getElementById("loginForm");
 
-  if(!authBtn){
+if (loginFormElement) {
 
-    return;
-  }
-
-  if(!user){
-
-    authBtn.textContent =
-      'ورود / ثبت نام';
-
-    return;
-  }
-
-  const name =
-    user.user_metadata?.full_name ||
-    'حساب کاربری';
-
-  authBtn.textContent =
-    '👤 '+name;
-
-  const pn =
-    document.getElementById(
-      'profileName'
-    );
-
-  const pr =
-    document.getElementById(
-      'profileRole'
-    );
-
-  if(pn){
-
-    pn.textContent = name;
-
-  }
-
-  if(pr){
-
-    pr.textContent =
-      user.user_metadata?.role === 'agent'
-      ? 'مشاور املاک'
-      : 'مشتری';
-
-  }
+  loginFormElement.addEventListener(
+    "submit",
+    sendLoginOtp
+  );
 
 }
 
 
-supabaseClient.auth
-.getSession()
-.then(({data})=>{
+const registerFormElement =
+  document.getElementById("registerForm");
 
-  updateAuthUI(
-    data.session?.user || null
+if (registerFormElement) {
+
+  registerFormElement.addEventListener(
+    "submit",
+    sendRegisterOtp
   );
 
-});
+}
+    /* =====================================================
+       CHECK CURRENT SESSION
+       ===================================================== */
+
+    async function checkUser() {
+
+      if (!supabaseClient) {
+        return;
+      }
 
 
-supabaseClient.auth
-.onAuthStateChange(
-  (_event,session)=>{
+      const {
+        data
+      } =
+        await supabaseClient.auth.getSession();
 
-    updateAuthUI(
-      session?.user || null
+
+      if (data.session) {
+
+        updateHeader(
+          data.session.user
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       AUTH STATE
+       ===================================================== */
+
+    if (supabaseClient) {
+
+      supabaseClient.auth.onAuthStateChange(
+        function(event, session) {
+
+          if (session) {
+
+            updateHeader(
+              session.user
+            );
+
+          } else {
+
+            updateHeader(null);
+
+          }
+
+        }
+      );
+
+    }
+
+
+    checkUser();
+
+
+    /* =====================================================
+       HEADER USER
+       ===================================================== */
+
+    function updateHeader(user) {
+
+      const headerButtons =
+        document.getElementById("headerButtons");
+
+
+      if (!user) {
+
+        headerButtons.innerHTML = `
+
+          <button
+            class="button button-light"
+            onclick="openAuth('login')"
+          >
+            ورود
+          </button>
+
+          <button
+            class="button button-primary"
+            onclick="openAuth('register')"
+          >
+            ثبت‌نام
+          </button>
+
+        `;
+
+        return;
+
+      }
+
+
+      const name =
+        user.user_metadata?.full_name ||
+        user.email ||
+        "کاربر";
+
+
+      headerButtons.innerHTML = `
+
+        <button
+          class="button user-button"
+          onclick="openUserModal()"
+        >
+          👤 ${escapeHtml(name)}
+        </button>
+
+      `;
+
+    }
+
+
+    function openUserModal() {
+
+      if (!supabaseClient) {
+        return;
+      }
+
+
+      supabaseClient.auth.getUser()
+        .then(function(result) {
+
+          const user = result.data.user;
+
+
+          if (!user) {
+
+            openAuth("login");
+
+            return;
+
+          }
+
+
+          const name =
+            user.user_metadata?.full_name ||
+            "کاربر";
+
+          const role =
+            user.user_metadata?.role;
+
+
+          let roleText =
+            "کاربر";
+
+
+          if (role === "customer") {
+            roleText = "مشتری";
+          }
+
+          if (role === "agent") {
+            roleText = "مشاور املاک";
+          }
+
+
+          document.getElementById("userInfo").innerHTML = `
+
+            <strong>
+              ${escapeHtml(name)}
+            </strong>
+
+            <br>
+
+            ایمیل:
+            ${escapeHtml(user.email || "")}
+
+            <br>
+
+            نوع حساب:
+            ${roleText}
+
+          `;
+
+
+          userModal.classList.add("show");
+
+          document.body.classList.add("modal-open");
+
+        });
+
+    }
+
+
+    /* =====================================================
+       LOGOUT
+       ===================================================== */
+
+    async function logout() {
+
+      if (!supabaseClient) {
+        return;
+      }
+
+
+      const { error } =
+        await supabaseClient.auth.signOut();
+
+
+      if (error) {
+
+        alert(
+          translateAuthError(error.message)
+        );
+
+        return;
+
+      }
+
+
+      closeUserModal();
+
+      updateHeader(null);
+
+      alert(
+        "با موفقیت از حساب خارج شدید."
+      );
+
+    }
+
+
+    /* =====================================================
+       AUTH ERROR TRANSLATION
+       ===================================================== */
+
+    function translateAuthError(message) {
+
+      if (!message) {
+        return "خطایی رخ داد.";
+      }
+
+
+      const text =
+        message.toLowerCase();
+
+
+      if (text.includes("invalid login credentials")) {
+
+        return "ایمیل یا رمز عبور اشتباه است.";
+
+      }
+
+
+      if (text.includes("email not confirmed")) {
+
+        return "ابتدا ایمیل خود را تأیید کنید.";
+
+      }
+
+
+      if (text.includes("user already registered")) {
+
+        return "این ایمیل قبلاً ثبت شده است.";
+
+      }
+
+
+      if (text.includes("password")) {
+
+        return "رمز عبور باید حداقل ۶ کاراکتر باشد.";
+
+      }
+
+
+      return message;
+
+    }
+
+
+    function showAuthMessage(
+      message,
+      success
+    ) {
+
+      authMessage.textContent =
+        message;
+
+      authMessage.classList.toggle(
+        "success",
+        success
+      );
+
+    }
+
+
+    /* =====================================================
+       SEARCH
+       ===================================================== */
+
+    const searchForm =
+      document.getElementById("searchForm");
+
+    const advancedButton =
+      document.getElementById("advancedButton");
+
+    const advancedSearch =
+      document.getElementById("advancedSearch");
+
+
+    advancedButton.addEventListener(
+      "click",
+      function() {
+
+        advancedSearch.classList.toggle("show");
+
+        advancedButton.textContent =
+          advancedSearch.classList.contains("show")
+            ? "▲ بستن فیلترهای بیشتر"
+            : "⚙ فیلترهای بیشتر";
+
+      }
     );
 
-  }
-);
+
+    searchForm.addEventListener(
+      "submit",
+      function(event) {
+
+        event.preventDefault();
+
+        applyFilters();
+
+        document
+          .getElementById("properties")
+          .scrollIntoView({
+            behavior:"smooth"
+          });
+
+      }
+    );
 
 
-/* PROPERTY TABS */
-
-document
-.querySelectorAll('.tab')
-.forEach(tab=>{
-
-  tab.addEventListener(
-    'click',
-    ()=>{
+    [
+      "minArea",
+      "maxArea",
+      "minPrice",
+      "maxPrice",
+      "bedrooms",
+      "sortBy"
+    ].forEach(function(id) {
 
       document
-      .querySelectorAll('.tab')
-      .forEach(t=>
-        t.classList.remove('active')
-      );
+        .getElementById(id)
+        .addEventListener(
+          "change",
+          applyFilters
+        );
 
-      tab.classList.add('active');
-
-      toastMsg(
-        'بخش «'+
-        tab.dataset.type+
-        '» انتخاب شد.'
-      );
-
-    }
-  );
-
-});
+    });
 
 
-/* FAVORITES */
+    function applyFilters() {
 
-document
-.querySelectorAll('.fav')
-.forEach(btn=>{
-
-  btn.addEventListener(
-    'click',
-    ()=>{
-
-      btn.textContent =
-        btn.textContent==='♥'
-        ? '♡'
-        : '♥';
-
-      toastMsg(
-        btn.textContent==='♥'
-        ? 'به علاقه‌مندی‌ها اضافه شد.'
-        : 'از علاقه‌مندی‌ها حذف شد.'
-      );
-
-    }
-  );
-
-});
+      const search =
+        document
+          .getElementById("searchInput")
+          .value
+          .trim()
+          .toLowerCase();
 
 
-/* SEARCH */
+      const deal =
+        document
+          .getElementById("dealType")
+          .value;
 
-document.getElementById(
-  'searchBtn'
-)?.addEventListener(
-  'click',
-  ()=>{
 
-    const city =
+      const type =
+        document
+          .getElementById("propertyType")
+          .value;
+
+
+      const minArea =
+        Number(
+          document
+            .getElementById("minArea")
+            .value
+        ) || 0;
+
+
+      const maxArea =
+        Number(
+          document
+            .getElementById("maxArea")
+            .value
+        ) || Infinity;
+
+
+      const minPrice =
+        Number(
+          document
+            .getElementById("minPrice")
+            .value
+        ) || 0;
+
+
+      const maxPrice =
+        Number(
+          document
+            .getElementById("maxPrice")
+            .value
+        ) || Infinity;
+
+
+      const bedrooms =
+        document
+          .getElementById("bedrooms")
+          .value;
+
+
+      const sortBy =
+        document
+          .getElementById("sortBy")
+          .value;
+
+
+      const cards =
+        Array.from(
+          document.querySelectorAll(
+            ".property-card"
+          )
+        );
+
+
+      let visibleCards = [];
+
+
+      cards.forEach(function(card) {
+
+        const title =
+          card.dataset.title.toLowerCase();
+
+        const location =
+          card.dataset.location.toLowerCase();
+
+        const cardDeal =
+          card.dataset.deal;
+
+        const cardType =
+          card.dataset.type;
+
+        const area =
+          Number(card.dataset.area);
+
+        const price =
+          Number(card.dataset.price);
+
+        const cardBedrooms =
+          card.dataset.bedrooms;
+
+
+        const searchMatch =
+          !search ||
+          title.includes(search) ||
+          location.includes(search);
+
+
+        const dealMatch =
+          !deal ||
+          cardDeal === deal;
+
+
+        const typeMatch =
+          !type ||
+          cardType === type;
+
+
+        const areaMatch =
+          area >= minArea &&
+          area <= maxArea;
+
+
+        const priceMatch =
+          price >= minPrice &&
+          price <= maxPrice;
+
+
+        const bedroomMatch =
+          !bedrooms ||
+          cardBedrooms === bedrooms;
+
+
+        const visible =
+          searchMatch &&
+          dealMatch &&
+          typeMatch &&
+          areaMatch &&
+          priceMatch &&
+          bedroomMatch;
+
+
+        if (visible) {
+
+          card.style.display = "";
+
+          visibleCards.push(card);
+
+        } else {
+
+          card.style.display = "none";
+
+        }
+
+      });
+
+
+      /* مرتب‌سازی */
+
+      visibleCards.sort(function(a,b) {
+
+        const areaA =
+          Number(a.dataset.area);
+
+        const areaB =
+          Number(b.dataset.area);
+
+        const priceA =
+          Number(a.dataset.price);
+
+        const priceB =
+          Number(b.dataset.price);
+
+
+        if (sortBy === "priceLow") {
+          return priceA - priceB;
+        }
+
+        if (sortBy === "priceHigh") {
+          return priceB - priceA;
+        }
+
+        if (sortBy === "areaLow") {
+          return areaA - areaB;
+        }
+
+        if (sortBy === "areaHigh") {
+          return areaB - areaA;
+        }
+
+        return 0;
+
+      });
+
+
+      const grid =
+        document.getElementById(
+          "propertyGrid"
+        );
+
+
+      visibleCards.forEach(function(card) {
+        grid.appendChild(card);
+      });
+
+
       document.getElementById(
-        'city'
-      ).value ||
-      'همه شهرها';
+        "resultsText"
+      ).textContent =
+        `${toPersianNumber(visibleCards.length)} فایل نمایش داده می‌شود`;
 
-    const type =
-      document.querySelector(
-        '.tab.active'
-      )?.dataset.type ||
-      'خرید';
 
-    toastMsg(
-      'جستجوی '+
-      type+
-      ' در '+
-      city+
-      ' انجام شد.'
+      document.getElementById(
+        "noResults"
+      ).style.display =
+        visibleCards.length === 0
+          ? "block"
+          : "none";
+
+    }
+
+
+    function clearAllFilters() {
+
+      document.getElementById(
+        "searchInput"
+      ).value = "";
+
+      document.getElementById(
+        "dealType"
+      ).value = "";
+
+      document.getElementById(
+        "propertyType"
+      ).value = "";
+
+      document.getElementById(
+        "minArea"
+      ).value = "";
+
+      document.getElementById(
+        "maxArea"
+      ).value = "";
+
+      document.getElementById(
+        "minPrice"
+      ).value = "";
+
+      document.getElementById(
+        "maxPrice"
+      ).value = "";
+
+      document.getElementById(
+        "bedrooms"
+      ).value = "";
+
+      document.getElementById(
+        "sortBy"
+      ).value = "default";
+
+
+      applyFilters();
+
+    }
+
+
+    window.clearAllFilters =
+      clearAllFilters;
+
+
+    document.getElementById(
+      "clearFilters"
+    ).addEventListener(
+      "click",
+      clearAllFilters
     );
 
-  }
-);
+
+    /* =====================================================
+       PROPERTY DETAILS
+       ===================================================== */
+
+    function showProperty(title) {
+
+      alert(
+        "جزئیات «" +
+        title +
+        "» در مرحله بعد به صفحه اختصاصی ملک متصل می‌شود."
+      );
+
+    }
 
 
-/* LOGOUT */
+    window.showProperty =
+      showProperty;
 
-document.getElementById(
-  'logout'
-)?.addEventListener(
-  'click',
-  async e=>{
 
-    e.preventDefault();
+    /* =====================================================
+       CLOSE MODALS WITH ESC / BACKGROUND
+       ===================================================== */
 
-    await supabaseClient.auth.signOut();
+    document.addEventListener(
+      "keydown",
+      function(event) {
 
-    toastMsg(
-      'از حساب خارج شدید.'
+        if (event.key === "Escape") {
+
+          closeAuth();
+
+          closeUserModal();
+
+        }
+
+      }
     );
 
-  }
-);
 
-</script>
+    authModal.addEventListener(
+      "click",
+      function(event) {
+
+        if (event.target === authModal) {
+
+          closeAuth();
+
+        }
+
+      }
+    );
+
+
+    userModal.addEventListener(
+      "click",
+      function(event) {
+
+        if (event.target === userModal) {
+
+          closeUserModal();
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       HELPERS
+       ===================================================== */
+
+    function toPersianNumber(value) {
+
+      return String(value).replace(
+        /\d/g,
+        function(d) {
+
+          return "۰۱۲۳۴۵۶۷۸۹"[d];
+
+        }
+      );
+
+    }
+
+
+    function escapeHtml(text) {
+
+      return String(text)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+    }
+
+  </script>
 
 </body>
 </html>
