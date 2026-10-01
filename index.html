@@ -1348,7 +1348,28 @@
   .mobile-bottom-nav{display:none}
   @media(max-width:1050px){main{padding-right:0}.saghf-sidebar{display:none}.hero{margin-left:18px;margin-right:18px}.category-grid{grid-template-columns:repeat(4,1fr)}.property-grid{grid-template-columns:repeat(2,1fr)}.phone-row{grid-template-columns:repeat(3,1fr)}.phone:nth-child(4),.phone:nth-child(5){display:none}}
   @media(max-width:700px){body{padding-bottom:66px}.header-inner{min-height:65px}.brand-logo{width:45px;height:45px}.brand-name{font-size:17px}.brand-slogan{font-size:8px}.hero{margin:9px 12px 0;min-height:575px;border-radius:17px}.hero-content{height:575px}.hero-photo{width:100%;height:285px;right:0;left:0;border-radius:17px 17px 0 0}.hero-photo:after{background:linear-gradient(180deg,rgba(82,22,113,.08),rgba(89,23,123,.1) 45%,rgba(102,28,145,.85) 78%,rgba(103,28,145,.98))}.hero-content:before{background:linear-gradient(180deg,transparent 25%,rgba(100,27,142,.18) 43%,rgba(102,28,145,.97) 65%,rgba(103,28,145,.99) 100%)}.hero-copy{left:0;right:0;width:100%;padding:200px 22px 0}.main-slogan{font-size:29px;line-height:1.32}.hero-description{font-size:9px;max-width:290px}.search-panel{left:12px;right:12px;bottom:14px;width:auto;grid-template-columns:1fr 1fr;padding:8px;border-radius:13px}.search-tabs{overflow:auto;white-space:nowrap;justify-content:flex-start;gap:2px}.search-tabs button{font-size:7px;padding:5px 6px}.search-panel input,.search-panel select,.search-submit{height:38px;font-size:8px}.search-submit{grid-column:1/-1}.advanced-button{left:15px;bottom:-24px;font-size:8px}.quick-categories{padding:40px 0 12px}.category-grid{grid-template-columns:repeat(4,1fr);gap:6px}.category-card{min-height:63px;font-size:7px;border-radius:10px}.category-card b{font-size:20px}.properties-section{padding:28px 0 45px}.section-heading-row h2{font-size:16px}.property-grid{grid-template-columns:1fr 1fr;gap:8px}.property-image{height:115px}.property-body{padding:8px}.property-title{font-size:9px}.property-location{font-size:7px}.property-meta span{font-size:6px}.property-price{font-size:7px}.property-link{font-size:6px}.features{padding:42px 0}.feature-grid{grid-template-columns:1fr}.cta{padding:40px 0}.cta-box{padding:25px;display:block;text-align:center}.cta-box .button{margin-top:15px}.app-showcase{padding:30px 0 55px}.phone-row{grid-template-columns:repeat(2,1fr);gap:12px;padding:0 14px}.phone{border-radius:21px;padding:5px}.phone-screen{height:340px;border-radius:17px}.phone:nth-child(2),.phone:nth-child(4){transform:none}.phone:nth-child(5){display:none}.mobile-bottom-nav{position:fixed;z-index:1001;bottom:0;right:0;left:0;height:62px;background:rgba(255,255,255,.98);border-top:1px solid #e8e1ed;display:grid;grid-template-columns:repeat(5,1fr);box-shadow:0 -5px 25px rgba(50,20,70,.1)}.mobile-bottom-nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;color:#85798b;font-size:8px}.mobile-bottom-nav a b{font-size:19px;font-weight:500}.mobile-bottom-nav a.active{color:#9d207f}.mobile-menu{background:#fff}}
-  </style>
+  
+
+/* =====================================================
+   سقف | پنل های کاربردی — فقط قابلیت، بدون تغییر ظاهر اصلی
+   ===================================================== */
+.function-modal .function-box{
+  width:min(760px,94vw);max-height:88vh;overflow:auto;background:#fff;border-radius:22px;
+  padding:24px;box-shadow:0 25px 80px rgba(35,18,55,.25);position:relative;
+}
+.function-modal .function-head{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee7f1;padding-bottom:15px;margin-bottom:18px}
+.function-modal .function-head h2{margin:0;color:#4b2677;font-size:20px}
+.function-modal .function-close{border:0;background:#f5effa;color:#4b2677;width:36px;height:36px;border-radius:12px;font-size:22px;cursor:pointer}
+.function-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.function-card{border:1px solid #eee7f1;border-radius:15px;padding:15px;background:#fff;text-align:right}
+.function-card h3{margin:0 0 7px;font-size:13px;color:#4b2677}.function-card p{margin:0;color:#766c82;font-size:10px;line-height:1.9}
+.function-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.function-actions button{border:0;border-radius:16px;padding:9px 15px;cursor:pointer;font-family:inherit;font-size:10px;font-weight:800}
+.function-primary{background:linear-gradient(90deg,#6124a3,#ef2f6c);color:#fff}.function-light{background:#f7edf5;color:#5d287d}
+.profile-form{display:grid;grid-template-columns:1fr 1fr;gap:12px}.profile-form label{font-size:10px;color:#655b6c;font-weight:800}.profile-form input,.profile-form select{width:100%;margin-top:6px;height:40px;border:1px solid #e8dfea;border-radius:11px;padding:0 11px;font-family:inherit;outline:0}.profile-form input:focus,.profile-form select:focus{border-color:#a86ac4}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid #f0eaf2}.setting-row:last-child{border-bottom:0}.setting-row strong{display:block;font-size:11px;color:#403547}.setting-row small{display:block;color:#8a8090;font-size:9px;margin-top:4px}.setting-switch{position:relative;width:44px;height:24px}.setting-switch input{display:none}.setting-slider{position:absolute;inset:0;background:#ddd3e2;border-radius:20px;cursor:pointer}.setting-slider:before{content:"";position:absolute;width:18px;height:18px;right:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 4px #bbb}.setting-switch input:checked+.setting-slider{background:#7b31a4}.setting-switch input:checked+.setting-slider:before{transform:translateX(-20px)}
+.detail-cover{height:220px;border-radius:16px;overflow:hidden;margin-bottom:16px}.detail-cover img{width:100%;height:100%;object-fit:cover}.detail-price{font-size:17px;font-weight:900;color:#7027a5}.detail-meta{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}.detail-meta span{background:#f7edf5;color:#5d287d;border-radius:10px;padding:6px 9px;font-size:9px}.empty-state{text-align:center;padding:30px 15px;color:#766c82;font-size:11px}.message-item{padding:13px;border:1px solid #eee7f1;border-radius:13px;margin-bottom:9px}.message-item strong{font-size:11px;color:#4b2677}.message-item p{font-size:9px;color:#766c82;margin:5px 0 0;line-height:1.8}
+@media(max-width:600px){.function-grid,.profile-form{grid-template-columns:1fr}.function-modal .function-box{padding:18px}.detail-cover{height:170px}}
+</style>
 </head>
 
 <body>
@@ -1436,13 +1457,13 @@
       <span>‹</span>
     </div>
     <nav class="side-nav">
-      <a class="active" href="#home">⌂ <span>داشبورد</span></a>
-      <a href="#properties">▣ <span>آگهی‌های من</span></a>
-      <a href="#properties">♧ <span>نیازهای من</span></a>
-      <a href="#properties">♡ <span>علاقه‌مندی‌ها</span></a>
-      <a href="#features">▢ <span>پیام‌ها</span><b>3</b></a>
-      <a href="#about">⚙ <span>تنظیمات</span></a>
-      <a href="#home">↪ <span>خروج</span></a>
+      <a class="active" href="#home" onclick="setSidebarActive(this)">⌂ <span>داشبورد</span></a>
+      <a href="#" onclick="openFunctionPanel('properties');return false">▣ <span>آگهی‌های من</span></a>
+      <a href="#" onclick="openFunctionPanel('needs');return false">♧ <span>نیازهای من</span></a>
+      <a href="#" onclick="openFunctionPanel('favorites');return false">♡ <span>علاقه‌مندی‌ها</span></a>
+      <a href="#" onclick="openFunctionPanel('messages');return false">▢ <span>پیام‌ها</span><b>3</b></a>
+      <a href="#" onclick="openFunctionPanel('settings');return false">⚙ <span>تنظیمات</span></a>
+      <a href="#" onclick="logout();return false">↪ <span>خروج</span></a>
     </nav>
     <div class="side-help">
       <div class="help-logo">⌂</div>
@@ -1991,7 +2012,10 @@
   </div>
 
 
-  <script>
+  
+  <div class="modal function-modal" id="functionModal"><div class="function-box"><div class="function-head"><h2 id="functionTitle">پنل سقف</h2><button class="function-close" onclick="closeFunctionModal()">×</button></div><div id="functionContent"></div></div></div>
+  <div class="modal function-modal" id="propertyModal"><div class="function-box"><div class="function-head"><h2 id="propertyModalTitle">جزئیات ملک</h2><button class="function-close" onclick="closePropertyModal()">×</button></div><div id="propertyModalContent"></div></div></div>
+<script>
 
     /* =====================================================
        SUPABASE
@@ -3312,13 +3336,16 @@ if (registerFormElement) {
        ===================================================== */
 
     function showProperty(title) {
-
-      alert(
-        "جزئیات «" +
-        title +
-        "» در مرحله بعد به صفحه اختصاصی ملک متصل می‌شود."
-      );
-
+      const card = Array.from(document.querySelectorAll('.property-card')).find(c => c.querySelector('.property-title')?.textContent.trim() === title);
+      if (!card) return;
+      const image=card.querySelector('.property-image img')?.src||'';
+      const location=card.querySelector('.property-location')?.textContent||'';
+      const price=card.querySelector('.property-price')?.textContent||'';
+      const badge=card.querySelector('.property-badge')?.textContent||'';
+      const meta=Array.from(card.querySelectorAll('.property-meta span')).map(x=>`<span>${escapeHtml(x.textContent)}</span>`).join('');
+      document.getElementById('propertyModalTitle').textContent=title;
+      document.getElementById('propertyModalContent').innerHTML=`<div class="detail-cover"><img src="${image}" alt="${escapeHtml(title)}"></div><div class="detail-price">${escapeHtml(price)}</div><p style="font-size:11px;color:#766c82;margin:7px 0">${escapeHtml(location)} · ${escapeHtml(badge)}</p><div class="detail-meta">${meta}</div><div class="function-card"><h3>اطلاعات ملک</h3><p>جزئیات این ملک از اطلاعات واقعی همین کارت نمایش داده می‌شود.</p></div><div class="function-actions"><button class="function-primary" onclick="toggleFavoriteByTitle('${title.replace("'","\'")}')">♡ علاقه‌مندی</button><button class="function-light" onclick="closePropertyModal()">بستن</button></div>`;
+      propertyModal.classList.add('show'); document.body.classList.add('modal-open');
     }
 
 
@@ -3326,6 +3353,27 @@ if (registerFormElement) {
       showProperty;
 
 
+    const functionModal=document.getElementById('functionModal'), propertyModal=document.getElementById('propertyModal'), functionTitle=document.getElementById('functionTitle'), functionContent=document.getElementById('functionContent');
+    function closeFunctionModal(){functionModal.classList.remove('show');document.body.classList.remove('modal-open')}
+    function closePropertyModal(){propertyModal.classList.remove('show');document.body.classList.remove('modal-open')}
+    window.closeFunctionModal=closeFunctionModal;window.closePropertyModal=closePropertyModal;
+    function setSidebarActive(el){document.querySelectorAll('.side-nav a').forEach(a=>a.classList.remove('active'));if(el)el.classList.add('active')} window.setSidebarActive=setSidebarActive;
+    function getFavorites(){try{return JSON.parse(localStorage.getItem('saghf_favorites')||'[]')}catch(e){return[]}}
+    function toggleFavoriteByTitle(title){let a=getFavorites(),i=a.indexOf(title);if(i>=0)a.splice(i,1);else a.push(title);localStorage.setItem('saghf_favorites',JSON.stringify(a));updateFavoriteButtons();alert(i>=0?'از علاقه‌مندی‌ها حذف شد.':'به علاقه‌مندی‌ها اضافه شد.')} window.toggleFavoriteByTitle=toggleFavoriteByTitle;
+    function updateFavoriteButtons(){let a=getFavorites();document.querySelectorAll('.property-card').forEach(c=>{let t=c.querySelector('.property-title')?.textContent.trim(),b=c.querySelector('.heart');if(!t||!b)return;b.textContent=a.includes(t)?'♥':'♡';b.style.color=a.includes(t)?'#ef2f6c':'';b.onclick=e=>{e.stopPropagation();toggleFavoriteByTitle(t)}})} updateFavoriteButtons();
+    async function openFunctionPanel(type){
+      if(type==='account'){if(!supabaseClient){openAuth('login');return}let r=await supabaseClient.auth.getUser(),u=r.data?.user;if(!u){openAuth('login');return}let m=u.user_metadata||{};functionTitle.textContent='حساب کاربری';functionContent.innerHTML=`<form class="profile-form" onsubmit="saveAccount(event)"><label>نام و نام خانوادگی<input id="accountName" value="${escapeHtml(m.full_name||'')}" placeholder="نام شما"></label><label>شماره موبایل<input value="${escapeHtml(u.phone||'')}" disabled></label><label>نوع حساب<select id="accountRole"><option value="customer" ${m.role==='customer'?'selected':''}>مشتری</option><option value="agent" ${m.role==='agent'?'selected':''}>مشاور املاک</option></select></label><label>ایمیل<input value="${escapeHtml(u.email||'')}" disabled></label><div class="function-actions" style="grid-column:1/-1"><button class="function-primary">ذخیره تغییرات</button></div></form>`}
+      else if(type==='settings'){functionTitle.textContent='تنظیمات';let g=k=>localStorage.getItem(k)!=='false';functionContent.innerHTML=`<div class="setting-row"><div><strong>اعلان‌های سایت</strong><small>نمایش اعلان‌های مهم سقف</small></div><label class="setting-switch"><input type="checkbox" ${g('saghf_notif')?'checked':''} onchange="saveSetting('saghf_notif',this.checked)"><span class="setting-slider"></span></label></div><div class="setting-row"><div><strong>اعلان علاقه‌مندی‌ها</strong><small>اطلاع از تغییر وضعیت ملک‌های ذخیره‌شده</small></div><label class="setting-switch"><input type="checkbox" ${g('saghf_fav_notif')?'checked':''} onchange="saveSetting('saghf_fav_notif',this.checked)"><span class="setting-slider"></span></label></div><div class="setting-row"><div><strong>ذخیره جستجوها</strong><small>فیلترهای آخر روی همین دستگاه ذخیره می‌شوند</small></div><label class="setting-switch"><input type="checkbox" ${g('saghf_search_save')?'checked':''} onchange="saveSetting('saghf_search_save',this.checked)"><span class="setting-slider"></span></label></div>`}
+      else if(type==='favorites'){functionTitle.textContent='علاقه‌مندی‌ها';let a=getFavorites();functionContent.innerHTML=a.length?a.map(t=>`<div class="message-item"><strong>${escapeHtml(t)}</strong><div class="function-actions"><button class="function-primary" onclick="showProperty('${t.replace("'","\\'")}');closeFunctionModal()">جزئیات</button><button class="function-light" onclick="toggleFavoriteByTitle('${t.replace("'","\\'")}');openFunctionPanel('favorites')">حذف</button></div></div>`).join(''):`<div class="empty-state">هنوز ملکی به علاقه‌مندی‌ها اضافه نکرده‌اید.<br>از روی کارت‌های ملک روی ♡ بزنید.</div>`}
+      else if(type==='properties'){functionTitle.textContent='آگهی‌های من';functionContent.innerHTML='<div class="empty-state">در حال حاضر آگهی اختصاصی برای این حساب ثبت نشده است.</div>'}
+      else if(type==='needs'){functionTitle.textContent='نیازهای من';let a=JSON.parse(localStorage.getItem('saghf_needs')||'[]');functionContent.innerHTML=`<div class="function-card"><h3>ثبت نیاز ملکی</h3><p>نیاز خود را برای خرید، فروش یا اجاره ثبت کنید.</p><div class="function-actions"><button class="function-primary" onclick="addNeed()">+ ثبت نیاز جدید</button></div></div>${a.map((x,i)=>`<div class="message-item"><strong>${escapeHtml(x)}</strong><div class="function-actions"><button class="function-light" onclick="removeNeed(${i});openFunctionPanel('needs')">حذف</button></div></div>`).join('')||'<div class="empty-state">هنوز نیازی ثبت نکرده‌اید.</div>'}`}
+      else if(type==='messages'){functionTitle.textContent='پیام‌ها';functionContent.innerHTML='<div class="message-item"><strong>سقف</strong><p>پنل حساب کاربری شما آماده استفاده است.</p></div><div class="message-item"><strong>راهنما</strong><p>برای مشاهده جزئیات ملک روی «جزئیات» و برای ذخیره روی ♡ بزنید.</p></div>'}
+      functionModal.classList.add('show');document.body.classList.add('modal-open');
+    } window.openFunctionPanel=openFunctionPanel;
+    function saveSetting(k,v){localStorage.setItem(k,String(v))} window.saveSetting=saveSetting;
+    async function saveAccount(e){e.preventDefault();if(!supabaseClient)return;let r=await supabaseClient.auth.getUser(),u=r.data?.user;if(!u)return;let m=u.user_metadata||{},full_name=document.getElementById('accountName').value.trim(),role=document.getElementById('accountRole').value;let q=await supabaseClient.auth.updateUser({data:{...m,full_name,role}});if(q.error){alert(translateAuthError(q.error.message));return}updateHeader({...u,user_metadata:{...m,full_name,role}});alert('اطلاعات حساب ذخیره شد.');closeFunctionModal()} window.saveAccount=saveAccount;
+    function addNeed(){let v=prompt('نیاز ملکی خود را وارد کنید:');if(!v?.trim())return;let a=JSON.parse(localStorage.getItem('saghf_needs')||'[]');a.push(v.trim());localStorage.setItem('saghf_needs',JSON.stringify(a));openFunctionPanel('needs')} function removeNeed(i){let a=JSON.parse(localStorage.getItem('saghf_needs')||'[]');a.splice(i,1);localStorage.setItem('saghf_needs',JSON.stringify(a))} window.addNeed=addNeed;window.removeNeed=removeNeed;
+    functionModal.addEventListener('click',e=>{if(e.target===functionModal)closeFunctionModal()});propertyModal.addEventListener('click',e=>{if(e.target===propertyModal)closePropertyModal()});
     /* =====================================================
        CLOSE MODALS WITH ESC / BACKGROUND
        ===================================================== */
